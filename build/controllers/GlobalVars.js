@@ -13,7 +13,7 @@ let GlobalEmpnit ='';
 
 let GlobalUsuario = '';
 let GlobalPass = '';
-let GlobalNivelUsuario = 0;
+let GlobalNivelUsuario = 1;
 let GlobalCodUsuario = 0;
 
 let GlobalBolEditando = false;

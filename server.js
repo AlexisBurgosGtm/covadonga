@@ -13,12 +13,11 @@ var nodemailer = require('nodemailer');
 
 const execute = require('./connection');
 
-var router_config = require('./router/router_config.js');
+var router_productos = require('./router/router_productos.js');
 
 
 
 var http = require('http').Server(app);
-//var io = require('socket.io')(http);
 var io = require('socket.io')(http, { cors: { origin: '*' } });
 
 
@@ -135,7 +134,7 @@ app.get("/despacho_finalizado",function(req,res){
 
 
 //Router 
-app.use('/config', router_config);
+app.use('/productos', router_productos);
 
 
 

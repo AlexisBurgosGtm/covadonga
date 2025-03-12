@@ -15,10 +15,10 @@ let Menu = {
     salidaMenu:()=>{
         $("#modal_menu").modal('hide');
     },
-    inicio_admin:()=>{         
+    productos:()=>{         
         if(Menu.verify()==true){
             Menu.salidaMenu();
-            F.loadScript('../views/menu/menu.js','root')
+            F.loadScript('../views/view_productos.js','root')
             .then(async()=>{
                 initView();
             })
