@@ -2,6 +2,31 @@ const execute = require('./../connection');
 const express = require('express');
 const router = express.Router();
 
+router.post("/select_clasificaciones_tipo", async(req,res)=>{
+
+        const {sucursal, tipo} = req.body;
+
+        let qry = `SELECT CODIGO,DESCRIPCION
+                FROM CLASIFICACIONES
+                WHERE TIPO='${tipo}';
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+router.post("/select_clasificaciones_todas", async(req,res)=>{
+
+        const {sucursal} = req.body;
+
+        let qry = `SELECT TIPO, CODIGO, DESCRIPCION
+                FROM CLASIFICACIONES;
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
 
 router.post("/select_productos", async(req,res)=>{
 
@@ -32,16 +57,16 @@ router.post("/select_productos", async(req,res)=>{
 
 router.post("/insert_producto", async(req,res)=>{
 
-        const {token, codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2} = req.body;
+        const {codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2} = req.body;
 
         let qry = `
        INSERT INTO PRODUCTOS
-                (CODPROD,CODPROD2,DESPROD,DESPROS2,UXC,CODMEDIDA,
+                (CODPROD,CODPROD2,DESPROD,DESPROD2,UXC,CODMEDIDA,
                 COSTO,PRECIO,CODMARCA,CODRUBRO,CODRUBRO2,HABILITADO)  
         SELECT '${codprod}' AS CODPROD,
                 '${codprod2}' AS CODPROD2,
                 '${desprod}' AS DESPROD,
-                '${desprod2}' AS DESPROS2,
+                '${desprod2}' AS DESPROD2,
                 ${uxc} AS UXC,
                 '${codmedida}' AS CODMEDIDA,
                 ${costo} AS COSTO,
@@ -59,13 +84,13 @@ router.post("/insert_producto", async(req,res)=>{
 
 router.post("/edit_producto", async(req,res)=>{
 
-        const {token, codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2} = req.body;
+        const {codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2} = req.body;
 
         let qry = `
         UPDATE PRODUCTOS SET 
                 CODPROD2='${codprod2}',
                 DESPROD='${desprod}',
-                DESPROS2='${desprod2}',
+                DESPROD2='${desprod2}',
                 UXC=${uxc},
                 CODMEDIDA='${codmedida}',
                 COSTO=${costo},

@@ -39,7 +39,28 @@ function getView(){
             return `
             <div class="card card-rounded shadow">
                 <div class="card-body p-2">
-                    <h3 class="negrita text-danger">Catalogo de productos</h3>
+                    
+                    <div class="row">
+                        
+                        <div class="col-6">
+                            <h4 class="negrita text-danger">Catalogo de productos</h4>
+                            <h3 class="negrita text-success">COVADONGA</h3>
+                            
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label></label>
+                                <select class="negrita form-control" id="cmbStatus">
+                                    <option value='SI'>HABILITADOS</option>
+                                    <option value='NO'>DESHABILITADOS</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br>
+
                     <div class="table-responsive col-12">
                         <table class="table table-hover col-12 h-full" id="tblProductos">
                             <thead class="bg-base text-white">
@@ -108,15 +129,15 @@ function getView(){
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label class="text-base negrita">CODIGO</label>
-                                                <input type="text" class="form-control negrita">
+                                                <label class="text-success negrita">CODIGO</label>
+                                                <input type="text" class="form-control negrita" id="txtCodprod">
                                             </div>
                                         </div>
 
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label class="text-base negrita">CODIGO ALTERNO</label>
-                                                <input type="text" class="form-control negrita">
+                                                <label class="text-success negrita">CODIGO ALTERNO</label>
+                                                <input type="text" class="form-control negrita" id="txtCodprod2">
                                             </div>
                                         </div>
                                     </div>
@@ -124,27 +145,27 @@ function getView(){
                                     <br>
 
                                     <div class="form-group">
-                                        <label class="text-base negrita">DESCRIPCION</label>
-                                        <input type="text" class="form-control negrita">
+                                        <label class="text-success negrita">DESCRIPCION</label>
+                                        <input type="text" class="form-control negrita" id="txtDesprod">
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="text-base negrita">DESCRIPCION 2</label>
-                                        <input type="text" class="form-control negrita">
+                                        <label class="text-success negrita">DESCRIPCION 2</label>
+                                        <input type="text" class="form-control negrita" id="txtDesprod2">
                                     </div>
 
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label class="text-base negrita">UNIDADES X CAJA</label>
-                                                <input type="number" class="form-control negrita">
+                                                <label class="text-success negrita">UNIDADES X CAJA</label>
+                                                <input type="number" class="form-control negrita"  id="txtUxc">
                                             </div>
                                         </div>
 
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label class="text-base negrita">EMPAQUE</label>
-                                                <input type="text" class="form-control negrita">
+                                                <label class="text-success negrita">EMPAQUE</label>
+                                                <input type="text" class="form-control negrita"  id="txtCodmedida">
                                             </div>
                                         </div>
                                     </div>
@@ -154,15 +175,15 @@ function getView(){
                                       <div class="row">
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label class="text-base negrita">COSTO COMPRA</label>
-                                                <input type="number" class="form-control negrita">
+                                                <label class="text-success negrita">COSTO COMPRA</label>
+                                                <input type="number" class="form-control negrita"  id="txtCosto">
                                             </div>
                                         </div>
 
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label class="text-base negrita">PRECIO VENTA</label>
-                                                <input type="text" class="form-control negrita">
+                                                <label class="text-success negrita">PRECIO VENTA</label>
+                                                <input type="text" class="form-control negrita"  id="txtPrecio">
                                             </div>
                                         </div>
                                     </div>
@@ -170,20 +191,20 @@ function getView(){
                                     <br>
 
                                     <div class="form-group">
-                                        <label class="text-base negrita">MARCA</label>
-                                        <select class="form-control negrita">
+                                        <label class="text-success negrita">MARCA</label>
+                                        <select class="form-control negrita" id="cmbMarca">
                                         </select>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="text-base negrita">RUBRO</label>
-                                        <select class="form-control negrita">
+                                        <label class="text-success negrita">RUBRO</label>
+                                        <select class="form-control negrita" id="cmbRubro">
                                         </select>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="text-base negrita">RUBRO 2</label>
-                                        <select class="form-control negrita">
+                                        <label class="text-success negrita">RUBRO 2</label>
+                                        <select class="form-control negrita" id="cmbRubro2">
                                         </select>
                                     </div>
 
@@ -209,21 +230,162 @@ function getView(){
 
 function addListeners(){
 
-    F.slideAnimationTabs();
+
     
-        document.getElementById('btnNuevo').addEventListener('click',()=>{
+            F.slideAnimationTabs();
+
             
-            document.getElementById('tab-dos').click();
 
-            clean_productos();
+            document.getElementById('btnNuevo').addEventListener('click',()=>{
+                
+                document.getElementById('txtCodprod').disabled = false;
+
+                document.getElementById('tab-dos').click();
+                clean_productos();
+
+            });
 
 
-        });
+
+            GF.data_clasificaciones_todas()
+            .then((data)=>{
+
+                let strMarca = ''; let strR1 = ''; let strR2 = '';
+
+                data.recordset.map((r)=>{
+                        switch (r.TIPO) {
+                            case 'MARCA':
+                                strMarca += `<option value='${r.CODIGO}'>${r.DESCRIPCION}</option>`;
+                                break;
+                            case 'RUBRO':
+                                strR1  += `<option value='${r.CODIGO}'>${r.DESCRIPCION}</option>`;
+                                break;
+                            case 'RUBRO2':
+                                strR2  += `<option value='${r.CODIGO}'>${r.DESCRIPCION}</option>`;
+                                break;
+                        };
+                });
+
+                document.getElementById('cmbMarca').innerHTML = strMarca;
+                document.getElementById('cmbRubro').innerHTML = strR1;
+                document.getElementById('cmbRubro2').innerHTML = strR2;
+
+            })
+            .catch(()=>{
+
+                document.getElementById('cmbMarca').innerHTML = `<option value='0'>-----</option>`;
+                document.getElementById('cmbRubro').innerHTML = `<option value='0'>-----</option>`;
+                document.getElementById('cmbRubro2').innerHTML = `<option value='0'>-----</option>`;
+            
+            })
+
+
+
+            let btnGuardar = document.getElementById('btnGuardar');
+            btnGuardar.addEventListener('click',()=>{
+
+                    let codprod = document.getElementById('txtCodprod').value || '';
+                    let codprod2 = document.getElementById('txtCodprod2').value  || codprod;
+                    let desprod = document.getElementById('txtDesprod').value  || '';
+                    let desprod2 = document.getElementById('txtDesprod2').value  || '';
+                    let uxc = document.getElementById('txtUxc').value  || '1';
+                    let codmedida = document.getElementById('txtCodmedida').value  || 'UNIDAD';
+                    let costo = document.getElementById('txtCosto').value  || '0';
+                    let precio = document.getElementById('txtPrecio').value  || '0';
+                    let codmarca = document.getElementById('cmbMarca').value;
+                    let codrubro = document.getElementById('cmbRubro').value;
+                    let codrubro2 = document.getElementById('cmbRubro2').value;
+
+                    if(codprod==''){F.AvisoError('Escriba un código de producto');return;};
+                    if(desprod==''){F.AvisoError('Escriba un descripción de producto');return;};
+                        
+                    
+                    if(document.getElementById('txtCodprod').disabled==true){
+
+                        F.Confirmacion('¿Está seguro que desea ACTUALIZAR este producto?')
+                        .then((value)=>{
+
+                            if(value==true){
+
+                                btnGuardar.disabled = true;
+                                btnGuardar.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
+
+                                    GF.edit_producto(codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)
+                                    .then(()=>{
+
+                                        btnGuardar.disabled = false;
+                                        btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+
+                                            F.Aviso('Producto actualizado exitosamente!!');
+                                            document.getElementById('tab-uno').click();
+
+                                            get_tbl_productos();
+
+                                    })
+                                    .catch(()=>{
+
+                                        btnGuardar.disabled = false;
+                                        btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+
+                                        F.AvisoError('No se pudo actualizar este producto');
+                                        
+                                    })
+
+                            }
+
+                        })
+                    
+                    }else{
+
+                        F.Confirmacion('¿Está seguro que desea CREAR este producto?')
+                        .then((value)=>{
+
+                            if(value==true){
+
+                                btnGuardar.disabled = true;
+                                btnGuardar.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
+
+                                    GF.insert_producto(codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)
+                                    .then(()=>{
+
+                                        btnGuardar.disabled = false;
+                                        btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+
+
+                                            F.Aviso('Producto creado exitosamente!!');
+                                            
+                                            document.getElementById('tab-uno').click();
+                                            
+                                            get_tbl_productos();
+
+                                    })
+                                    .catch(()=>{
+
+                                        btnGuardar.disabled = false;
+                                        btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+
+
+                                        F.AvisoError('No se pudo crear este producto');
+                                        
+                                    })
+
+                            }
+
+                        })
+                        
+                    }
+                    
+                    
+                    
+
+
+
+            });
 
 
 
 
-
+            get_tbl_productos();
 
 
 };
@@ -236,19 +398,71 @@ function initView(){
 };
 
 
+function get_clasificacion(tipo){
+
+    GF.data_clasificaciones_tipo(tipo)
+        .then((data)=>{
+
+            let str = ''; 
+
+            data.recordset.map((r)=>{
+                str += `<option value='${r.CODIGO}'>${r.DESCRIPCION}</option>`;
+            });
+
+            switch (tipo) {
+                case 'MARCA':
+                    document.getElementById('cmbMarca').innerHTML = str;
+                    break;
+                case 'RUBRO':
+                    document.getElementById('cmbRubro').innerHTML = str
+                    break;
+                case 'RUBRO2':
+                    document.getElementById('cmbRubro2').innerHTML = str
+                    break;
+            };
+
+        })
+        .catch(()=>{
+
+                switch (tipo) {
+                    case 'MARCA':
+                        document.getElementById('cmbMarca').innerHTML = '';
+                        break;
+                    case 'RUBRO':
+                        document.getElementById('cmbRubro').innerHTML = '';
+                        break;
+                    case 'RUBRO2':
+                        document.getElementById('cmbRubro2').innerHTML = '';
+                        break;
+                };
+           
+        })
+};
+
+
+
 function clean_productos(){
 
-
+        document.getElementById('txtCodprod').value ='';
+        document.getElementById('txtCodprod2').value ='';
+        document.getElementById('txtDesprod').value ='';
+        document.getElementById('txtDesprod2').value ='';
+        document.getElementById('txtUxc').value ='1';
+        document.getElementById('txtCodmedida').value ='';
+        document.getElementById('txtCosto').value ='0';
+        document.getElementById('txtPrecio').value ='0';
 
 };
 
-function get_data_productos(){
+
+function get_data_productos(st){
 
     return new Promise((resolve,reject)=>{
     
         axios.post(GlobalUrlCalls + '/productos/select_productos',
             {
-                sucursal:GlobalEmpnit
+                sucursal:GlobalEmpnit,
+                habilitado:st
             })
         .then((response) => {
             if(response.status.toString()=='200'){
@@ -278,18 +492,21 @@ function get_tbl_productos(){
     container.innerHTML = GlobalLoader;
 
 
-    get_data_productos()
+    let st = document.getElementById('cmbStatus').value;
+
+    get_data_productos(st)
     .then((data)=>{
 
         let str = '';
         data.recordset.map((r)=>{
+            let btnE = `btnE${r.CODPROD}`;
             str += `
             <tr>
                 <td><b class="text-danger">${r.CODPROD}</b>
                     <br>
                     <small>${r.CODPROD2}</small>
                 </td>
-                <td>${r.DESCRIPCION}}
+                <td>${r.DESPROD}
                     <br>
                     <small>${r.DESPROD2}</small>
                 </td>
@@ -303,12 +520,17 @@ function get_tbl_productos(){
                     <small class="text-secondary negrita">${r.RUBRO2}</small>
                 </td>
                 <td>
-                    <button class="btn btn-md btn-circle btn-info hand shadow">
+                    <button class="btn btn-md btn-circle btn-info hand shadow"
+                    onclick="edit_producto('${r.CODPROD}','${r.CODPROD2}','${r.DESPROD}','${r.DESPROD2}','${r.UXC}','${r.CODMEDIDA}','${r.COSTO}','${r.PRECIO}','${r.CODMARCA}','${r.CODRUBRO}','${r.CODRUBRO2}')"
+                    >
                         <i class="fal fa-edit"></i>
                     </button>
                 </td>
                 <td>
-                    <button class="btn btn-md btn-circle btn-danger hand shadow">
+                    <button class="btn btn-md btn-circle btn-danger hand shadow"
+                    id="${btnE}"
+                    onclick="delete_producto('${r.CODPROD}','${btnE}')" >
+
                         <i class="fal fa-trash"></i>
                     </button>
                 </td>
@@ -320,6 +542,76 @@ function get_tbl_productos(){
     .catch(()=>{
         container.innerHTML = 'No se cargaron datos...'
 
+    })
+
+
+};
+
+
+function edit_producto(codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2){
+
+    F.Confirmacion('¿Está seguro que desea EDITAR este producto?')
+    .then((value)=>{
+        if(value==true){
+
+
+            document.getElementById('txtCodprod').disabled = true;
+
+            document.getElementById('txtCodprod').value =codprod;
+            document.getElementById('txtCodprod2').value =codprod2;
+            document.getElementById('txtDesprod').value = desprod;
+            document.getElementById('txtDesprod2').value = desprod2;
+            document.getElementById('txtUxc').value = uxc;
+            document.getElementById('txtCodmedida').value = codmedida;
+            document.getElementById('txtCosto').value = costo;
+            document.getElementById('txtPrecio').value = precio;
+            document.getElementById('cmbMarca').value = codmarca;
+            document.getElementById('cmbRubro').value = codrubro;
+            document.getElementById('cmbRubro2').value = codrubro2;
+    
+    
+            document.getElementById('tab-dos').click();
+
+
+
+        }
+    })
+
+
+
+
+};
+
+function delete_producto(codprod,idbtn){
+
+    let btn = document.getElementById(idbtn);
+
+    F.Confirmacion('¿Está seguro que desea ELIMINAR este Producto?')
+    .then((value)=>{
+        if(value==true){
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fal fa-trash fa-spin"></i>`;
+
+            GF.delete_producto(codprod)
+            .then(()=>{
+
+                F.Aviso('Producto eliminado exitosamente!!');
+
+                get_tbl_productos();
+
+
+            })
+            .catch(()=>{
+                
+                F.AvisoError('No se pudo ELIMINAR, probablemente ya tenga movimientos asociados, DESHABILITELO en su lugar');
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fal fa-trash"></i>`;
+
+            })
+
+
+        }
     })
 
 
