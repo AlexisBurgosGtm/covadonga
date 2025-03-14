@@ -150,6 +150,37 @@ let GF = {
             })   
         
         },
+        insert_clasificacion:(tipo,descripcion)=>{
+        
+            return new Promise((resolve,reject)=>{
+        
+                axios.post(GlobalUrlCalls + '/productos/insert_clasificacion',
+                    {
+                        sucursal:GlobalEmpnit,
+                        tipo:tipo,
+                        descripcion:descripcion
+                    })
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            })   
+        
+        },
         insert_producto: (codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)=>{
         
                 return new Promise((resolve,reject)=>{

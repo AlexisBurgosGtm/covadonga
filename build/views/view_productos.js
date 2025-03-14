@@ -9,7 +9,7 @@ function getView(){
                             ${view.vista_listado() }
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
-                           ${view.vista_detalles_producto()}
+                           ${view.vista_detalles_producto() + view.modal_clasificaciones()}
                         </div>
                         <div class="tab-pane fade" id="tres" role="tabpanel" aria-labelledby="home-tab">
                             
@@ -93,25 +93,43 @@ function getView(){
               <div id="modal_clasificaciones" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-right modal-xl">
                     <div class="modal-content">
-                        <div class="dropdown-header bg-secondary d-flex justify-content-center align-items-center w-100">
+                        <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
                             <h4 class="m-0 text-center color-white" id="">
-                                TITULO
+                                Datos de la Nueva Clasificación
                             </h4>
                         </div>
                         <div class="modal-body p-4">
                             
                             <div class="card card-rounded">
-                                <div class="card-body p-2">
+                                <div class="card-body p-4">
 
+
+                                    <div class="from-group">
+                                        <label class="negrita text-success">Descripcion</label>
+                                        <input type="text" class="form-control negrita" id="txtDesClasificacion">
+                                    </div>
+
+
+                                    <br>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button class="btn btn-secondary btn-circle btn-xl hand shadow" data-dismiss="modal">
+                                                <i class="fal fa-arrow-left"></i>
+                                            </button>    
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn btn-info btn-circle btn-xl hand shadow" id="btnGuardarClasificacion">
+                                                <i class="fal fa-save"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
 
                                 
-                            <div class="row">
-                                <button class="btn btn-secondary btn-circle btn-xl hand shadow" data-dismiss="modal">
-                                    <i class="fal fa-arrow-left"></i>
-                                </button>
-                            </div>
+                            
 
                         </div>
                     
@@ -122,7 +140,7 @@ function getView(){
         },
         vista_detalles_producto:()=>{
             return `
-                            <div class="card card-rounded">
+                            <div class="card card-rounded col-sm-12 col-md-6 col-lg-6 col-lx-6">
                                 <div class="card-body p-4">
                                 
 
@@ -192,20 +210,35 @@ function getView(){
 
                                     <div class="form-group">
                                         <label class="text-success negrita">MARCA</label>
-                                        <select class="form-control negrita" id="cmbMarca">
-                                        </select>
+                                        <div class="input-group">
+                                            <select class="form-control negrita" id="cmbMarca">
+                                            </select>
+                                              <button class="btn btn-success hand" id="btnClasifMarca">
+                                                <i class="fal fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label class="text-success negrita">RUBRO</label>
-                                        <select class="form-control negrita" id="cmbRubro">
-                                        </select>
+                                        <div class="input-group">
+                                            <select class="form-control negrita" id="cmbRubro">
+                                            </select>
+                                              <button class="btn btn-success hand" id="btnClasifR1">
+                                                <i class="fal fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div class="form-group">
                                         <label class="text-success negrita">RUBRO 2</label>
-                                        <select class="form-control negrita" id="cmbRubro2">
-                                        </select>
+                                        <div class="input-group">
+                                            <select class="form-control negrita" id="cmbRubro2">
+                                            </select>
+                                            <button class="btn btn-success hand" id="btnClasifR2">
+                                                <i class="fal fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -386,6 +419,90 @@ function addListeners(){
 
 
             get_tbl_productos();
+
+
+
+
+            document.getElementById('btnClasifMarca').addEventListener('click',()=>{
+
+                selected_clasificacion = 'MARCA';
+
+                document.getElementById('txtDesClasificacion').value = '';
+
+                $("#modal_clasificaciones").modal('show');
+
+
+
+            });
+
+            document.getElementById('btnClasifR1').addEventListener('click',()=>{
+
+
+                selected_clasificacion = 'RUBRO';
+
+                document.getElementById('txtDesClasificacion').value = '';
+
+                $("#modal_clasificaciones").modal('show');
+
+
+
+            });
+
+            document.getElementById('btnClasifR2').addEventListener('click',()=>{
+
+                selected_clasificacion = 'RUBRO2';
+
+                document.getElementById('txtDesClasificacion').value = '';
+                
+                $("#modal_clasificaciones").modal('show');
+
+
+
+
+            });
+
+
+
+            let btnGuardarClasificacion = document.getElementById('btnGuardarClasificacion');
+            btnGuardarClasificacion.addEventListener('click',()=>{
+
+                let descripcion = document.getElementById('txtDesClasificacion').value || '';
+                if(descripcion==''){F.AvisoError('Escriba la descripción de la nueva clasificación');return;}
+
+                F.Confirmacion('¿Está seguro que desea crear este nueva clasificación?')
+                .then((value)=>{
+                    if(value==true){
+
+                        btnGuardarClasificacion.disabled = true;
+                        btnGuardarClasificacion.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
+
+
+                        GF.insert_clasificacion(selected_clasificacion,descripcion)
+                        .then(()=>{
+
+                            btnGuardarClasificacion.disabled = false;
+                            btnGuardarClasificacion.innerHTML = `<i class="fal fa-save"></i>`;
+                       
+                            $("#modal_clasificaciones").modal('hide');
+
+                            get_clasificacion(selected_clasificacion);
+
+                        })
+                        .catch(()=>{
+                            F.AvisoError('No se creó la clasificación');
+                            btnGuardarClasificacion.disabled = false;
+                            btnGuardarClasificacion.innerHTML = `<i class="fal fa-save"></i>`;
+                       
+                        })
+
+
+                    }
+                })
+
+
+
+            });
+
 
 
 };

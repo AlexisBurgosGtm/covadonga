@@ -16,8 +16,8 @@ let GlobalPass = '';
 let GlobalNivelUsuario = 1;
 let GlobalCodUsuario = 0;
 
-let GlobalBolEditando = false;
-let GlobalSignoMoneda = 'Q'
+let selected_clasificacion = '';
+
 
 let data_config_general = [];
 let data_empresa_config = [];

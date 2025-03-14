@@ -2,6 +2,19 @@ const execute = require('./../connection');
 const express = require('express');
 const router = express.Router();
 
+
+
+router.post("/insert_clasificacion", async(req,res)=>{
+
+        const {sucursal, tipo,descripcion} = req.body;
+
+        let qry = `INSERT INTO CLASIFICACIONES (TIPO,DESCRIPCION) VALUES ('${tipo}','${descripcion}');   `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+
 router.post("/select_clasificaciones_tipo", async(req,res)=>{
 
         const {sucursal, tipo} = req.body;
