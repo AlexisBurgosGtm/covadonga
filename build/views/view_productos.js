@@ -95,7 +95,7 @@ function getView(){
                     <div class="modal-content">
                         <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
                             <h4 class="m-0 text-center color-white" id="">
-                                Datos de la Nueva Clasificación
+                                Datos de la Nueva Clasificación/Empaque
                             </h4>
                         </div>
                         <div class="modal-body p-4">
@@ -183,7 +183,12 @@ function getView(){
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label class="text-success negrita">EMPAQUE</label>
-                                                <input type="text" class="form-control negrita"  id="txtCodmedida">
+                                                <div class="input-group">
+                                                    <select class="form-control negrita"  id="txtCodmedida"></select>
+                                                    <button class="btn btn-success hand" id="btnClasifEmpaque">
+                                                        <i class="fal fa-plus"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -213,7 +218,7 @@ function getView(){
                                         <div class="input-group">
                                             <select class="form-control negrita" id="cmbMarca">
                                             </select>
-                                              <button class="btn btn-success hand" id="btnClasifMarca">
+                                            <button class="btn btn-success hand" id="btnClasifMarca">
                                                 <i class="fal fa-plus"></i>
                                             </button>
                                         </div>
@@ -283,7 +288,7 @@ function addListeners(){
             GF.data_clasificaciones_todas()
             .then((data)=>{
 
-                let strMarca = ''; let strR1 = ''; let strR2 = '';
+                let strMarca = ''; let strR1 = ''; let strR2 = ''; let strMedidas = '';
 
                 data.recordset.map((r)=>{
                         switch (r.TIPO) {
@@ -296,12 +301,16 @@ function addListeners(){
                             case 'RUBRO2':
                                 strR2  += `<option value='${r.CODIGO}'>${r.DESCRIPCION}</option>`;
                                 break;
+                            case 'MEDIDAS':
+                                strMedidas += `<option value='${r.DESCRIPCION}'>${r.DESCRIPCION}</option>`;
+                                break;
                         };
                 });
 
                 document.getElementById('cmbMarca').innerHTML = strMarca;
                 document.getElementById('cmbRubro').innerHTML = strR1;
                 document.getElementById('cmbRubro2').innerHTML = strR2;
+                document.getElementById('txtCodmedida').innerHTML = strMedidas;
 
             })
             .catch(()=>{
@@ -309,6 +318,7 @@ function addListeners(){
                 document.getElementById('cmbMarca').innerHTML = `<option value='0'>-----</option>`;
                 document.getElementById('cmbRubro').innerHTML = `<option value='0'>-----</option>`;
                 document.getElementById('cmbRubro2').innerHTML = `<option value='0'>-----</option>`;
+                document.getElementById('txtCodmedida').innerHTML =`<option value=''>-----</option>`;
             
             })
 
@@ -461,6 +471,19 @@ function addListeners(){
 
             });
 
+            document.getElementById('btnClasifEmpaque').addEventListener('click',()=>{
+
+                selected_clasificacion = 'MEDIDAS';
+
+                document.getElementById('txtDesClasificacion').value = '';
+                
+                $("#modal_clasificaciones").modal('show');
+
+
+
+
+            });
+
 
 
             let btnGuardarClasificacion = document.getElementById('btnGuardarClasificacion');
@@ -536,6 +559,9 @@ function get_clasificacion(tipo){
                 case 'RUBRO2':
                     document.getElementById('cmbRubro2').innerHTML = str
                     break;
+                case 'MEDIDAS':
+                    document.getElementById('txtCodmedida').innerHTML = str
+                    break;
             };
 
         })
@@ -551,6 +577,9 @@ function get_clasificacion(tipo){
                     case 'RUBRO2':
                         document.getElementById('cmbRubro2').innerHTML = '';
                         break;
+                    case 'MEDIDAS':
+                        document.getElementById('txtCodmedida').innerHTML = '';
+                        break;
                 };
            
         })
@@ -565,7 +594,6 @@ function clean_productos(){
         document.getElementById('txtDesprod').value ='';
         document.getElementById('txtDesprod2').value ='';
         document.getElementById('txtUxc').value ='1';
-        document.getElementById('txtCodmedida').value ='';
         document.getElementById('txtCosto').value ='0';
         document.getElementById('txtPrecio').value ='0';
 
