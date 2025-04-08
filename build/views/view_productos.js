@@ -353,7 +353,7 @@ function addListeners(){
                                 btnGuardar.disabled = true;
                                 btnGuardar.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
 
-                                    GF.edit_producto(codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)
+                                    GF.edit_producto(F.limpiarTexto(codprod),F.limpiarTexto(codprod2),F.limpiarTexto(desprod),F.limpiarTexto(desprod2),uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)
                                     .then(()=>{
 
                                         btnGuardar.disabled = false;
@@ -666,7 +666,7 @@ function get_tbl_productos(){
                 </td>
                 <td>
                     <button class="btn btn-md btn-circle btn-info hand shadow"
-                    onclick="edit_producto('${r.CODPROD}','${r.CODPROD2}','${r.DESPROD}','${r.DESPROD2}','${r.UXC}','${r.CODMEDIDA}','${r.COSTO}','${r.PRECIO}','${r.CODMARCA}','${r.CODRUBRO}','${r.CODRUBRO2}')"
+                    onclick="edit_producto('${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.CODPROD2)}','${F.limpiarTexto(r.DESPROD)}','${F.limpiarTexto(r.DESPROD2)}','${r.UXC}','${r.CODMEDIDA}','${r.COSTO}','${r.PRECIO}','${r.CODMARCA}','${r.CODRUBRO}','${r.CODRUBRO2}')"
                     >
                         <i class="fal fa-edit"></i>
                     </button>
@@ -702,7 +702,7 @@ function edit_producto(codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,pre
 
             document.getElementById('txtCodprod').disabled = true;
 
-            document.getElementById('txtCodprod').value =codprod;
+            document.getElementById('txtCodprod').value = codprod;
             document.getElementById('txtCodprod2').value =codprod2;
             document.getElementById('txtDesprod').value = desprod;
             document.getElementById('txtDesprod2').value = desprod2;
