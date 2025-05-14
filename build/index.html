@@ -117,12 +117,43 @@
                     
                     <nav id="js-primary-nav" class="primary-nav bg-base" role="navigation"> 
                         
-                        <!--
+                       
                         <ul id="js-nav-menu" class="nav-menu">
                             
+                            <li>
+                                <a href="#"  class="text-white"  data-filter-tags="application intel"  onclick="Menu.inicio();">
+                                    <i class="fal fa-home"></i>
+                                    <span class="nav-link-text" data-i18n="nav.application_intel">INICIO</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"  class="text-white"  data-filter-tags="application intel"  onclick="Menu.pendiente();">
+                                    <i class="fal fa-arrow-right"></i>
+                                    <span class="nav-link-text" data-i18n="nav.application_intel">ENTRADAS DE BODEGA</span>
+                                </a>
+                            </li>
+                             <li>
+                                <a href="#"  class="text-white"  data-filter-tags="application intel"  onclick="Menu.pendiente();">
+                                    <i class="fal fa-arrow-left"></i>
+                                    <span class="nav-link-text" data-i18n="nav.application_intel">SALIDAS DE BODEGA</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"  class="text-white"  data-filter-tags="application intel"  onclick="Menu.pendiente();">
+                                    <i class="fal fa-users"></i>
+                                    <span class="nav-link-text" data-i18n="nav.application_intel">EMPLEADOS</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#"  class="text-white"  data-filter-tags="application intel"  onclick="Menu.productos();">
+                                    <i class="fal fa-box"></i>
+                                    <span class="nav-link-text" data-i18n="nav.application_intel">PRODUCTOS</span>
+                                </a>
+                            </li>
+
                             
                         </ul>
-                        -->
+                      
                     </nav>
                     
                     <!-- END PRIMARY NAVIGATION -->
@@ -162,8 +193,15 @@
                                 <a href="#" class="header-icon" data-toggle="modal" data-target=".js-modal-settings">
                                     <i class="fal fa-cog"></i>
                                 </a>
+                                 
+                            
                             </div>
                            
+                            <div class="">
+                                <a href="#" class="hand header-icon text-danger hand" onclick="Menu.salir()">
+                                    <i class="fal fa-power-off"></i>
+                                </a>
+                            </div>
                            
                         </div>
                     </header>

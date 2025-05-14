@@ -1,4 +1,3 @@
-
 function getView(){
     let view = {
         body:()=>{
@@ -6,10 +5,10 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                            ${view.vista_listado()}
+                            ${view.login()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
-                           
+                           ${view.usuarios()}
                         </div>
                         <div class="tab-pane fade" id="tres" role="tabpanel" aria-labelledby="home-tab">
                             
@@ -35,7 +34,40 @@ function getView(){
                
             `
         },
-        vista_listado:()=>{
+        login:()=>{
+            return `
+            <div class="card card-rounded border-info shadow col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <div class="card-body p-4">
+                    
+                    <div class="text-center form-group">
+                        <img src="./favicon.png" width="150px" height="150px">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="negrita">Usuario</label>
+                        <input type="text" class="border-info negrita text-secondary form-control" id="txtU">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="negrita">Clave</label>
+                        <input type="password" class="border-info negrita text-secondary form-control" id="txtP">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                        </div>
+                        <div class="col-6 text-right">
+                            <button class="btn btn-info btn-circle hand btn-xl shadow" id="btnLogin">
+                                <i class="fal fa-lock"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            `
+        },
+        usuarios:()=>{
             return `
             <div class="card card-rounded shadow">
                 <div class="card-body p-2">
@@ -98,6 +130,17 @@ function getView(){
 
 function addListeners(){
 
+    
+    let btnLogin = document.getElementById('btnLogin');
+    btnLogin.addEventListener('click',()=>{
+        
+        GlobalNivelUsuario=1;
+        //Menu.inicio();
+        Menu.productos();
+    })
+
+
+
 };
 
 function initView(){
@@ -106,5 +149,3 @@ function initView(){
     addListeners();
 
 };
-
-

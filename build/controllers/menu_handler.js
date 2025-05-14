@@ -3,22 +3,47 @@ let Menu = {
         if(Number(GlobalNivelUsuario)==0){return false;}
         return true;
     },
-    pendiente:()=>{
-        
-        if(Number(GlobalNivelUsuario)==0){return false;}
-        
-        F.AvisoError("Función no disponible");
-
-        return true;
-        
+    login:()=>{         
+            GlobalNivelUsuario = 0;
+            F.loadScript('../views/view_login.js','root')
+            .then(async()=>{
+                initView();
+            })
     },
-    salidaMenu:()=>{
-        $("#modal_menu").modal('hide');
+    inicio:()=>{         
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_inicio.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
+    },
+    salir:()=>{
+        F.Confirmacion('¿Está seguro que desea salir?')
+        .then((value)=>{
+            if(value==true){
+
+                Menu.login();
+
+            }
+        })
     },
     productos:()=>{         
         if(Menu.verify()==true){
-            Menu.salidaMenu();
             F.loadScript('../views/view_productos.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
+    }
+    ,
+    movinv:()=>{         
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_movinv.js','root')
             .then(async()=>{
                 initView();
             })

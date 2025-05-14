@@ -45,7 +45,7 @@ Mousetrap.bind(['command+e', 'ctrl+e'], function(e) {
 $.fn.dataTable.ext.errMode = 'none';
 
 
-Menu.productos();
+Menu.login();
 
 
 
