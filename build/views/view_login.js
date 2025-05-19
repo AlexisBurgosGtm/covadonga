@@ -36,7 +36,7 @@ function getView(){
         },
         login:()=>{
             return `
-            <div class="card card-rounded border-info shadow col-sm-12 col-md-4 col-lg-4 col-xl-4">
+            <div class="card card-rounded border-base shadow col-sm-12 col-md-4 col-lg-4 col-xl-4">
                 <div class="card-body p-4">
                     
                     <div class="text-center form-group">
@@ -45,12 +45,12 @@ function getView(){
 
                     <div class="form-group">
                         <label class="negrita">Usuario</label>
-                        <input type="text" class="border-info negrita text-secondary form-control" id="txtU">
+                        <input type="text" class="border-base negrita text-secondary form-control" id="txtU">
                     </div>
 
                     <div class="form-group">
                         <label class="negrita">Clave</label>
-                        <input type="password" class="border-info negrita text-secondary form-control" id="txtP">
+                        <input type="password" class="border-base negrita text-secondary form-control" id="txtP">
                     </div>
 
                     <div class="row">

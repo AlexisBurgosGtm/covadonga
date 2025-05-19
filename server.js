@@ -19,7 +19,7 @@ var nodemailer = require('nodemailer');
 const execute = require('./connection');
 
 var router_productos = require('./router/router_productos.js');
-
+var router_empleados =require('./router/router_empleados.js');
 
 
 var http = require('http').Server(app);
@@ -50,50 +50,6 @@ router.use(function (req,res,next) {
 });
 
 
-
-app.post("/enviar_mail",function(req,res){
-  
-    const {destino,msg,motivo} = req.body;
-
-
-    //Creamos el objeto de transporte
-    var transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'pym.notificaciones@gmail.com',
-        pass: 'gdjysyxrpzcgedyd'  //$ystems2023
-      }
-    });
-
-   
-
-    var mensaje = msg;
-
-    var mailOptions = {
-      from: 'pym.notificaciones@gmail.com', 
-      to: destino,
-      subject: motivo,
-      text: mensaje
-    };
-
-    
-
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log('Error al enviar correo: ')
-        console.log(error);
-         res.send('error');
-      } else {
-        console.log('Email enviado: ' + info.response);
-         res.send('enviado');
-      }
-    });
-
-	 
-
-
-
-}); 
 
 
 
@@ -140,6 +96,8 @@ app.get("/despacho_finalizado",function(req,res){
 
 //Router 
 app.use('/productos', router_productos);
+app.use('/empleados', router_empleados);
+
 
 
 

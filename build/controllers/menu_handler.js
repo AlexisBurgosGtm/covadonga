@@ -41,14 +41,24 @@ let Menu = {
         }
     }
     ,
-    movinv:()=>{         
+    inventarios_entradas:()=>{         
         if(Menu.verify()==true){
-            F.loadScript('../views/view_movinv.js','root')
+            F.loadScript('../views/view_inventario_entrada.js','root')
             .then(async()=>{
                 initView();
             })
         }else{
             F.AvisoError('No tiene permitido entrar a esta sección');
         }
-    }
+    },
+    inventarios_salidas:()=>{         
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_inventario_salidas.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
+    },
 }

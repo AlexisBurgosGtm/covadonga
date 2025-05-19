@@ -34,11 +34,9 @@ function requestPermission() {
 InicializarServiceWorkerNotif();
 
 
-Mousetrap.bind(['command+e', 'ctrl+e'], function(e) {
-  $('#modalErrores').modal('show');
-  
-  return false;
-});
+
+
+document.getElementById('lbVersion').innerText = versionapp;
 
 
 //quita los alert de error en el plugin de las datatables
