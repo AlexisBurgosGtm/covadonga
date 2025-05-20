@@ -32,6 +32,7 @@ function getView(){
                     </ul>
                     
                 </div>
+                ${view.modal_lista_productos()}
                
             `
         },
@@ -370,20 +371,35 @@ function getView(){
             </button>
             `
         },
-        modal:()=>{
+        modal_lista_productos:()=>{
             return `
-              <div id="modal_" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+              <div id="modal_productos" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-right modal-xl">
                     <div class="modal-content">
                         <div class="dropdown-header bg-secondary d-flex justify-content-center align-items-center w-100">
                             <h4 class="m-0 text-center color-white" id="">
-                                TITULO
+                                Seleccione un Producto
                             </h4>
                         </div>
                         <div class="modal-body p-4">
                             
                             <div class="card card-rounded">
-                                <div class="card-body p-2">
+                                <div class="card-body p-4">
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered h-full col-12">
+                                            <thead class="bg-secondary text-white">
+                                                <tr>
+                                                    <td>CODIGO</td>
+                                                    <td>PRODUCTO</td>
+                                                    <td>EMPAQUE</td>
+                                                    <td>MARCA</td>
+                                                    <td>COSTO</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tblDataProductos"></tbody>
+                                        </table>
+                                    </div>
 
                                 </div>
                             </div>
@@ -567,6 +583,17 @@ function addListeners(){
 
     tbl_movimientos();
 
+
+
+    document.getElementById('btnNuevoProductoE').addEventListener('click',()=>{
+        $('#modal_productos').modal('show');
+
+    })
+
+    document.getElementById('btnNuevoProductoS').addEventListener('click',()=>{
+        $('#modal_productos').modal('show');
+        
+    })
 
 
 };
