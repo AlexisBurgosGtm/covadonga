@@ -99,52 +99,57 @@ function getView(){
             return `
             
             <div class="card card-rounded col-12">
-                <div class="card-body p-2">
+                <div class="card-body p-4" style="font-size:90%">
 
-                    <h4 class="negrita text-danger">Nueva Salida de Inventario</h4>
+                    <h4 class="negrita text-danger text-center">Nueva Orden de Salida</h4>
+                    
                     <div class="row">
-                        <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
                             <div class="form-group">
-                                <label class="negrita">Empresa</label>
+                                <label class="negrita text-secondary">Empresa</label>
                                 <select class="form-control negrita" id="cmbEmpresaS">
                                 </select>
 
-                                <label class="negrita">Proyecto / Area</label>
+                                <label class="negrita text-secondary">Proyecto / Area</label>
                                 <select class="form-control negrita" id="cmbProyectoS">
                                 </select>
                             </div>
 
-                           
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Documento sistema</label>
+                                <div class="input-group">
+                                    <select class="form-control negrita" id="cmbCoddocS">
+                                    <input type="text" class="form-control negrita" id="txtCorrelativoS" disabled="true">
+                                </div>                               
+                            </div>
 
+                          
+
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        
                             <div class="form-group">
 
-                                <label class="negrita">Persona que Recibe</label>
+                                <label class="negrita text-secondary">Persona que Recibe</label>
                                 <select class="form-control negrita"  id="cmbRecibeS">
                                 </select>
 
-                                 <label class="negrita">Persona que Solicita</label>
+                                 <label class="negrita text-secondary">Persona que Solicita</label>
                                 <select class="form-control negrita"  id="cmbSolicitaS">
                                 </select>
 
                             </div>
 
-                        
-
-                        </div>
-                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                        
                             <div class="form-group">
-                                <label class="negrita">Fecha Despacho</label>
-                                <input type="date" class="form-control negrita" id="txtFechaS">
+                                <label class="negrita text-secondary">Fecha y Hora del Despacho</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control negrita" id="txtFechaS">
+                                    <input type="text" class="form-control negrita" id="txtHoraS" disabled="true">
+                                </div>
                                 
                             </div>
 
-                            <div class="form-group">
-                                <label class="negrita">Hora</label>
-                                <input type="text" class="form-control negrita" id="txtHoraS" disabled="true">
-                                
-                            </div>
                         
                         </div>
                     </div>
@@ -157,14 +162,64 @@ function getView(){
             <div class="card card-rounded col-12">
                 <div class="card-body p-4">
 
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                            <div class="form-group">
+                                <label>Producto</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control negrita text-base" disabled="true">
+                                    <button class="btn btn-success hand shadow" id="btnNuevoProductoS">
+                                        <i class="fal fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                            <div class="form-group">
+                                <label>Cantidad</label>
+                                <input type="number" class="form-control negrita text-danger">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <label>Costo</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control negrita text-base" disabled="true">
+                                    <button class="btn btn-info hand shadow"  id="btnAgregarProductoS">
+                                        <i class="fal fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
 
 
                 </div>
             </div>
+            
+            <br>
+
             <div class="card card-rounded col-12">
                 <div class="card-body p-4">
 
+                    <div class="table-responsive">
+                        <table class="table table-bordered h-full col-12">
+                            <thead class="bg-base text-white">
+                                <tr>
+                                    <td>PRODUCTO</td>
+                                    <td>CANTIDAD</td>
+                                    <td>COSTO</td>
+                                    <td>SUBTOTAL</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDataSalida"></tbody>
 
+                        </table>
+                    </div>
 
                 </div>
             </div>
@@ -183,41 +238,54 @@ function getView(){
             return `
             
             <div class="card card-rounded col-12">
-                <div class="card-body p-2">
+                <div class="card-body p-4" style="font-size:90%">
 
-                    <h4 class="negrita text-danger">Nueva Entrada de Inventario</h4>
+                    <h4 class="negrita text-danger text-center">Nueva Orden de Entrada</h4>
+                    
                     <div class="row">
-                        <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
                             <div class="form-group">
-                                <label class="negrita">Empresa</label>
+                                <label class="negrita text-secondary">Empresa</label>
                                 <select class="form-control negrita" id="cmbEmpresaE">
                                 </select>
 
-                                <label class="negrita">Proyecto / Area</label>
+                                <label class="negrita text-secondary">Proyecto / Area</label>
                                 <select class="form-control negrita" id="cmbProyectoE">
                                 </select>
                             </div>
-                           
+
                             <div class="form-group">
-                                <label class="negrita">Persona que Recibe</label>
-                                <select class="form-control negrita"  id="cmbRecibeE">
-                                </select>                               
+                                <label class="negrita text-secondary">Documento sistema</label>
+                                <div class="input-group">
+                                    <select class="form-control negrita" id="cmbCoddocE">
+                                    <input type="text" class="form-control negrita" id="txtCorrelativoE" disabled="true">
+                                </div>                               
                             </div>
-                        
+
+                          
 
                         </div>
-                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         
                             <div class="form-group">
-                                <label class="negrita">Fecha Despacho</label>
-                                <input type="date" class="form-control negrita" id="txtFechaE">           
+
+                                <label class="negrita text-secondary">Persona que Recibe</label>
+                                <select class="form-control negrita"  id="cmbRecibeE">
+                                </select>
+                               
+
                             </div>
 
                             <div class="form-group">
-                                <label class="negrita">Hora</label>
-                                <input type="text" class="form-control negrita" id="txtHoraE" disabled="true">
+                                <label class="negrita text-secondary">Fecha y Hora del Despacho</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control negrita" id="txtFechaE">
+                                    <input type="text" class="form-control negrita" id="txtHoraE" disabled="true">
+                                </div>
+                                
                             </div>
+
                         
                         </div>
                     </div>
@@ -225,11 +293,69 @@ function getView(){
                 </div>
             </div>
 
+
             <br>
             <div class="card card-rounded col-12">
-                <div class="card-body p-2">
+                <div class="card-body p-4">
+
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                            <div class="form-group">
+                                <label>Producto</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control negrita text-base" disabled="true">
+                                    <button class="btn btn-success hand shadow" id="btnNuevoProductoE">
+                                        <i class="fal fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                            <div class="form-group">
+                                <label>Cantidad</label>
+                                <input type="number" class="form-control negrita text-danger" id="txtCantidadE">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <label>Costo</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control negrita text-base" disabled="true">
+                                    <button class="btn btn-info hand shadow"  id="btnAgregarProductoE">
+                                        <i class="fal fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
 
 
+                </div>
+            </div>
+            
+            <br>
+
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered h-full col-12">
+                            <thead class="bg-base text-white">
+                                <tr>
+                                    <td>PRODUCTO</td>
+                                    <td>CANTIDAD</td>
+                                    <td>COSTO</td>
+                                    <td>SUBTOTAL</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDataEntrada"></tbody>
+
+                        </table>
+                    </div>
 
                 </div>
             </div>
@@ -322,6 +448,120 @@ function addListeners(){
             
     });
 
+
+    //cargando empresas
+    GF.data_listado_empresas()
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.EMPNIT}'>${r.EMPRESA}</option>
+            `
+        })
+        document.getElementById('cmbEmpresaS').innerHTML = str;
+        document.getElementById('cmbEmpresaE').innerHTML = str;
+
+    })
+    .catch(()=>{
+        document.getElementById('cmbEmpresaS').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+        document.getElementById('cmbEmpresaE').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+
+    });
+    //cargando empresas
+
+
+    //carga de empleados
+    GF.data_listado_empleados('%')
+    .then((data)=>{
+
+         let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODEMP}'>${r.NOMEMP} (<small class="negrita">${r.EMPRESA}</small>)</option>`
+        })
+        document.getElementById('cmbRecibeS').innerHTML = str;
+        document.getElementById('cmbSolicitaS').innerHTML = str;
+        document.getElementById('cmbRecibeE').innerHTML = str;
+        //document.getElementById('cmbSolicitaE').innerHTML = str;
+
+    })
+    .catch(()=>{
+        document.getElementById('cmbRecibeS').innerHTML = "<option value=''>SN</option>";
+        document.getElementById('cmbSolicitaS').innerHTML = "<option value=''>SN</option>";
+        document.getElementById('cmbRecibeE').innerHTML = "<option value=''>SN</option>";
+        //document.getElementById('cmbSolicitaE').innerHTML = "<option value=''>SN</option>";
+    })
+    //carga de empleados
+
+
+     //cargando proyectos
+    GF.data_listado_proyectos('%')
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO} (${r.EMPRESA})</option>
+            `
+        })
+        document.getElementById('cmbProyectoS').innerHTML = str;
+        document.getElementById('cmbProyectoE').innerHTML = str;
+
+    })
+    .catch(()=>{
+        document.getElementById('cmbProyectoS').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+        document.getElementById('cmbProyectoE').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+
+    });
+    //cargando empresas
+
+
+
+    //cargando coddoc salidas
+    GF.data_coddoc('%','SAL')
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODDOC}'>${r.CODDOC}</option>
+            `
+        })
+        document.getElementById('cmbCoddocS').innerHTML = str;
+  
+    })
+    .catch(()=>{
+        document.getElementById('cmbCoddocS').innerHTML = "<option value=''></option>";
+
+    });
+    //cargando coddoc salidas
+
+
+
+     //cargando coddoc entradas
+    GF.data_coddoc('%','ENT')
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODDOC}'>${r.CODDOC}</option>
+            `
+        })
+        document.getElementById('cmbCoddocE').innerHTML = str;
+  
+    })
+    .catch(()=>{
+        document.getElementById('cmbCoddocE').innerHTML = "<option value=''></option>";
+
+    });
+    //cargando coddoc entradas
 
 
 

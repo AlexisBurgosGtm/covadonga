@@ -13,13 +13,13 @@ var app = express();
 var router = express.Router();
 var bodyParser = require('body-parser');
 
-var nodemailer = require('nodemailer');
-
 
 const execute = require('./connection');
 
 var router_productos = require('./router/router_productos.js');
 var router_empleados =require('./router/router_empleados.js');
+var router_general =require('./router/router_general.js');
+
 
 
 var http = require('http').Server(app);
@@ -97,6 +97,8 @@ app.get("/despacho_finalizado",function(req,res){
 //Router 
 app.use('/productos', router_productos);
 app.use('/empleados', router_empleados);
+app.use('/general', router_general);
+
 
 
 
