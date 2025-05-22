@@ -315,6 +315,38 @@ let GF = {
     
 
         },
+        data_correlativo:(sucursal,coddoc)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/select_correlativo',{sucursal:sucursal,coddoc:coddoc})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject(0);
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                let correlativo = '0';
+                                data.recordset.map((r)=>{
+                                    correlativo = r.CORRELATIVO;
+                                })
+                                resolve(correlativo);             
+                            }else{
+                                reject(0);
+                            } 
+                        }       
+                    }else{
+                        reject(0);
+                    }                   
+                }, (_error) => {
+                    console.log(_error)
+                    reject(0);
+                });
+            }) 
+    
+
+        },
         data_listado_empleados:(sucursal)=>{
 
             return new Promise((resolve,reject)=>{
@@ -374,6 +406,33 @@ let GF = {
             return new Promise((resolve,reject)=>{
 
                 axios.post(GlobalUrlCalls + '/general/select_empresas')
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        data_lista_productos:(sucursal)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/listado_productos',{sucursal:sucursal})
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;

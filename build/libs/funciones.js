@@ -1025,6 +1025,11 @@ let F = {
         let hoy = new Date();
         let hora = hoy.getHours();
         let minuto = hoy.getMinutes();
+        
+        if(Number(minuto.toString().length)==1){
+          minuto = `0${minuto.toString()}`
+        }
+
         return `${hora.toString()}:${minuto.toString()}`;
       },
       getHora_SAT:()=>{
@@ -1040,23 +1045,6 @@ let F = {
       },
       gotoGoogleMaps:(lat,long)=>{
         window.open(`https://www.google.com/maps?q=${lat},${long}`);
-      },
-      BACKUPimprimirSelec:(nombreDiv)=>{
-          var contenido= document.getElementById(nombreDiv).innerHTML;
-          var contenidoOriginal= document.body.innerHTML;
-      
-          document.body.innerHTML = contenido;
-      
-          /*
-          setTimeout(() => {
-            window.print();
-            document.body.innerHTML = contenidoOriginal;    
-          }, 3000);
-          */
-
-          window.print();
-          document.body.innerHTML = contenidoOriginal;
-        
       },
       imprimirSelec:(nombreDiv)=>{
         

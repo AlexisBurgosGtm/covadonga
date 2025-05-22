@@ -4,6 +4,32 @@ const router = express.Router();
 
 
 
+router.post("/listado_productos", async(req,res)=>{
+
+        const {sucursal} = req.body;
+
+        let qry = `
+        SELECT  EMPRESAS.EMPNIT, 
+                EMPRESAS.EMPRESA, 
+                PRODUCTOS.CODPROD, 
+                PRODUCTOS.DESPROD,
+                ISNULL(PRODUCTOS.COSTO,0) AS COSTO, 
+                ISNULL(invsaldo_inventario_sucursales.TOTALUNIDADES, 0) AS EXISTENCIA, 
+                ISNULL(invsaldo_inventario_sucursales.TOTALCOSTO, 0) AS TOTALCOSTO, 
+                CLASIFICACIONES.DESCRIPCION AS DESMARCA
+        FROM CLASIFICACIONES RIGHT OUTER JOIN
+                PRODUCTOS ON CLASIFICACIONES.CODIGO = PRODUCTOS.CODMARCA CROSS JOIN
+                EMPRESAS LEFT OUTER JOIN
+                invsaldo_inventario_sucursales ON EMPRESAS.EMPNIT = invsaldo_inventario_sucursales.EMPNIT
+        WHERE EMPRESAS.EMPNIT='${sucursal}'
+        ORDER BY PRODUCTOS.CODPROD
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+
 router.post("/select_empresas", async(req,res)=>{
 
         //const {sucursal} = req.body;

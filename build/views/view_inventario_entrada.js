@@ -169,7 +169,7 @@ function getView(){
                             <div class="form-group">
                                 <label>Producto</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control negrita text-base" disabled="true">
+                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtDesprodS">
                                     <button class="btn btn-success hand shadow" id="btnNuevoProductoS">
                                         <i class="fal fa-plus"></i>
                                     </button>
@@ -180,14 +180,14 @@ function getView(){
                         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                             <div class="form-group">
                                 <label>Cantidad</label>
-                                <input type="number" class="form-control negrita text-danger">
+                                <input type="number" class="form-control negrita text-danger" id="txtCantidadS">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                             <div class="form-group">
                                 <label>Costo</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control negrita text-base" disabled="true">
+                                    <input type="number" class="form-control negrita text-base" disabled="true"  id="txtCostoS">
                                     <button class="btn btn-info hand shadow"  id="btnAgregarProductoS">
                                         <i class="fal fa-arrow-right"></i>
                                     </button>
@@ -224,6 +224,8 @@ function getView(){
 
                 </div>
             </div>
+
+            <input type="text" id="txtCodprodS" disabled="true">
             
             
             <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow" onclick="document.getElementById('tab-uno').click()">
@@ -305,7 +307,7 @@ function getView(){
                             <div class="form-group">
                                 <label>Producto</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control negrita text-base" disabled="true">
+                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtDesprodE">
                                     <button class="btn btn-success hand shadow" id="btnNuevoProductoE">
                                         <i class="fal fa-plus"></i>
                                     </button>
@@ -323,7 +325,7 @@ function getView(){
                             <div class="form-group">
                                 <label>Costo</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control negrita text-base" disabled="true">
+                                    <input type="number" class="form-control negrita text-base" disabled="true" id="txtCostoE">
                                     <button class="btn btn-info hand shadow"  id="btnAgregarProductoE">
                                         <i class="fal fa-arrow-right"></i>
                                     </button>
@@ -361,6 +363,7 @@ function getView(){
                 </div>
             </div>
             
+            <input type="text" id="txtCodprodE" disabled="true">
             
             <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow" onclick="document.getElementById('tab-uno').click()">
                 <i class="fal fa-arrow-left"></i>
@@ -387,14 +390,23 @@ function getView(){
                                 <div class="card-body p-4">
                                     
                                     <div class="table-responsive">
-                                        <table class="table table-bordered h-full col-12">
+                                        
+                                        <div class="form-group">
+                                            <input type="text" class="negrita text-base border-warning form-control" 
+                                                id="txtBuscarProducto" 
+                                                oninput="F.FiltrarTabla('tblProductos','txtBuscarProducto')"
+                                                placeholder="Escriba para filtrar...."
+                                            >
+                                        </div>
+
+                                        <table class="table table-bordered h-full col-12" id="tblProductos">
                                             <thead class="bg-secondary text-white">
                                                 <tr>
                                                     <td>CODIGO</td>
                                                     <td>PRODUCTO</td>
-                                                    <td>EMPAQUE</td>
+                                                    <td>EXISTENCIA</td>
                                                     <td>MARCA</td>
-                                                    <td>COSTO</td>
+                                                    <td></td>
                                                 </tr>
                                             </thead>
                                             <tbody id="tblDataProductos"></tbody>
@@ -549,11 +561,15 @@ function addListeners(){
             `
         })
         document.getElementById('cmbCoddocS').innerHTML = str;
+        
+        GF.data_correlativo('%',document.getElementById('cmbCoddocS').value)
+        .then((data)=>{document.getElementById('txtCorrelativoS').value=data})
+        .catch((data)=>{document.getElementById('txtCorrelativoS').value=data})
   
     })
     .catch(()=>{
         document.getElementById('cmbCoddocS').innerHTML = "<option value=''></option>";
-
+        document.getElementById('txtCorrelativoS').value = '0';
     });
     //cargando coddoc salidas
 
@@ -571,11 +587,14 @@ function addListeners(){
             `
         })
         document.getElementById('cmbCoddocE').innerHTML = str;
+        GF.data_correlativo('%',document.getElementById('cmbCoddocE').value)
+        .then((data)=>{document.getElementById('txtCorrelativoE').value=data})
+        .catch((data)=>{document.getElementById('txtCorrelativoE').value=data})
   
     })
     .catch(()=>{
         document.getElementById('cmbCoddocE').innerHTML = "<option value=''></option>";
-
+        document.getElementById('txtCorrelativoE').value = '0';
     });
     //cargando coddoc entradas
 
@@ -586,14 +605,26 @@ function addListeners(){
 
 
     document.getElementById('btnNuevoProductoE').addEventListener('click',()=>{
+        
         $('#modal_productos').modal('show');
 
-    })
+        let sucursal = document.getElementById('cmbEmpresaE').value;
+
+        tbl_lista_productos(sucursal,'E');
+
+
+    });
 
     document.getElementById('btnNuevoProductoS').addEventListener('click',()=>{
-        $('#modal_productos').modal('show');
         
-    })
+        $('#modal_productos').modal('show');
+
+         let sucursal = document.getElementById('cmbEmpresaS').value;
+
+        tbl_lista_productos(sucursal,'S');
+
+
+    });
 
 
 };
@@ -622,6 +653,57 @@ function tbl_movimientos(){
 
 
 
+
+
+
+};
+
+
+
+function tbl_lista_productos(sucursal,entsal){
+
+    let container = document.getElementById('tblDataProductos');
+    container.innerHTML = GlobalLoader;
+ 
+    GF.data_lista_productos(sucursal)
+    .then((data)=>{
+        let str = '';
+        data.recordset.map((r)=>{
+            str += `
+            <tr class="hand"
+                onclick="get_producto('${r.CODPROD}','${r.DESPROD}','${r.COSTO}','${entsal}')">
+                <td>${r.CODPROD}</td>
+                <td>${r.DESPROD}</td>
+                <td>${r.EXISTENCIA}</td>
+                <td>${r.DESMARCA}</td>
+                <td></td>
+            </tr>
+            `
+        })
+        container.innerHTML = str;
+
+
+    })
+    .catch(()=>{
+
+        container.innerHTML = 'No se cargaron datos...';
+
+    })
+
+
+};
+
+function get_producto(codprod,desprod,costo,entsal){
+
+
+    document.getElementById('txtCodprod' + entsal).value = codprod;
+    document.getElementById('txtDesprod' + entsal).value = desprod;
+    document.getElementById('txtCosto' + entsal).value = costo;
+    
+    document.getElementById('txtCantidad' + entsal).value = 1;
+
+    
+    $('#modal_productos').modal('hide');
 
 
 
