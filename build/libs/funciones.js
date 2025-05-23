@@ -952,6 +952,12 @@ let F = {
             progressBar: false,
             text,
           }).show();
+
+          try {
+              navigator.vibrate(500);
+          } catch (error) {
+              
+          }
       },
       slideAnimationTabs: ()=>{
         //inicializa el slide de las tabs en censo

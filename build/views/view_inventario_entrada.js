@@ -32,7 +32,7 @@ function getView(){
                     </ul>
                     
                 </div>
-                ${view.modal_lista_productos()}
+                ${view.modal_lista_productos() + view.modal_cantidad()}
                
             `
         },
@@ -97,6 +97,141 @@ function getView(){
             `
         },
         movimiento_salida: ()=>{
+            return `
+            
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4" style="font-size:90%">
+
+                    <h4 class="negrita text-danger text-center">Nueva Orden de Salida</h4>
+                    
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Empresa</label>
+                                <select class="form-control negrita" id="cmbEmpresaS">
+                                </select>
+
+                                <label class="negrita text-secondary">Proyecto / Area</label>
+                                <select class="form-control negrita" id="cmbProyectoS">
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Documento sistema</label>
+                                <div class="input-group">
+                                    <select class="form-control negrita" id="cmbCoddocS">
+                                    <input type="text" class="form-control negrita" id="txtCorrelativoS" disabled="true">
+                                </div>                               
+                            </div>
+
+                          
+
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        
+                            <div class="form-group">
+
+                                <label class="negrita text-secondary">Persona que Recibe</label>
+                                <select class="form-control negrita"  id="cmbRecibeS">
+                                </select>
+
+                                 <label class="negrita text-secondary">Persona que Solicita</label>
+                                <select class="form-control negrita"  id="cmbSolicitaS">
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Fecha y Hora del Despacho</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control negrita" id="txtFechaS">
+                                    <input type="text" class="form-control negrita" id="txtHoraS" disabled="true">
+                                </div>
+                                
+                            </div>
+
+                        
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <br>
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4">
+
+                    <div class="row">
+
+                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <label>Codigo Seleccionado</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtCodprodS">
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                            <div class="form-group">
+                                <label>Producto</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtDesprodS">
+                                    <button class="btn btn-success hand shadow" id="btnNuevoProductoS">
+                                        <i class="fal fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                    </div>
+
+
+                </div>
+            </div>
+            
+            <br>
+
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered h-full col-12">
+                            <thead class="bg-base text-white">
+                                <tr>
+                                    <td>PRODUCTO</td>
+                                    <td>CANTIDAD</td>
+                                    <td>COSTO</td>
+                                    <td>SUBTOTAL</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDataSalida"></tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <input type="text" id="txtCodprodS" disabled="true">
+            
+            
+            <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow" onclick="document.getElementById('tab-uno').click()">
+                <i class="fal fa-arrow-left"></i>
+            </button>
+
+            <button class="btn btn-info btn-xl btn-circle btn-bottom-r hand shadow" id="btnGuardarS">
+                <i class="fal fa-save"></i>
+            </button>
+            `
+        },
+        BACKUP_movimiento_salida: ()=>{
             return `
             
             <div class="card card-rounded col-12">
@@ -374,12 +509,150 @@ function getView(){
             </button>
             `
         },
+        BACKUP_movimiento_entrada: ()=>{
+            return `
+            
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4" style="font-size:90%">
+
+                    <h4 class="negrita text-danger text-center">Nueva Orden de Entrada</h4>
+                    
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Empresa</label>
+                                <select class="form-control negrita" id="cmbEmpresaE">
+                                </select>
+
+                                <label class="negrita text-secondary">Proyecto / Area</label>
+                                <select class="form-control negrita" id="cmbProyectoE">
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Documento sistema</label>
+                                <div class="input-group">
+                                    <select class="form-control negrita" id="cmbCoddocE">
+                                    <input type="text" class="form-control negrita" id="txtCorrelativoE" disabled="true">
+                                </div>                               
+                            </div>
+
+                          
+
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        
+                            <div class="form-group">
+
+                                <label class="negrita text-secondary">Persona que Recibe</label>
+                                <select class="form-control negrita"  id="cmbRecibeE">
+                                </select>
+                               
+
+                            </div>
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Fecha y Hora del Despacho</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control negrita" id="txtFechaE">
+                                    <input type="text" class="form-control negrita" id="txtHoraE" disabled="true">
+                                </div>
+                                
+                            </div>
+
+                        
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <br>
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4">
+
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                            <div class="form-group">
+                                <label>Producto</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtDesprodE">
+                                    <button class="btn btn-success hand shadow" id="btnNuevoProductoE">
+                                        <i class="fal fa-plus"></i>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                            <div class="form-group">
+                                <label>Cantidad</label>
+                                <input type="number" class="form-control negrita text-danger" id="txtCantidadE">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <label>Costo</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control negrita text-base" disabled="true" id="txtCostoE">
+                                    <button class="btn btn-info hand shadow"  id="btnAgregarProductoE">
+                                        <i class="fal fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+            
+            <br>
+
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered h-full col-12">
+                            <thead class="bg-base text-white">
+                                <tr>
+                                    <td>PRODUCTO</td>
+                                    <td>CANTIDAD</td>
+                                    <td>COSTO</td>
+                                    <td>SUBTOTAL</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDataEntrada"></tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            
+            <input type="text" id="txtCodprodE" disabled="true">
+            
+            <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow" onclick="document.getElementById('tab-uno').click()">
+                <i class="fal fa-arrow-left"></i>
+            </button>
+
+            <button class="btn btn-info btn-xl btn-circle btn-bottom-r hand shadow" id="btnGuardarE">
+                <i class="fal fa-save"></i>
+            </button>
+            `
+        },
         modal_lista_productos:()=>{
             return `
-              <div id="modal_productos" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+              <div id="modal_productos" 
+              class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-right modal-xl">
                     <div class="modal-content">
-                        <div class="dropdown-header bg-secondary d-flex justify-content-center align-items-center w-100">
+                        <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
                             <h4 class="m-0 text-center color-white" id="">
                                 Seleccione un Producto
                             </h4>
@@ -429,7 +702,68 @@ function getView(){
                 </div>
             </div>
             `
-        }
+        },
+        modal_cantidad:()=>{
+            return `
+              <div id="modal_cantidad" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-right modal-lg">
+                    <div class="modal-content">
+                        <div class="dropdown-header bg-secondary d-flex justify-content-center align-items-center w-100">
+                            <h4 class="m-0 text-center color-white" id="">
+                                Indique la cantidad
+                            </h4>
+                        </div>
+                        <div class="modal-body p-4">
+                            
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+                                    
+                                    <h4 class="negrita text-base" id="lbDesprod"></h4>
+                                    <h5 class="negrita text-danger" id="lbCodprod"></h5>
+                                    
+                                    <div class="form-group">
+                                        <label class="negrita text-secondary">Cantidad</label>
+                                        <input type="number" class="negrita text-danger form-control h5" id="txtCantidad">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="negrita text-secondary">Costo Unitario</label>
+                                        <input type="number" class="negrita text-danger form-control h5" id="txtCosto">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="negrita text-secondary">Costo Total</label>
+                                        <input type="number" class="negrita text-danger form-control h5" id="txtCostoTotal" disabled="true">
+                                    </div>
+
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button class="btn btn-secondary btn-circle btn-xl hand shadow" data-dismiss="modal">
+                                                <i class="fal fa-arrow-left"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn btn-success btn-circle btn-xl hand shadow" id="btnAceptarCantidad">
+                                                <i class="fal fa-check"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <input type="text" id="txtTipoEntSal" disabled="true" class="">
+                                
+                           
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            `
+        },
     }
 
     root.innerHTML = view.body();
@@ -610,10 +944,14 @@ function addListeners(){
 
         let sucursal = document.getElementById('cmbEmpresaE').value;
 
+        document.getElementById('txtTipoEntSal').value = 'E';
+
         tbl_lista_productos(sucursal,'E');
 
 
     });
+
+
 
     document.getElementById('btnNuevoProductoS').addEventListener('click',()=>{
         
@@ -621,10 +959,68 @@ function addListeners(){
 
          let sucursal = document.getElementById('cmbEmpresaS').value;
 
+        document.getElementById('txtTipoEntSal').value = 'S';
+
         tbl_lista_productos(sucursal,'S');
 
 
     });
+
+
+    document.getElementById('txtCantidad').addEventListener('change',()=>{
+
+        try {
+            let cantidad = document.getElementById('txtCantidad').value || '1';
+            let costo = document.getElementById('txtCosto').value || '0.01';
+            document.getElementById('txtCostoTotal').value = F.setMoneda((cantidad * costo),'');
+
+        } catch (error) {
+            document.getElementById('txtCostoTotal').value = '0.01';
+        }
+
+    });
+
+    document.getElementById('txtCosto').addEventListener('change',()=>{
+
+        try {
+            let cantidad = document.getElementById('txtCantidad').value || '1';
+            let costo = document.getElementById('txtCosto').value || '0.01';
+            document.getElementById('txtCostoTotal').value = F.setMoneda((cantidad * costo),'');
+
+        } catch (error) {
+            document.getElementById('txtCostoTotal').value = '0.01';
+        }
+
+    });
+
+
+
+    // modal cantidad
+
+    let btnAceptarCantidad = document.getElementById('btnAceptarCantidad');
+    btnAceptarCantidad.addEventListener('click',()=>{
+
+        let cantidad = document.getElementById('txtCantidad').value || '1';
+        let costo = document.getElementById('txtCosto').value || '0.01';
+
+
+        F.showToast('Producto agregado a la lista');
+    
+        
+        $("#modal_cantidad").modal('hide');
+
+
+
+
+
+
+    });
+
+
+
+    
+    // modal cantidad
+    
 
 
 };
@@ -671,11 +1067,11 @@ function tbl_lista_productos(sucursal,entsal){
         data.recordset.map((r)=>{
             str += `
             <tr class="hand"
-                onclick="get_producto('${r.CODPROD}','${r.DESPROD}','${r.COSTO}','${entsal}')">
-                <td>${r.CODPROD}</td>
-                <td>${r.DESPROD}</td>
+                onclick="get_producto('${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.DESPROD)}','${r.COSTO}','${entsal}')">
+                <td>${F.limpiarTexto(r.CODPROD)}</td>
+                <td>${F.limpiarTexto(r.DESPROD)}</td>
                 <td>${r.EXISTENCIA}</td>
-                <td>${r.DESMARCA}</td>
+                <td>${F.limpiarTexto(r.DESMARCA)}</td>
                 <td></td>
             </tr>
             `
@@ -695,15 +1091,25 @@ function tbl_lista_productos(sucursal,entsal){
 
 function get_producto(codprod,desprod,costo,entsal){
 
+  
 
-    document.getElementById('txtCodprod' + entsal).value = codprod;
-    document.getElementById('txtDesprod' + entsal).value = desprod;
-    document.getElementById('txtCosto' + entsal).value = costo;
-    
-    document.getElementById('txtCantidad' + entsal).value = 1;
+        document.getElementById('txtCodprod' + entsal).value = codprod;
+        document.getElementById('txtDesprod' + entsal).value = desprod;
+        
 
-    
-    $('#modal_productos').modal('hide');
+
+        document.getElementById('lbDesprod').innerText = desprod;
+        document.getElementById('lbCodprod').innerText = codprod;
+        
+        document.getElementById('txtCosto').value = costo;
+        document.getElementById('txtCantidad').value = 1;
+
+        
+
+        $("#modal_cantidad").modal('show');
+
+
+
 
 
 
