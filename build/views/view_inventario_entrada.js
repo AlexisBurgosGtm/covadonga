@@ -181,7 +181,7 @@ function getView(){
                                 <div class="input-group">
                                     <input type="text" class="form-control negrita text-base" id="txtDesprodS">
                                     <button class="btn btn-success hand shadow" id="btnNuevoProductoS">
-                                        <i class="fal fa-plus"></i>
+                                        <i class="fal fa-search"></i>
                                     </button>
                                 </div>
                                 
@@ -311,9 +311,9 @@ function getView(){
                             <div class="form-group">
                                 <label>Producto</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtDesprodE">
+                                    <input type="text" class="form-control negrita text-base" id="txtDesprodE">
                                     <button class="btn btn-success hand shadow" id="btnNuevoProductoE">
-                                        <i class="fal fa-plus"></i>
+                                        <i class="fal fa-search"></i>
                                     </button>
                                 </div>
                                 
@@ -658,7 +658,15 @@ function addListeners(){
 
     tbl_movimientos();
 
-
+    document.getElementById('txtDesprodE').addEventListener('keyup',(e)=>{
+        if (e.code === 'Enter') { 
+             document.getElementById('btnNuevoProductoE').click();
+        };
+        if (e.keyCode === 13 && !e.shiftKey) {
+            document.getElementById('btnNuevoProductoE').click();
+        };
+    })
+    
 
     document.getElementById('btnNuevoProductoE').addEventListener('click',()=>{
         
@@ -674,6 +682,15 @@ function addListeners(){
 
     });
 
+
+    document.getElementById('txtDesprodS').addEventListener('keyup',(e)=>{
+        if (e.code === 'Enter') { 
+             document.getElementById('btnNuevoProductoS').click();
+        };
+        if (e.keyCode === 13 && !e.shiftKey) {
+            document.getElementById('btnNuevoProductoS').click();
+        };
+    })
 
 
     document.getElementById('btnNuevoProductoS').addEventListener('click',()=>{
