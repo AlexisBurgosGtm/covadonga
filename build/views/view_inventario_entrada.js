@@ -363,143 +363,6 @@ function getView(){
             </button>
             `
         },
-        BACKUP_movimiento_entrada: ()=>{
-            return `
-            
-            <div class="card card-rounded col-12">
-                <div class="card-body p-4" style="font-size:90%">
-
-                    <h4 class="negrita text-danger text-center">Nueva Orden de Entrada</h4>
-                    
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-
-                            <div class="form-group">
-                                <label class="negrita text-secondary">Empresa</label>
-                                <select class="form-control negrita" id="cmbEmpresaE">
-                                </select>
-
-                                <label class="negrita text-secondary">Proyecto / Area</label>
-                                <select class="form-control negrita" id="cmbProyectoE">
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="negrita text-secondary">Documento sistema</label>
-                                <div class="input-group">
-                                    <select class="form-control negrita" id="cmbCoddocE">
-                                    <input type="text" class="form-control negrita" id="txtCorrelativoE" disabled="true">
-                                </div>                               
-                            </div>
-
-                          
-
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        
-                            <div class="form-group">
-
-                                <label class="negrita text-secondary">Persona que Recibe</label>
-                                <select class="form-control negrita"  id="cmbRecibeE">
-                                </select>
-                               
-
-                            </div>
-
-                            <div class="form-group">
-                                <label class="negrita text-secondary">Fecha y Hora del Despacho</label>
-                                <div class="input-group">
-                                    <input type="date" class="form-control negrita" id="txtFechaE">
-                                    <input type="text" class="form-control negrita" id="txtHoraE" disabled="true">
-                                </div>
-                                
-                            </div>
-
-                        
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-            <br>
-            <div class="card card-rounded col-12">
-                <div class="card-body p-4">
-
-                    <div class="row">
-
-                        <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                            <div class="form-group">
-                                <label>Producto</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtDesprodE">
-                                    <button class="btn btn-success hand shadow" id="btnNuevoProductoE">
-                                        <i class="fal fa-plus"></i>
-                                    </button>
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                            <div class="form-group">
-                                <label>Cantidad</label>
-                                <input type="number" class="form-control negrita text-danger" id="txtCantidadE">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <label>Costo</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control negrita text-base" disabled="true" id="txtCostoE">
-                                    <button class="btn btn-info hand shadow"  id="btnAgregarProductoE">
-                                        <i class="fal fa-arrow-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                </div>
-            </div>
-            
-            <br>
-
-            <div class="card card-rounded col-12">
-                <div class="card-body p-4">
-
-                    <div class="table-responsive">
-                        <table class="table table-bordered h-full col-12">
-                            <thead class="bg-base text-white">
-                                <tr>
-                                    <td>PRODUCTO</td>
-                                    <td>CANTIDAD</td>
-                                    <td>COSTO</td>
-                                    <td>SUBTOTAL</td>
-                                    <td></td>
-                                </tr>
-                            </thead>
-                            <tbody id="tblDataEntrada"></tbody>
-
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-            
-            <input type="text" id="txtCodprodE" disabled="true">
-            
-            <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow" onclick="document.getElementById('tab-uno').click()">
-                <i class="fal fa-arrow-left"></i>
-            </button>
-
-            <button class="btn btn-info btn-xl btn-circle btn-bottom-r hand shadow" id="btnGuardarE">
-                <i class="fal fa-save"></i>
-            </button>
-            `
-        },
         modal_lista_productos:()=>{
             return `
               <div id="modal_productos" 
@@ -617,7 +480,7 @@ function getView(){
                 </div>
             </div>
             `
-        },
+        }
     }
 
     root.innerHTML = view.body();
@@ -908,7 +771,20 @@ function addListeners(){
     let btnGuardarE = document.getElementById('btnGuardarE');
     btnGuardarE.addEventListener('click',()=>{
 
-        
+        F.Confirmacion('¿Está seguro que desea Guardar este movimiento?')
+        .then((value)=>{
+            if(value==true){
+
+                insert_movimiento('E')
+                .then(()=>{
+                    F.Aviso('Documento guardado exitosamente!!')
+                })
+                .catch(()=>{
+                    F.AvisoError('No se pudo guardar');
+                })
+
+            }
+        })
 
 
 
@@ -918,7 +794,20 @@ function addListeners(){
     let btnGuardarS = document.getElementById('btnGuardarS');
     btnGuardarS.addEventListener('click',()=>{
 
+        F.Confirmacion('¿Está seguro que desea Guardar este movimiento?')
+        .then((value)=>{
+            if(value==true){
 
+                insert_movimiento('S')
+                .then(()=>{
+                    F.Aviso('Documento guardado exitosamente!!')
+                })
+                .catch(()=>{
+                    F.AvisoError('No se pudo guardar');
+                })
+
+            }
+        })
         
     });
 
@@ -932,7 +821,70 @@ function initView(){
 
 };
 
+function insert_movimiento(entsal){
 
+    return new Promise((resolve,reject)=>{
+
+        let sucursal = document.getElementById('cmbEmpresa' + entsal).value;
+        let coddoc = document.getElementById('cmbCoddoc' + entsal).value;
+        let correlativo = document.getElementById('txtCorrelativo' + entsal).value;
+        let mes = 0;
+        let anio = 0;
+        let fecha = F.devuelveFecha('txtFecha' + entsal);
+        let hora = document.getElementById('txtHora' + entsal).value;
+        let codproyecto = document.getElementById('cmbProyecto' + entsal).value;
+        let codsolicita = document.getElementById('cmbSolicita' + entsal).value;
+        let codrecibe = 0;
+        let noorden = '';
+        let obs = '';
+
+
+        let json_details = [];
+
+        if(entsal=='S'){db_movinv.select_temp_movinv_salida().then((data)=>{json_details = data}); codrecibe = document.getElementById('cmbRecibe'+ entsal).value;};
+        if(entsal=='E'){db_movinv.select_temp_movinv_entrada().then((data)=>{json_details = data})};
+
+        console.log('hasta aqui')
+        
+        let data = {sucursal:sucursal,
+                    coddoc:coddoc,
+                    correlativo:correlativo,
+                    mes:mes,
+                    anio:anio,
+                    fecha:fecha,
+                    hora:hora,
+                    codproyecto:codproyecto,
+                    codsolicita:codsolicita,
+                    codrecibe:codrecibe,
+                    noorden:noorden,
+                    obs:obs,
+                    json_details: JSON.stringify(json_details)
+                }
+
+
+                axios.post(GlobalUrlCalls + '/general/insert_documento',data)
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+
+    })
+
+};
 
 function clean_data(){
 

@@ -4,6 +4,28 @@ const router = express.Router();
 
 
 
+router.post("/insert_documento", async(req,res)=>{
+
+        const {sucursal,coddoc,correlativo,mes,anio,fecha,hora,codproyecto,codsolicita,codrecibe,noorden,
+                obs,json_details
+        } = req.body;
+
+        let qry = `
+       INSERT INTO ORDERS 
+        (EMPNIT,CODDOC,CORRELATIVO,MES,ANIO,FECHA,HORA,CODPROYECTO,
+                CODEMP_SOLICITA,CODEMP_RECIBE,NO_ORDEN,OBS,STATUS,JSON_DETAILS)
+        SELECT '${sucursal}' AS EMPNIT,'${coddoc}' AS CODDOC,${correlativo} AS CORRELATIVO,
+        ${mes} AS MES,${anio} AS ANIO,'${fecha}' AS FECHA,
+        '${hora}' AS HORA,${codproyecto} AS CODPROYECTO,
+        ${codsolicita} AS CODEMP_SOLICITA,${codrecibe} AS CODEMP_RECIBE,
+        '${noorden}' AS NO_ORDEN,'${obs}' AS OBS,'O' AS STATUS,'${json_details}' AS JSON_DETAILS
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+
 router.post("/listado_productos", async(req,res)=>{
 
         const {sucursal} = req.body;
