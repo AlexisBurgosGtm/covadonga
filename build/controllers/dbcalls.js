@@ -1,3 +1,109 @@
+let db_movinv = {
+    select_temp_movinv_salida:()=>{
+
+        return new Promise(async(resolve,reject)=>{
+            var response = await connection.select({
+                from: "temp_salida",                
+                order: { by: 'ID', type: 'desc' }
+            });
+            let datos = JSON.stringify(response);
+            
+
+            datos = datos.replace('[','');
+            datos = datos.replace(']','');
+            let result = '[' + datos + ']';
+            let data = JSON.parse(result);
+            resolve(data);
+        });
+    },
+    insert_temp_movinv_salida:(coddoc,codprod, desprod,codmedida,cantidad,costo,totalcosto)=>{
+
+        let datos = {
+                        CODDOC:coddoc,
+                        CODPROD:codprod,
+                        DESPROD:desprod,
+                        CODMEDIDA:codmedida,
+                        CANTIDAD:Number(cantidad),
+                        COSTO:Number(costo),
+                        TOTALCOSTO:Number(totalcosto)
+                    }
+
+
+         return new Promise((resolve,reject)=>{
+            connection.insert({
+                into: "temp_salida",
+                values: [datos] //you can insert multiple values at a time
+            })
+            resolve();    
+        })
+
+    },
+    delete_temp_movinv_salida_id:(id)=>{
+       
+        return new Promise(async(resolve,reject)=>{
+            var rowsDeleted = await connection.remove({
+                from: "temp_salida",
+                where: {
+                    ID: Number(id)
+                }
+            });
+            if(rowsDeleted>0){resolve()}else{reject()}
+        })            
+    },
+    select_temp_movinv_entrada:()=>{
+
+        return new Promise(async(resolve,reject)=>{
+            var response = await connection.select({
+                from: "temp_entrada",                
+                order: { by: 'ID', type: 'desc' }
+            });
+            let datos = JSON.stringify(response);
+            
+
+            datos = datos.replace('[','');
+            datos = datos.replace(']','');
+            let result = '[' + datos + ']';
+            let data = JSON.parse(result);
+            resolve(data);
+        });
+    },
+    insert_temp_movinv_entrada:(coddoc,codprod, desprod,codmedida,cantidad,costo,totalcosto)=>{
+
+        let datos = {
+                        CODDOC:coddoc,
+                        CODPROD:codprod,
+                        DESPROD:desprod,
+                        CODMEDIDA:codmedida,
+                        CANTIDAD:Number(cantidad),
+                        COSTO:Number(costo),
+                        TOTALCOSTO:Number(totalcosto)
+                    }
+
+
+         return new Promise((resolve,reject)=>{
+            connection.insert({
+                into: "temp_entrada",
+                values: [datos] //you can insert multiple values at a time
+            })
+            resolve();    
+        })
+
+    },
+    delete_temp_movinv_entrada_id:(id)=>{
+       
+        return new Promise(async(resolve,reject)=>{
+            var rowsDeleted = await connection.remove({
+                from: "temp_entrada",
+                where: {
+                    ID: Number(id)
+                }
+            });
+            if(rowsDeleted>0){resolve()}else{reject()}
+        })            
+    },
+}
+
+
 
 // --------------------------------
 // COMPRAS

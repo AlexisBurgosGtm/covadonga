@@ -219,148 +219,7 @@ function getView(){
                 </div>
             </div>
 
-            <input type="text" id="txtCodprodS" disabled="true">
-            
-            
-            <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow" onclick="document.getElementById('tab-uno').click()">
-                <i class="fal fa-arrow-left"></i>
-            </button>
-
-            <button class="btn btn-info btn-xl btn-circle btn-bottom-r hand shadow" id="btnGuardarS">
-                <i class="fal fa-save"></i>
-            </button>
-            `
-        },
-        BACKUP_movimiento_salida: ()=>{
-            return `
-            
-            <div class="card card-rounded col-12">
-                <div class="card-body p-4" style="font-size:90%">
-
-                    <h4 class="negrita text-danger text-center">Nueva Orden de Salida</h4>
-                    
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-
-                            <div class="form-group">
-                                <label class="negrita text-secondary">Empresa</label>
-                                <select class="form-control negrita" id="cmbEmpresaS">
-                                </select>
-
-                                <label class="negrita text-secondary">Proyecto / Area</label>
-                                <select class="form-control negrita" id="cmbProyectoS">
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="negrita text-secondary">Documento sistema</label>
-                                <div class="input-group">
-                                    <select class="form-control negrita" id="cmbCoddocS">
-                                    <input type="text" class="form-control negrita" id="txtCorrelativoS" disabled="true">
-                                </div>                               
-                            </div>
-
-                          
-
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        
-                            <div class="form-group">
-
-                                <label class="negrita text-secondary">Persona que Recibe</label>
-                                <select class="form-control negrita"  id="cmbRecibeS">
-                                </select>
-
-                                 <label class="negrita text-secondary">Persona que Solicita</label>
-                                <select class="form-control negrita"  id="cmbSolicitaS">
-                                </select>
-
-                            </div>
-
-                            <div class="form-group">
-                                <label class="negrita text-secondary">Fecha y Hora del Despacho</label>
-                                <div class="input-group">
-                                    <input type="date" class="form-control negrita" id="txtFechaS">
-                                    <input type="text" class="form-control negrita" id="txtHoraS" disabled="true">
-                                </div>
-                                
-                            </div>
-
-                        
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-            <br>
-            <div class="card card-rounded col-12">
-                <div class="card-body p-4">
-
-                    <div class="row">
-
-                        <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                            <div class="form-group">
-                                <label>Producto</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtDesprodS">
-                                    <button class="btn btn-success hand shadow" id="btnNuevoProductoS">
-                                        <i class="fal fa-plus"></i>
-                                    </button>
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                            <div class="form-group">
-                                <label>Cantidad</label>
-                                <input type="number" class="form-control negrita text-danger" id="txtCantidadS">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <label>Costo</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control negrita text-base" disabled="true"  id="txtCostoS">
-                                    <button class="btn btn-info hand shadow"  id="btnAgregarProductoS">
-                                        <i class="fal fa-arrow-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                </div>
-            </div>
-            
-            <br>
-
-            <div class="card card-rounded col-12">
-                <div class="card-body p-4">
-
-                    <div class="table-responsive">
-                        <table class="table table-bordered h-full col-12">
-                            <thead class="bg-base text-white">
-                                <tr>
-                                    <td>PRODUCTO</td>
-                                    <td>CANTIDAD</td>
-                                    <td>COSTO</td>
-                                    <td>SUBTOTAL</td>
-                                    <td></td>
-                                </tr>
-                            </thead>
-                            <tbody id="tblDataSalida"></tbody>
-
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-
-            <input type="text" id="txtCodprodS" disabled="true">
+            <input type="text" id="txtCodprodS" disabled="true" class="hidden">
             
             
             <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow" onclick="document.getElementById('tab-uno').click()">
@@ -378,7 +237,7 @@ function getView(){
             <div class="card card-rounded col-12">
                 <div class="card-body p-4" style="font-size:90%">
 
-                    <h4 class="negrita text-danger text-center">Nueva Orden de Entrada</h4>
+                    <h4 class="negrita text-info text-center">Nueva Orden de Entrada</h4>
                     
                     <div class="row">
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -411,8 +270,8 @@ function getView(){
                                 <label class="negrita text-secondary">Persona que Recibe</label>
                                 <select class="form-control negrita"  id="cmbRecibeE">
                                 </select>
-                               
 
+                                
                             </div>
 
                             <div class="form-group">
@@ -438,7 +297,17 @@ function getView(){
 
                     <div class="row">
 
-                        <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <label>Codigo Seleccionado</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtCodprodE">
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
                             <div class="form-group">
                                 <label>Producto</label>
                                 <div class="input-group">
@@ -450,23 +319,7 @@ function getView(){
                                 
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                            <div class="form-group">
-                                <label>Cantidad</label>
-                                <input type="number" class="form-control negrita text-danger" id="txtCantidadE">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <label>Costo</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control negrita text-base" disabled="true" id="txtCostoE">
-                                    <button class="btn btn-info hand shadow"  id="btnAgregarProductoE">
-                                        <i class="fal fa-arrow-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                     </div>
 
@@ -497,8 +350,9 @@ function getView(){
 
                 </div>
             </div>
+
+            <input type="text" id="txtCodprodE" disabled="true" class="hidden">
             
-            <input type="text" id="txtCodprodE" disabled="true">
             
             <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow" onclick="document.getElementById('tab-uno').click()">
                 <i class="fal fa-arrow-left"></i>
@@ -802,8 +656,10 @@ function addListeners(){
 
         if(movinv=='ENT'){
             document.getElementById('tab-tres').click();
+            tbl_temp_entrada()
         }else{
             document.getElementById('tab-dos').click();
+            tbl_temp_salida();
         }
         
         clean_data();
@@ -900,6 +756,7 @@ function addListeners(){
         .then((data)=>{document.getElementById('txtCorrelativoS').value=data})
         .catch((data)=>{document.getElementById('txtCorrelativoS').value=data})
   
+        tbl_temp_salida();
     })
     .catch(()=>{
         document.getElementById('cmbCoddocS').innerHTML = "<option value=''></option>";
@@ -925,6 +782,8 @@ function addListeners(){
         .then((data)=>{document.getElementById('txtCorrelativoE').value=data})
         .catch((data)=>{document.getElementById('txtCorrelativoE').value=data})
   
+        tbl_temp_entrada();
+
     })
     .catch(()=>{
         document.getElementById('cmbCoddocE').innerHTML = "<option value=''></option>";
@@ -1000,14 +859,38 @@ function addListeners(){
     let btnAceptarCantidad = document.getElementById('btnAceptarCantidad');
     btnAceptarCantidad.addEventListener('click',()=>{
 
+        
+        let tipoentsal = document.getElementById('txtTipoEntSal').value;
+           
+
         let cantidad = document.getElementById('txtCantidad').value || '1';
         let costo = document.getElementById('txtCosto').value || '0.01';
 
 
         F.showToast('Producto agregado a la lista');
     
+        let coddoc = document.getElementById('cmbCoddoc' + tipoentsal).value;
+        let codprod = document.getElementById('txtCodprod' + tipoentsal).value;
+        let desprod = document.getElementById('txtDesprod' + tipoentsal).value;
+        let totalcosto = (Number(costo)*Number(cantidad));
+
+            $("#modal_cantidad").modal('hide');
+
+            if(tipoentsal=='E'){
+                db_movinv.insert_temp_movinv_entrada(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
+                .then(()=>{
+                    tbl_temp_entrada();
+                })
+                
+            }else{
+                 db_movinv.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
+                .then(()=>{
+                    tbl_temp_salida();
+                })
+            }
+            
         
-        $("#modal_cantidad").modal('hide');
+
 
 
 
@@ -1021,6 +904,23 @@ function addListeners(){
     
     // modal cantidad
     
+
+    let btnGuardarE = document.getElementById('btnGuardarE');
+    btnGuardarE.addEventListener('click',()=>{
+
+        
+
+
+
+    });
+
+
+    let btnGuardarS = document.getElementById('btnGuardarS');
+    btnGuardarS.addEventListener('click',()=>{
+
+
+        
+    });
 
 
 };
@@ -1114,3 +1014,119 @@ function get_producto(codprod,desprod,costo,entsal){
 
 
 };
+
+
+
+function tbl_temp_salida(){
+
+
+    let container = document.getElementById('tblDataSalida');
+    container.innerHTML = GlobalLoader;
+
+    let str = '';
+
+    db_movinv.select_temp_movinv_salida()
+    .then((data)=>{
+        
+        data.map((r)=>{
+            let idbtn = `btnE${r.ID}`
+            str += `
+            <tr>
+                <td>${r.DESPROD}
+                    <br>
+                    <small class="negrita text-danger">Cod: ${r.CODPROD}</small>
+                </td>
+                <td>${r.CANTIDAD}</td>
+                <td>${F.setMoneda(r.COSTO,'Q')}</td>
+                <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                <td>
+                    <button class="btn btn-danger btn-circle btn-md hand shadow" id="${idbtn}"
+                     onclick="delete_temp_salida('${r.ID}','${idbtn}')">
+                        <i class="fal fa-trash"></i>
+                     </button>
+                </td>
+            </tr>
+            `
+        })
+        container.innerHTML = str;
+
+    })
+
+
+
+};
+
+function delete_temp_salida(idrow,idbtn){
+
+        F.Confirmacion('¿Está seguro que desea ELIMINAR esta linea?')
+        .then((value)=>{
+            if(value==true){
+                    db_movinv.delete_temp_movinv_salida_id(idrow)
+                    .then(()=>{
+                        tbl_temp_salida();
+                    })
+            }
+        })
+
+        
+
+};
+
+
+
+
+
+function tbl_temp_entrada(){
+
+    
+    let container = document.getElementById('tblDataEntrada');
+    container.innerHTML = GlobalLoader;
+
+    let str = '';
+
+    db_movinv.select_temp_movinv_entrada()
+    .then((data)=>{
+        
+        data.map((r)=>{
+            let idbtn = `btnEE${r.ID}`
+            str += `
+            <tr>
+                <td>${r.DESPROD}
+                    <br>
+                    <small class="negrita text-danger">Cod: ${r.CODPROD}</small>
+                </td>
+                <td>${r.CANTIDAD}</td>
+                <td>${F.setMoneda(r.COSTO,'Q')}</td>
+                <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                <td>
+                    <button class="btn btn-danger btn-circle btn-md hand shadow" id="${idbtn}"
+                     onclick="delete_temp_entrada('${r.ID}','${idbtn}')">
+                        <i class="fal fa-trash"></i>
+                     </button>
+                </td>
+            </tr>
+            `
+        })
+        container.innerHTML = str;
+
+    })
+
+
+};
+
+function delete_temp_entrada(idrow,idbtn){
+
+      F.Confirmacion('¿Está seguro que desea ELIMINAR esta linea?')
+        .then((value)=>{
+            if(value==true){
+                    db_movinv.delete_temp_movinv_entrada_id(idrow)
+                    .then(()=>{
+                        tbl_temp_entrada();
+                    })
+            }
+        })
+
+};
+
+
+
