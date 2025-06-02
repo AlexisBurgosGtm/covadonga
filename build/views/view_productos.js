@@ -71,9 +71,10 @@ function getView(){
                         <table class="table table-hover col-12 h-full" id="tblProductos">
                             <thead class="bg-base text-white">
                                 <tr>
+                                    <td>TIPO</td>
                                     <td>CODIGOS</td>
                                     <td>DESCRIPCIONES</td>
-                                    <td>UXC</td>
+                                    <td>EMPAQUE</td>
                                     <td>COSTO</td>
                                     <td>PRECIO</td>
                                     <td>MARCA / RUBROS</td>
@@ -220,6 +221,16 @@ function getView(){
                                     <br>
 
                                     <div class="form-group">
+                                        <label class="text-success negrita">TIPO DE PRODUCTO</label>
+                                        <div class="input-group">
+                                            <select class="form-control negrita" id="cmbTipo">
+                                                <option value='INSUMO'>INSUMO</option>
+                                                <option value='HERRAMIENTA'>HERRAMIENTA</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label class="text-success negrita">MARCA</label>
                                         <div class="input-group">
                                             <select class="form-control negrita" id="cmbMarca">
@@ -251,6 +262,8 @@ function getView(){
                                             </button>
                                         </div>
                                     </div>
+
+                                 
 
                                 </div>
                             </div>
@@ -344,6 +357,7 @@ function addListeners(){
                     let codmarca = document.getElementById('cmbMarca').value;
                     let codrubro = document.getElementById('cmbRubro').value;
                     let codrubro2 = document.getElementById('cmbRubro2').value;
+                    let tipo = document.getElementById('cmbTipo').value;
 
                     if(codprod==''){F.AvisoError('Escriba un código de producto');return;};
                     if(desprod==''){F.AvisoError('Escriba un descripción de producto');return;};
@@ -359,7 +373,7 @@ function addListeners(){
                                 btnGuardar.disabled = true;
                                 btnGuardar.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
 
-                                    GF.edit_producto(F.limpiarTexto(codprod),F.limpiarTexto(codprod2),F.limpiarTexto(desprod),F.limpiarTexto(desprod2),uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)
+                                    GF.edit_producto(tipo,F.limpiarTexto(codprod),F.limpiarTexto(codprod2),F.limpiarTexto(desprod),F.limpiarTexto(desprod2),uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)
                                     .then(()=>{
 
                                         btnGuardar.disabled = false;
@@ -394,7 +408,7 @@ function addListeners(){
                                 btnGuardar.disabled = true;
                                 btnGuardar.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
 
-                                    GF.insert_producto(codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)
+                                    GF.insert_producto(tipo,codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)
                                     .then(()=>{
 
                                         btnGuardar.disabled = false;
@@ -653,6 +667,7 @@ function get_tbl_productos(){
             let btnE = `btnE${r.CODPROD}`;
             str += `
             <tr>
+                <td>${r.TIPO}</td>
                 <td><b class="text-danger">${r.CODPROD}</b>
                     <br>
                     <small>${r.CODPROD2}</small>
@@ -661,7 +676,7 @@ function get_tbl_productos(){
                     <br>
                     <small>${r.DESPROD2}</small>
                 </td>
-                <td>${r.UXC}</td>
+                <td>${r.CODMEDIDA}</td>
                 <td>${F.setMoneda(r.COSTO,'Q')}</td>
                 <td>${F.setMoneda(r.PRECIO,'Q')}</td>
                 <td>${r.MARCA}
@@ -672,7 +687,7 @@ function get_tbl_productos(){
                 </td>
                 <td>
                     <button class="btn btn-md btn-circle btn-info hand shadow"
-                    onclick="edit_producto('${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.CODPROD2)}','${F.limpiarTexto(r.DESPROD)}','${F.limpiarTexto(r.DESPROD2)}','${r.UXC}','${r.CODMEDIDA}','${r.COSTO}','${r.PRECIO}','${r.CODMARCA}','${r.CODRUBRO}','${r.CODRUBRO2}')"
+                    onclick="edit_producto('${r.TIPO}','${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.CODPROD2)}','${F.limpiarTexto(r.DESPROD)}','${F.limpiarTexto(r.DESPROD2)}','${r.UXC}','${r.CODMEDIDA}','${r.COSTO}','${r.PRECIO}','${r.CODMARCA}','${r.CODRUBRO}','${r.CODRUBRO2}')"
                     >
                         <i class="fal fa-edit"></i>
                     </button>
@@ -699,7 +714,7 @@ function get_tbl_productos(){
 };
 
 
-function edit_producto(codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2){
+function edit_producto(tipo,codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2){
 
     F.Confirmacion('¿Está seguro que desea EDITAR este producto?')
     .then((value)=>{
@@ -719,6 +734,7 @@ function edit_producto(codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,pre
             document.getElementById('cmbMarca').value = codmarca;
             document.getElementById('cmbRubro').value = codrubro;
             document.getElementById('cmbRubro2').value = codrubro2;
+            document.getElementById('cmbTipo').value = tipo;
     
     
             document.getElementById('tab-dos').click();

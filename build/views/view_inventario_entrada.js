@@ -179,7 +179,7 @@ function getView(){
                             <div class="form-group">
                                 <label>Producto</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtDesprodS">
+                                    <input type="text" class="form-control negrita text-base" id="txtDesprodS">
                                     <button class="btn btn-success hand shadow" id="btnNuevoProductoS">
                                         <i class="fal fa-plus"></i>
                                     </button>
@@ -665,10 +665,11 @@ function addListeners(){
         $('#modal_productos').modal('show');
 
         let sucursal = document.getElementById('cmbEmpresaE').value;
+        let filtro = document.getElementById('txtDesprodE').value || '';
 
         document.getElementById('txtTipoEntSal').value = 'E';
 
-        tbl_lista_productos(sucursal,'E');
+        tbl_lista_productos(sucursal,filtro,'E');
 
 
     });
@@ -680,10 +681,11 @@ function addListeners(){
         $('#modal_productos').modal('show');
 
          let sucursal = document.getElementById('cmbEmpresaS').value;
+        let filtro = document.getElementById('txtDesprodS').value || '';
 
         document.getElementById('txtTipoEntSal').value = 'S';
 
-        tbl_lista_productos(sucursal,'S');
+        tbl_lista_productos(sucursal,filtro,'S');
 
 
     });
@@ -908,12 +910,12 @@ function tbl_movimientos(){
 
 
 
-function tbl_lista_productos(sucursal,entsal){
+function tbl_lista_productos(sucursal,filtro,entsal){
 
     let container = document.getElementById('tblDataProductos');
     container.innerHTML = GlobalLoader;
  
-    GF.data_lista_productos(sucursal)
+    GF.data_lista_productos(sucursal,filtro)
     .then((data)=>{
         let str = '';
         data.recordset.map((r)=>{

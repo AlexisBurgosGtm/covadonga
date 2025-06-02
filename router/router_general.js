@@ -28,7 +28,7 @@ router.post("/insert_documento", async(req,res)=>{
 
 router.post("/listado_productos", async(req,res)=>{
 
-        const {sucursal} = req.body;
+        const {sucursal,filtro} = req.body;
 
         let qry = `
         SELECT  EMPRESAS.EMPNIT, 
@@ -43,7 +43,7 @@ router.post("/listado_productos", async(req,res)=>{
                 PRODUCTOS ON CLASIFICACIONES.CODIGO = PRODUCTOS.CODMARCA CROSS JOIN
                 EMPRESAS LEFT OUTER JOIN
                 invsaldo_inventario_sucursales ON EMPRESAS.EMPNIT = invsaldo_inventario_sucursales.EMPNIT
-        WHERE EMPRESAS.EMPNIT='${sucursal}'
+        WHERE EMPRESAS.EMPNIT='${sucursal}' AND PRODUCTOS.DESPROD LIKE '%${filtro}%'
         ORDER BY PRODUCTOS.CODPROD
         `
     

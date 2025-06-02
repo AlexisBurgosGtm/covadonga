@@ -52,7 +52,8 @@ router.post("/select_productos", async(req,res)=>{
                 PRODUCTOS.COSTO, PRODUCTOS.PRECIO, 
                 PRODUCTOS.CODMARCA, CLASIFICACIONES_1.DESCRIPCION AS MARCA, 
                 PRODUCTOS.CODRUBRO, CLASIFICACIONES_2.DESCRIPCION AS RUBRO, 
-                PRODUCTOS.CODRUBRO2, CLASIFICACIONES.DESCRIPCION AS RUBRO2, 
+                PRODUCTOS.CODRUBRO2, CLASIFICACIONES.DESCRIPCION AS RUBRO2,
+                PRODUCTOS.TIPO, 
                 PRODUCTOS.HABILITADO
         FROM CLASIFICACIONES AS CLASIFICACIONES_1 RIGHT OUTER JOIN
                 PRODUCTOS LEFT OUTER JOIN
@@ -70,12 +71,12 @@ router.post("/select_productos", async(req,res)=>{
 
 router.post("/insert_producto", async(req,res)=>{
 
-        const {codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2} = req.body;
+        const {codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2,tipo} = req.body;
 
         let qry = `
        INSERT INTO PRODUCTOS
                 (CODPROD,CODPROD2,DESPROD,DESPROD2,UXC,CODMEDIDA,
-                COSTO,PRECIO,CODMARCA,CODRUBRO,CODRUBRO2,HABILITADO)  
+                COSTO,PRECIO,CODMARCA,CODRUBRO,CODRUBRO2,TIPO,HABILITADO)  
         SELECT '${codprod}' AS CODPROD,
                 '${codprod2}' AS CODPROD2,
                 '${desprod}' AS DESPROD,
@@ -87,6 +88,7 @@ router.post("/insert_producto", async(req,res)=>{
                 ${codmarca} AS CODMARCA,
                 ${codrubro} AS CODRUBRO,
                 ${codrubro2} AS CODRUBRO2,
+                '${tipo}' AS TIPO
                 'SI' AS HABILITADO;
         `
 
@@ -97,7 +99,7 @@ router.post("/insert_producto", async(req,res)=>{
 
 router.post("/edit_producto", async(req,res)=>{
 
-        const {codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2} = req.body;
+        const {codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2,tipo} = req.body;
 
         let qry = `
         UPDATE PRODUCTOS SET 
@@ -110,7 +112,8 @@ router.post("/edit_producto", async(req,res)=>{
                 PRECIO=${precio},
                 CODMARCA=${codmarca},
                 CODRUBRO=${codrubro},
-                CODRUBRO2=${codrubro2}
+                CODRUBRO2=${codrubro2},
+                TIPO='${tipo}'
         WHERE CODPROD='${codprod}';
         `
 

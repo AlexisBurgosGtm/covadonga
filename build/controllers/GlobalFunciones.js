@@ -181,7 +181,7 @@ let GF = {
             })   
         
         },
-        insert_producto: (codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)=>{
+        insert_producto: (tipo,codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)=>{
         
                 return new Promise((resolve,reject)=>{
             
@@ -198,7 +198,8 @@ let GF = {
                             precio:precio,
                             codmarca:codmarca,
                             codrubro:codrubro,
-                            codrubro2:codrubro2
+                            codrubro2:codrubro2,
+                            tipo:tipo
                         })
                     .then((response) => {
                         if(response.status.toString()=='200'){
@@ -221,7 +222,7 @@ let GF = {
                 })   
         
         },
-        edit_producto: (codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)=>{
+        edit_producto: (tipo,codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)=>{
         
             return new Promise((resolve,reject)=>{
         
@@ -238,7 +239,8 @@ let GF = {
                         precio:precio,
                         codmarca:codmarca,
                         codrubro:codrubro,
-                        codrubro2:codrubro2
+                        codrubro2:codrubro2,
+                        tipo:tipo
                     })
                 .then((response) => {
                     if(response.status.toString()=='200'){
@@ -428,11 +430,11 @@ let GF = {
     
 
         },
-        data_lista_productos:(sucursal)=>{
+        data_lista_productos:(sucursal,filtro)=>{
 
             return new Promise((resolve,reject)=>{
 
-                axios.post(GlobalUrlCalls + '/general/listado_productos',{sucursal:sucursal})
+                axios.post(GlobalUrlCalls + '/general/listado_productos',{sucursal:sucursal,filtro:filtro})
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
