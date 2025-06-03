@@ -6,7 +6,7 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                            ${view.vista_listado() }
+                            ${view.vista_listado() + view.modal_historial()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
                            ${view.vista_detalles_producto() + view.modal_clasificaciones()}
@@ -78,6 +78,8 @@ function getView(){
                                     <td>COSTO</td>
                                     <td>PRECIO</td>
                                     <td>MARCA / RUBROS</td>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -279,6 +281,36 @@ function getView(){
 
             `
         },
+        modal_historial:()=>{
+            return `
+              <div id="modal_historial" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-right modal-xl">
+                    <div class="modal-content">
+                        <div class="dropdown-header bg-warning d-flex justify-content-center align-items-center w-100">
+                            <h4 class="m-0 text-center color-white" id="">
+                                Historial de Movimientos del Producto
+                            </h4>
+                        </div>
+                        <div class="modal-body p-4">
+                            
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+
+
+                                    
+                                </div>
+                            </div>
+
+                                
+                            
+
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            `
+        },
     }
 
     root.innerHTML = view.body();
@@ -286,12 +318,8 @@ function getView(){
 };
 
 function addListeners(){
-
-
     
-            F.slideAnimationTabs();
-
-            
+            F.slideAnimationTabs();            
 
             document.getElementById('btnNuevo').addEventListener('click',()=>{
                 
@@ -302,6 +330,9 @@ function addListeners(){
 
             });
 
+            document.getElementById('cmbStatus').addEventListener('change',()=>{
+                get_tbl_productos();
+            })
 
 
             GF.data_clasificaciones_todas()
@@ -445,11 +476,7 @@ function addListeners(){
 
             });
 
-
-
-
             get_tbl_productos();
-
 
 
 
@@ -664,7 +691,11 @@ function get_tbl_productos(){
 
         let str = '';
         data.recordset.map((r)=>{
+
             let btnE = `btnE${r.CODPROD}`;
+            let btnST = `btnST${r.CODPROD}`;
+            let classBtnSt = ''; if(r.HABILITADO=='SI'){classBtnSt='btn-outline-success'}else{classBtnSt='btn-outline-danger'};
+            
             str += `
             <tr>
                 <td>${r.TIPO}</td>
@@ -686,10 +717,25 @@ function get_tbl_productos(){
                     <small class="text-secondary negrita">${r.RUBRO2}</small>
                 </td>
                 <td>
+                    <button class="btn btn-md btn-circle ${classBtnSt} hand shadow"
+                    id="${btnST}"
+                    onclick="update_status_producto('${F.limpiarTexto(r.CODPROD)}','${r.HABILITADO}','${btnST}')"
+                    >
+                        <i class="fal fa-sync"></i>
+                    </button>
+                </td>
+                <td>
                     <button class="btn btn-md btn-circle btn-info hand shadow"
                     onclick="edit_producto('${r.TIPO}','${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.CODPROD2)}','${F.limpiarTexto(r.DESPROD)}','${F.limpiarTexto(r.DESPROD2)}','${r.UXC}','${r.CODMEDIDA}','${r.COSTO}','${r.PRECIO}','${r.CODMARCA}','${r.CODRUBRO}','${r.CODRUBRO2}')"
                     >
                         <i class="fal fa-edit"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-md btn-circle btn-warning hand shadow"
+                    onclick="historial_producto('${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.DESPROD)}')"
+                    >
+                        <i class="fal fa-list"></i>
                     </button>
                 </td>
                 <td>
@@ -700,6 +746,7 @@ function get_tbl_productos(){
                         <i class="fal fa-trash"></i>
                     </button>
                 </td>
+                
             </tr>
             `
         })
@@ -784,6 +831,49 @@ function delete_producto(codprod,idbtn){
 
 };
 
+function update_status_producto(codprod,st,idbtn){
+
+
+    let btn = document.getElementById(idbtn);
+
+    let strMsn = ''; let stStatus = '';
+    if(st=='SI'){
+        strMsn= '¿Está seguro que desea DESACTIVAR este producto?';
+        stStatus = 'NO';
+    }else{
+        strMsn= '¿Está seguro que desea ACTIVAR este producto?';
+        stStatus = 'SI';
+    }
+
+    F.Confirmacion(strMsn)
+    .then((value)=>{
+        if(value==true){
+
+            btn.disabled = true; btn.innerHTML = `<i class="fal fa-sync fa-spin"></i>`;
+
+            GF.update_st_producto(codprod,stStatus)
+            .then(()=>{
+                F.Aviso('Producto actualizado exitosamente!!');
+                get_tbl_productos();
+            })
+            .catch(()=>{
+                F.AvisoError('No se pudo actualizar');
+                btn.disabled = false; btn.innerHTML = `<i class="fal fa-sync"></i>`;
+            })
+
+
+        }
+    })
+
+};
+
+function historial_producto(codprod,desprod){
+
+    $("#modal_historial").modal('show');
+
+    
+
+};
 
 
 

@@ -290,6 +290,33 @@ let GF = {
     
 
         },
+        update_st_producto:(codprod,st)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/productos/update_st_producto',{codprod:codprod,st:st})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
         data_coddoc:(sucursal,tipodoc)=>{
 
             return new Promise((resolve,reject)=>{
@@ -344,33 +371,6 @@ let GF = {
                 }, (_error) => {
                     console.log(_error)
                     reject(0);
-                });
-            }) 
-    
-
-        },
-        data_listado_empleados:(sucursal)=>{
-
-            return new Promise((resolve,reject)=>{
-
-                axios.post(GlobalUrlCalls + '/empleados/select_listado',{sucursal:sucursal})
-                .then((response) => {
-                    if(response.status.toString()=='200'){
-                        let data = response.data;
-                        if(data.toString()=="error"){
-                            reject();
-                        }else{
-                            if(Number(data.rowsAffected[0])>0){
-                                resolve(data);             
-                            }else{
-                                reject();
-                            } 
-                        }       
-                    }else{
-                        reject();
-                    }                   
-                }, (_error) => {
-                    reject();
                 });
             }) 
     
@@ -457,5 +457,121 @@ let GF = {
     
 
         }, 
+        insert_empleado:(empnit,codpuesto,nombre,telefono,dpi,usuario,clave)=>{
+        
+            return new Promise((resolve,reject)=>{
+        
+                axios.post(GlobalUrlCalls + '/empleados/insert_empleado',
+                    {
+                        sucursal:empnit,
+                        codpuesto:codpuesto,
+                        nombre:nombre,
+                        telefono:telefono,
+                        dpi:dpi,
+                        usuario:usuario,
+                        clave:clave
+                    })
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            })   
+        
+        },
+        data_listado_empleados:(sucursal)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/empleados/select_listado',{sucursal:sucursal})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        update_st_empleado:(codemp,st)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/empleados/update_st_empleado',{codemp:codemp,st:st})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        delete_empleados:(codemp)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/empleados/delete_empleado', {codemp:codemp})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
 };
 

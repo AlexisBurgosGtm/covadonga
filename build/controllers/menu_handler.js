@@ -39,8 +39,17 @@ let Menu = {
         }else{
             F.AvisoError('No tiene permitido entrar a esta sección');
         }
-    }
-    ,
+    },
+    empleados:()=>{         
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_empleados.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
+    },
     inventarios_entradas:()=>{         
         if(Menu.verify()==true){
             F.loadScript('../views/view_inventario_entrada.js','root')

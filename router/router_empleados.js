@@ -4,18 +4,40 @@ const router = express.Router();
 
 
 
+router.post("/login", async(req,res)=>{
+
+        const {usuario,clave} = req.body;
+
+        let qry = `
+        SELECT EMPNIT, USUARIO, CLAVE
+        FROM EMPLEADOS
+        WHERE   USUARIO<>'' 
+                AND CLAVE<>''
+                AND USUARIO='${usuario}'
+                AND CLAVE='${clave}';
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+
 router.post("/select_listado", async(req,res)=>{
 
         const {sucursal} = req.body;
 
         let qry = `
-        SELECT  EMPLEADOS.CODEMP, 
+        SELECT 
+                EMPLEADOS.CODEMP, 
                 EMPLEADOS.EMPNIT, 
                 EMPRESAS.EMPRESA, 
                 EMPLEADOS.NOMEMP, 
                 EMPLEADOS.TELEFONO,
-                EMPLEADOS.PUESTO
-        FROM  EMPLEADOS LEFT OUTER JOIN
+                EMPLEADOS.HABILITADO, 
+                EMPLEADOS_PUESTOS.DESPUESTO,
+                EMPLEADOS.USUARIO, EMPLEADOS.CLAVE
+        FROM    EMPLEADOS LEFT OUTER JOIN
+                EMPLEADOS_PUESTOS ON EMPLEADOS.CODPUESTO = EMPLEADOS_PUESTOS.CODPUESTO LEFT OUTER JOIN
                 EMPRESAS ON EMPLEADOS.EMPNIT = EMPRESAS.EMPNIT
         `
     
@@ -23,6 +45,23 @@ router.post("/select_listado", async(req,res)=>{
 
 });
 
+router.post("/insert_empleado", async(req,res)=>{
+
+        const {sucursal,dpi,nombre,telefono,codpuesto,usuario,clave} = req.body;
+
+        let qry = `
+        INSERT INTO EMPLEADOS
+        (EMPNIT,DPI,NOMEMP,TELEFONO,CODPUESTO,HABILITADO,USUARIO,CLAVE)
+        SELECT
+        '${sucursal}' AS EMPNIT,'${dpi}' AS DPI,
+        '${nombre}' AS NOMEMP,'${telefono}' AS TELEFONO,${codpuesto} AS CODPUESTO,
+        'SI' AS HABILITADO,
+        '${usuario}' AS USUARIO,'${clave}' AS CLAVE;
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
 
 
 

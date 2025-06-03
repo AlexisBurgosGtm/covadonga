@@ -131,10 +131,14 @@ function getView(){
 function addListeners(){
 
     
+    document.getElementById('root_navbar').style = "visibility:hidden";
+    
     let btnLogin = document.getElementById('btnLogin');
     btnLogin.addEventListener('click',()=>{
         
         GlobalNivelUsuario=1;
+
+        document.getElementById('root_navbar').style = "visibility:visible";
         //Menu.inicio();
         Menu.productos();
     })
