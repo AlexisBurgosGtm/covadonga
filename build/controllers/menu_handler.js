@@ -63,7 +63,7 @@ let Menu = {
             F.AvisoError('No tiene permitido entrar a esta sección');
         }
     },
-    inventarios_entradas:()=>{         
+    nueva_compra:()=>{         
         if(Menu.verify()==true){
             F.loadScript('../views/view_inventario_entrada.js','root')
             .then(async()=>{
@@ -73,7 +73,17 @@ let Menu = {
             F.AvisoError('No tiene permitido entrar a esta sección');
         }
     },
-    inventarios_salidas:()=>{         
+    nueva_entrada:()=>{         
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_inventario_entrada.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
+    },
+    nueva_salida:()=>{         
         if(Menu.verify()==true){
             F.loadScript('../views/view_inventario_salidas.js','root')
             .then(async()=>{

@@ -93,10 +93,23 @@ function getView(){
             </div>
 
           
+            <nav class="shortcut-menu hidden-sm-down">
+                <input type="checkbox" class="menu-open" name="menu-open" id="menu_open" />
+                <label for="menu_open" class="menu-open-button ">
+                    <span class="app-shortcut-icon d-block"></span>
+                </label>
+                <a href="#" class="menu-item btn" data-toggle="tooltip" data-placement="left" title="Nueva Compra" onclick="Menu.nueva_compra()">
+                    <i class="fal fa-shopping-cart"></i>
+                </a>
+                <a href="#" class="menu-item btn" data-toggle="tooltip" data-placement="left" title="Nueva Salida de Bodega" onclick="Menu.nueva_salida()">
+                    <i class="fal fa-arrow-right"></i>
+                </a>
+                <a href="#" class="menu-item btn" data-toggle="tooltip" data-placement="left" title="Nueva Entrada de Bodega" onclick="Menu.nueva_entrada()">
+                    <i class="fal fa-arrow-left"></i>
+                </a>
+                
+            </nav>
 
-            <button class="btn btn-success btn-xl btn-circle btn-bottom-r hand shadow" id="btnNuevo">
-                <i class="fal fa-plus"></i>
-            </button>
             `
         },
         modal_lista_productos:()=>{
@@ -191,5 +204,5 @@ function initView(){
 
 function tbl_movimientos(){
 
-    
+
 };
