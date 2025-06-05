@@ -492,6 +492,42 @@ let GF = {
             })   
         
         },
+        edit_empleado:(codigo,empnit,codpuesto,nombre,telefono,dpi,usuario,clave)=>{
+        
+            return new Promise((resolve,reject)=>{
+        
+                axios.post(GlobalUrlCalls + '/empleados/edit_empleado',
+                    {
+                        codigo:codigo,
+                        sucursal:empnit,
+                        codpuesto:codpuesto,
+                        nombre:nombre,
+                        telefono:telefono,
+                        dpi:dpi,
+                        usuario:usuario,
+                        clave:clave
+                    })
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            })   
+        
+        },
         data_listado_empleados:(sucursal)=>{
 
             return new Promise((resolve,reject)=>{
@@ -546,11 +582,11 @@ let GF = {
     
 
         },
-        delete_empleados:(codemp)=>{
+        delete_empleado:(codemp)=>{
 
             return new Promise((resolve,reject)=>{
 
-                axios.post(GlobalUrlCalls + '/empleados/delete_empleado', {codemp:codemp})
+                axios.post(GlobalUrlCalls + '/empleados/delete_empleado', {codigo:codemp})
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;

@@ -110,6 +110,10 @@ function getView(){
                     <div class="form-group">
                         <label class="negrita text-base">Puesto / Nivel</label>
                         <select class="form-control" id="cmbPuesto">
+                            <option value='1'>GERENTE</option>
+                            <option value='2'>BODEGUERO</option>
+                            <option value='3'>OPERADOR BODEGA</option>
+                            <option value='4'>SUPERVISOR</option>
                         </select>
                     </div>
 
@@ -141,6 +145,7 @@ function getView(){
                         <input type="text" class="form-control" id="txtClave">
                     </div>
 
+                     <input type="text" disabled="true"  class="hidden form-control" id="txtCodigo">
             
                 </div>
             </div>
@@ -167,6 +172,27 @@ function addListeners(){
         F.slideAnimationTabs();
 
 
+        //cargando empresas
+        GF.data_listado_empresas()
+        .then((data)=>{
+            
+            let str = '';
+
+            data.recordset.map((r)=>{
+                str += `
+                <option value='${r.EMPNIT}'>${r.EMPRESA}</option>
+                `
+            })
+            document.getElementById('cmbEmpresa').innerHTML = str;
+          
+        })
+        .catch(()=>{
+            document.getElementById('cmbEmpresa').innerHTML = "<option value='0'>No se cargaron las empresas</option>";
+        });
+        //cargando empresas
+        
+
+
         document.getElementById('btnNuevo').addEventListener('click',()=>{
             document.getElementById('tab-dos').click();
             clean_data();
@@ -176,6 +202,84 @@ function addListeners(){
 
 
         tbl_empleados();
+
+
+        let btnGuardar = document.getElementById('btnGuardar');
+        btnGuardar.addEventListener('click',()=>{
+
+
+            let codigo = document.getElementById('txtCodigo').value || '';
+
+            let empnit = document.getElementById('cmbEmpresa').value;
+            let codpuesto = document.getElementById('cmbPuesto').value;
+            let nombre = document.getElementById('txtNombre').value || '';
+            let telefono = document.getElementById('txtTelefono').value || '';
+            let dpi = document.getElementById('txtDpi').value || '';
+            let usuario = document.getElementById('txtUsuario').value || '';
+            let clave = document.getElementById('txtClave').value || '';
+
+            if(nombre==''){F.AvisoError('Escriba un nombre de empleado');return;}
+    
+            if(codigo==''){
+
+                //insertar un empleado nuevo
+                F.Confirmacion(`¿Está seguro que desea CREAR ESTE NUEVO Empleado?`)
+                .then((value)=>{
+                    if(value==true){
+
+                        btnGuardar.disabled=true;btnGuardar.innerHTML=`<i class="fal fa-save fa-spin"></i>`;
+                        
+                        GF.insert_empleado(empnit,codpuesto,nombre,telefono,dpi,usuario,clave)
+                        .then(()=>{
+                            F.Aviso('Empleado creado exitosamente!!');
+                            btnGuardar.disabled=false;btnGuardar.innerHTML=`<i class="fal fa-save"></i>`;
+                            document.getElementById('tab-uno').click();
+                            tbl_empleados();
+                        })
+                        .catch(()=>{
+                            F.AvisoError('No se pudo crear este empleado');
+                            btnGuardar.disabled=false;btnGuardar.innerHTML=`<i class="fal fa-save"></i>`;
+                        })
+
+                    }
+                })
+
+            }else{
+
+                F.Confirmacion(`¿Está seguro que desea EDITAR este Empleado?`)
+                .then((value)=>{
+                    if(value==true){
+
+                         btnGuardar.disabled=true;btnGuardar.innerHTML=`<i class="fal fa-save fa-spin"></i>`;
+
+                        GF.edit_empleado(codigo,empnit,codpuesto,nombre,telefono,dpi,usuario,clave)
+                        .then(()=>{
+                            F.Aviso('Empleado actualizado exitosamente!!');
+                            document.getElementById('tab-uno').click();
+                            btnGuardar.disabled=false;btnGuardar.innerHTML=`<i class="fal fa-save"></i>`;
+
+                            tbl_empleados();
+                        })
+                        .catch(()=>{
+                            F.AvisoError('No se pudo actualizar este empleado');
+                            btnGuardar.disabled=false;btnGuardar.innerHTML=`<i class="fal fa-save"></i>`;
+                        })
+
+                    }
+                })
+
+            }
+            
+
+
+          
+
+
+            //editar datos
+
+
+        });
+
 
 
 };
@@ -191,6 +295,13 @@ function initView(){
 
 function clean_data(){
 
+    document.getElementById('txtCodigo').value = '';
+
+    document.getElementById('txtNombre').value = '';
+    document.getElementById('txtTelefono').value = '';
+    document.getElementById('txtDpi').value = '';
+    document.getElementById('txtUsuario').value = '';
+    document.getElementById('txtClave').value = '';
 
 };
 
@@ -206,7 +317,8 @@ function tbl_empleados(){
 
         data.recordset.map((r)=>{
             let strClassHabilitado = ''; if(r.HABILITADO=='SI'){strClassHabilitado='btn-success'}else{strClassHabilitado='btn-danger'}
-            let btnHab = `btnH${r.CODEMP}`
+            let btnHab = `btnH${r.CODEMP}`;
+            let btnDel = `btnDel${r.CODEMP}`
             str += `
                 <tr>
                     <td>${r.EMPRESA}</td>
@@ -220,13 +332,25 @@ function tbl_empleados(){
                     <td>
                         <button class="btn ${strClassHabilitado} btn-circle btn-md hand shadow"
                         id="${btnHab}"
-                        onclick="update_status_empleado('${r.HABILITADO}','${btnHab}')"
+                        onclick="update_status_empleado('${r.CODEMP}','${r.HABILITADO}','${btnHab}')"
                         >
                             <i class="fal fa-sync"></i>
                         </button>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <button class="btn btn-info btn-md btn-circle hand shadow"
+                        onclick="editar_empleado('${r.CODEMP}','${r.EMPNIT}','${r.CODPUESTO}','${r.NOMEMP}','${r.TELEFONO}','${r.DPI}','${r.USUARIO}','${r.CLAVE}')">
+                            <i class="fal fa-edit"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger btn-circle btn-md hand shadow"
+                        id="${btnDel}"
+                        onclick="eliminar_empleado('${r.CODEMP}','${btnDel}')"
+                        >
+                            <i class="fal fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>
             `
         })
@@ -237,6 +361,96 @@ function tbl_empleados(){
         container.innerHTML = 'No se cargaron datos....';
     })
 
+
+};
+
+
+
+function update_status_empleado(codemp,st,idbtn){
+
+
+    let strMsn = ''; let stStatus = '';
+    if(st=='SI'){
+        strMsn = `¿Está seguro que desea DESHABILITAR a este Empleado?`;
+        stStatus = 'NO';
+    }else{
+        strMsn = `¿Está seguro que desea HABILITAR a este Empleado?`;
+        stStatus = 'SI';
+    }
+
+
+    let btn = document.getElementById(idbtn);
+
+
+    F.Confirmacion(strMsn)
+    .then((value)=>{
+        if(value==true){
+
+            btn.disabled = true; btn.innerHTML = `<i class="fal fa-spin fa-sync"></i>`;
+
+            GF.update_st_empleado(codemp,stStatus)
+            .then(()=>{
+                F.Aviso('Empleado actualizado exitosamente!!');
+                tbl_empleados();
+            })
+            .catch(()=>{
+                F.AvisoError('No se pudo actualizar');
+                btn.disabled = false; btn.innerHTML = `<i class="fal fa-sync"></i>`;
+            })
+
+
+        }
+    })
+
+};
+
+function eliminar_empleado(codemp,idbtn){
+
+    let btn = document.getElementById(idbtn);
+
+    F.Confirmacion('¿Está seguro que desea ELIMINAR este Empleado?')
+    .then((value)=>{
+        if(value==true){
+
+            btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-trash"></i>`;
+
+            GF.delete_empleado(codemp)
+            .then(()=>{
+                F.Aviso('Empleado eliminado exitosamente!!');
+                tbl_empleados();
+            })
+            .catch(()=>{
+                F.AvisoError('No se pudo eliminar este Empleado');
+                btn.disabled=false;btn.innerHTML=`<i class="fal fa-trash"></i>`;
+            })
+
+        }
+    })
+
+};
+
+function editar_empleado(codigo,empnit,codpuesto,nombre,telefono,dpi,usuario,clave){
+
+    F.Confirmacion('¿Está seguro que desea EDITAR a este Empleado?')
+    .then((value)=>{
+        if(value==true){
+
+            document.getElementById('tab-dos').click();
+
+            document.getElementById('txtCodigo').value = codigo;
+            document.getElementById('cmbEmpresa').value = empnit;
+            document.getElementById('cmbPuesto').value = codpuesto;
+            document.getElementById('txtNombre').value = nombre;
+            document.getElementById('txtTelefono').value = telefono;
+            document.getElementById('txtDpi').value = dpi;
+            document.getElementById('txtUsuario').value = usuario;
+            document.getElementById('txtClave').value = clave;
+
+        }
+    })
+
+    
+   
 
 };
 

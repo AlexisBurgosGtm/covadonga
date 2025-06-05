@@ -498,37 +498,7 @@ function addListeners(){
     F.get_combo_anios('cmbAnio');
 
 
-    document.getElementById('txtFechaS').value = F.getFecha();
-    document.getElementById('txtHoraS').value = F.getHora();
-    document.getElementById('txtFechaE').value = F.getFecha();
-    document.getElementById('txtHoraE').value = F.getHora();
-
-
-    setInterval(() => {
-        document.getElementById('txtHoraS').value = F.getHora();
-        document.getElementById('txtHoraE').value = F.getHora()
-    }, 10000);
-
    
-
-
-    let btnNuevo = document.getElementById('btnNuevo');
-    btnNuevo.addEventListener('click',()=>{
-
-        let movinv = document.getElementById('cmbMovimiento').value;
-
-        if(movinv=='ENT'){
-            document.getElementById('tab-tres').click();
-            tbl_temp_entrada()
-        }else{
-            document.getElementById('tab-dos').click();
-            tbl_temp_salida();
-        }
-        
-        clean_data();
-            
-    });
-
 
     //cargando empresas
     GF.data_listado_empresas()

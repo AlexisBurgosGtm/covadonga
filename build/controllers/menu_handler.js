@@ -1,4 +1,7 @@
 let Menu = {
+    pendiente:()=>{
+        F.Aviso('Opcion en construccion');
+    },
     verify:()=>{
         if(Number(GlobalNivelUsuario)==0){return false;}
         return true;
@@ -33,6 +36,16 @@ let Menu = {
     productos:()=>{         
         if(Menu.verify()==true){
             F.loadScript('../views/view_productos.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
+    },
+    documentos:()=>{         
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_documentos.js','root')
             .then(async()=>{
                 initView();
             })
