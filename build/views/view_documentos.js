@@ -52,6 +52,7 @@ function getView(){
                                     <option value="ENT">ENTRADA DE INVENTARIO</option>
                                     <option value="SAL">SALIDA DE INVENTARIO</option>
                                     <option value="COM">COMPRAS</option>
+                                    <option value="PRS">PRESTAMO DE HERRAMIENTA</option>
                                 </select>
                             </div>
                         </div>
@@ -204,5 +205,11 @@ function initView(){
 
 function tbl_movimientos(){
 
+    let tipo = document.getElementById('cmbMovimiento').value;
+    let mes = document.getElementById('cmbMes').value;
+    let anio = document.getElementById('cmbAnio').value;
+
+
+    
 
 };

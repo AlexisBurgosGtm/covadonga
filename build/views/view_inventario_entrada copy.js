@@ -6,13 +6,13 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                             ${view.movimiento_entrada()}
+                            ${view.vista_listado()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
-                           
+                            ${view.movimiento_salida()}
                         </div>
                         <div class="tab-pane fade" id="tres" role="tabpanel" aria-labelledby="home-tab">
-                           
+                            ${view.movimiento_entrada()}
                         </div>    
                     </div>
 
@@ -36,32 +36,92 @@ function getView(){
                
             `
         },
-        movimiento_entrada: ()=>{
+        vista_listado:()=>{
+            return `
+            <div class="card card-rounded shadow">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                         
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Tipo Movimiento</label>
+                                <select class="negrita text-danger form-control" id="cmbMovimiento">
+                                    <option value="ENT">ENTRADA DE INVENTARIO</option>
+                                    <option value="SAL">SALIDA DE INVENTARIO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Seleccione Mes y Año</label>
+                                <div class="input-group">
+                                    <select class="negrita form-control" id="cmbMes">
+                                    </select>
+                                    <select class="negrita form-control" id="cmbAnio">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="card card-rounded shadow">
+                <div class="card-body p-2">
+                    <div class="table-responsive col-12">
+                        <table class="table table-responsive table-hover col-12" id="tblDocumentos">
+                            <thead class="bg-base text-white">
+                                <tr>
+                                    <td>EMPRESA</td>
+                                    <td>BODEGA</td>
+                                    <td>DOCUMENTO</td>
+                                    <td>FECHA</td>
+                                    <td>RESPONSABLES</td>
+                                    <td>IMPORTE</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDataDocumentos">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+          
+
+            <button class="btn btn-success btn-xl btn-circle btn-bottom-r hand shadow" id="btnNuevo">
+                <i class="fal fa-plus"></i>
+            </button>
+            `
+        },
+        movimiento_salida: ()=>{
             return `
             
             <div class="card card-rounded col-12">
                 <div class="card-body p-4" style="font-size:90%">
 
-                    <h4 class="negrita text-info text-center">Nueva Orden de Entrada</h4>
+                    <h4 class="negrita text-danger text-center">Nueva Orden de Salida</h4>
                     
                     <div class="row">
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
                             <div class="form-group">
                                 <label class="negrita text-secondary">Empresa</label>
-                                <select class="form-control negrita" id="cmbEmpresa">
+                                <select class="form-control negrita" id="cmbEmpresaS">
                                 </select>
 
                                 <label class="negrita text-secondary">Proyecto / Area</label>
-                                <select class="form-control negrita" id="cmbProyectos">
+                                <select class="form-control negrita" id="cmbProyectoS">
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label class="negrita text-secondary">Documento sistema</label>
                                 <div class="input-group">
-                                    <select class="form-control negrita" id="cmbCoddoc">
-                                    <input type="text" class="form-control negrita" id="txtCorrelativo" disabled="true">
+                                    <select class="form-control negrita" id="cmbCoddocS">
+                                    <input type="text" class="form-control negrita" id="txtCorrelativoS" disabled="true">
                                 </div>                               
                             </div>
 
@@ -73,17 +133,20 @@ function getView(){
                             <div class="form-group">
 
                                 <label class="negrita text-secondary">Persona que Recibe</label>
-                                <select class="form-control negrita"  id="cmbRecibe">
+                                <select class="form-control negrita"  id="cmbRecibeS">
                                 </select>
 
-                                
+                                 <label class="negrita text-secondary">Persona que Solicita</label>
+                                <select class="form-control negrita"  id="cmbSolicitaS">
+                                </select>
+
                             </div>
 
                             <div class="form-group">
                                 <label class="negrita text-secondary">Fecha y Hora del Despacho</label>
                                 <div class="input-group">
-                                    <input type="date" class="form-control negrita" id="txtFecha">
-                                    <input type="text" class="form-control negrita" id="txtHora" disabled="true">
+                                    <input type="date" class="form-control negrita" id="txtFechaS">
+                                    <input type="text" class="form-control negrita" id="txtHoraS" disabled="true">
                                 </div>
                                 
                             </div>
@@ -106,7 +169,7 @@ function getView(){
                             <div class="form-group">
                                 <label>Codigo Seleccionado</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtCodprod">
+                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtCodprodS">
                                 </div>
                                 
                             </div>
@@ -116,8 +179,8 @@ function getView(){
                             <div class="form-group">
                                 <label>Producto</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control negrita text-base" id="txtDesprod">
-                                    <button class="btn btn-success hand shadow" id="btnNuevoProducto">
+                                    <input type="text" class="form-control negrita text-base" id="txtDesprodS">
+                                    <button class="btn btn-success hand shadow" id="btnNuevoProductoS">
                                         <i class="fal fa-search"></i>
                                     </button>
                                 </div>
@@ -148,7 +211,7 @@ function getView(){
                                     <td></td>
                                 </tr>
                             </thead>
-                            <tbody id="tblDataMovimiento"></tbody>
+                            <tbody id="tblDataSalida"></tbody>
 
                         </table>
                     </div>
@@ -156,14 +219,146 @@ function getView(){
                 </div>
             </div>
 
-            <input type="text" id="txtCodprod" disabled="true" class="hidden">
+            <input type="text" id="txtCodprodS" disabled="true" class="hidden">
             
             
             <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow" onclick="document.getElementById('tab-uno').click()">
                 <i class="fal fa-arrow-left"></i>
             </button>
 
-            <button class="btn btn-info btn-xl btn-circle btn-bottom-r hand shadow" id="btnGuardar">
+            <button class="btn btn-info btn-xl btn-circle btn-bottom-r hand shadow" id="btnGuardarS">
+                <i class="fal fa-save"></i>
+            </button>
+            `
+        },
+        movimiento_entrada: ()=>{
+            return `
+            
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4" style="font-size:90%">
+
+                    <h4 class="negrita text-info text-center">Nueva Orden de Entrada</h4>
+                    
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Empresa</label>
+                                <select class="form-control negrita" id="cmbEmpresaE">
+                                </select>
+
+                                <label class="negrita text-secondary">Proyecto / Area</label>
+                                <select class="form-control negrita" id="cmbProyectoE">
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Documento sistema</label>
+                                <div class="input-group">
+                                    <select class="form-control negrita" id="cmbCoddocE">
+                                    <input type="text" class="form-control negrita" id="txtCorrelativoE" disabled="true">
+                                </div>                               
+                            </div>
+
+                          
+
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        
+                            <div class="form-group">
+
+                                <label class="negrita text-secondary">Persona que Recibe</label>
+                                <select class="form-control negrita"  id="cmbRecibeE">
+                                </select>
+
+                                
+                            </div>
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Fecha y Hora del Despacho</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control negrita" id="txtFechaE">
+                                    <input type="text" class="form-control negrita" id="txtHoraE" disabled="true">
+                                </div>
+                                
+                            </div>
+
+                        
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <br>
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4">
+
+                    <div class="row">
+
+                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <label>Codigo Seleccionado</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtCodprodE">
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                            <div class="form-group">
+                                <label>Producto</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control negrita text-base" id="txtDesprodE">
+                                    <button class="btn btn-success hand shadow" id="btnNuevoProductoE">
+                                        <i class="fal fa-search"></i>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                    </div>
+
+
+                </div>
+            </div>
+            
+            <br>
+
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered h-full col-12">
+                            <thead class="bg-base text-white">
+                                <tr>
+                                    <td>PRODUCTO</td>
+                                    <td>CANTIDAD</td>
+                                    <td>COSTO</td>
+                                    <td>SUBTOTAL</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDataEntrada"></tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <input type="text" id="txtCodprodE" disabled="true" class="hidden">
+            
+            
+            <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow" onclick="document.getElementById('tab-uno').click()">
+                <i class="fal fa-arrow-left"></i>
+            </button>
+
+            <button class="btn btn-info btn-xl btn-circle btn-bottom-r hand shadow" id="btnGuardarE">
                 <i class="fal fa-save"></i>
             </button>
             `
@@ -299,12 +494,11 @@ function addListeners(){
     F.slideAnimationTabs();
 
 
-    document.getElementById('txtFecha').value = F.getFecha();
+    F.get_combo_meses('cmbMes');
+    F.get_combo_anios('cmbAnio');
 
-   setInterval(() => {
-        document.getElementById('txtHora').value = F.getHora();
-   }, 1000);
 
+   
 
     //cargando empresas
     GF.data_listado_empresas()
@@ -317,12 +511,13 @@ function addListeners(){
             <option value='${r.EMPNIT}'>${r.EMPRESA}</option>
             `
         })
-      
-        document.getElementById('cmbEmpresa').innerHTML = str;
+        document.getElementById('cmbEmpresaS').innerHTML = str;
+        document.getElementById('cmbEmpresaE').innerHTML = str;
 
     })
     .catch(()=>{
-       document.getElementById('cmbEmpresa').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+        document.getElementById('cmbEmpresaS').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+        document.getElementById('cmbEmpresaE').innerHTML = "<option value=''>No se cargaron las empresas</option>";
 
     });
     //cargando empresas
@@ -338,12 +533,18 @@ function addListeners(){
             str += `
             <option value='${r.CODEMP}'>${r.NOMEMP} (<small class="negrita">${r.EMPRESA}</small>)</option>`
         })
-        document.getElementById('cmbRecibe').innerHTML = str;
-  
+        document.getElementById('cmbRecibeS').innerHTML = str;
+        document.getElementById('cmbSolicitaS').innerHTML = str;
+        document.getElementById('cmbRecibeE').innerHTML = str;
+        //document.getElementById('cmbSolicitaE').innerHTML = str;
+
     })
     .catch(()=>{
-         document.getElementById('cmbRecibe').innerHTML = "<option value=''>SN</option>";
-      })
+        document.getElementById('cmbRecibeS').innerHTML = "<option value=''>SN</option>";
+        document.getElementById('cmbSolicitaS').innerHTML = "<option value=''>SN</option>";
+        document.getElementById('cmbRecibeE').innerHTML = "<option value=''>SN</option>";
+        //document.getElementById('cmbSolicitaE').innerHTML = "<option value=''>SN</option>";
+    })
     //carga de empleados
 
 
@@ -358,18 +559,45 @@ function addListeners(){
             <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO} (${r.EMPRESA})</option>
             `
         })
-         document.getElementById('cmbProyectos').innerHTML = str;
+        document.getElementById('cmbProyectoS').innerHTML = str;
+        document.getElementById('cmbProyectoE').innerHTML = str;
 
     })
     .catch(()=>{
-        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+        document.getElementById('cmbProyectoS').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+        document.getElementById('cmbProyectoE').innerHTML = "<option value=''>No se cargaron las empresas</option>";
 
     });
     //cargando empresas
 
 
 
-   
+    //cargando coddoc salidas
+    GF.data_coddoc('%','SAL')
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODDOC}'>${r.CODDOC}</option>
+            `
+        })
+        document.getElementById('cmbCoddocS').innerHTML = str;
+        
+        GF.data_correlativo('%',document.getElementById('cmbCoddocS').value)
+        .then((data)=>{document.getElementById('txtCorrelativoS').value=data})
+        .catch((data)=>{document.getElementById('txtCorrelativoS').value=data})
+  
+        tbl_temp_salida();
+    })
+    .catch(()=>{
+        document.getElementById('cmbCoddocS').innerHTML = "<option value=''></option>";
+        document.getElementById('txtCorrelativoS').value = '0';
+    });
+    //cargando coddoc salidas
+
+
 
      //cargando coddoc entradas
     GF.data_coddoc('%','ENT')
@@ -382,38 +610,40 @@ function addListeners(){
             <option value='${r.CODDOC}'>${r.CODDOC}</option>
             `
         })
-        document.getElementById('cmbCoddoc').innerHTML = str;
-        GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
-        .then((data)=>{document.getElementById('txtCorrelativo').value=data})
-        .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
+        document.getElementById('cmbCoddocE').innerHTML = str;
+        GF.data_correlativo('%',document.getElementById('cmbCoddocE').value)
+        .then((data)=>{document.getElementById('txtCorrelativoE').value=data})
+        .catch((data)=>{document.getElementById('txtCorrelativoE').value=data})
   
         tbl_temp_entrada();
 
     })
     .catch(()=>{
-        document.getElementById('cmbCoddoc').innerHTML = "<option value=''></option>";
-        document.getElementById('txtCorrelativo').value = '0';
+        document.getElementById('cmbCoddocE').innerHTML = "<option value=''></option>";
+        document.getElementById('txtCorrelativoE').value = '0';
     });
     //cargando coddoc entradas
 
 
 
-    document.getElementById('txtDesprod').addEventListener('keyup',(e)=>{
+    tbl_movimientos();
+
+    document.getElementById('txtDesprodE').addEventListener('keyup',(e)=>{
         if (e.code === 'Enter') { 
-             document.getElementById('btnNuevoProducto').click();
+             document.getElementById('btnNuevoProductoE').click();
         };
         if (e.keyCode === 13 && !e.shiftKey) {
-            document.getElementById('btnNuevoProducto').click();
+            document.getElementById('btnNuevoProductoE').click();
         };
     })
     
 
-    document.getElementById('btnNuevoProducto').addEventListener('click',()=>{
+    document.getElementById('btnNuevoProductoE').addEventListener('click',()=>{
         
         $('#modal_productos').modal('show');
 
-        let sucursal = document.getElementById('cmbEmpresa').value;
-        let filtro = document.getElementById('txtDesprod').value || '';
+        let sucursal = document.getElementById('cmbEmpresaE').value;
+        let filtro = document.getElementById('txtDesprodE').value || '';
 
         document.getElementById('txtTipoEntSal').value = 'E';
 
@@ -423,8 +653,30 @@ function addListeners(){
     });
 
 
-  
-  
+    document.getElementById('txtDesprodS').addEventListener('keyup',(e)=>{
+        if (e.code === 'Enter') { 
+             document.getElementById('btnNuevoProductoS').click();
+        };
+        if (e.keyCode === 13 && !e.shiftKey) {
+            document.getElementById('btnNuevoProductoS').click();
+        };
+    })
+
+
+    document.getElementById('btnNuevoProductoS').addEventListener('click',()=>{
+        
+        $('#modal_productos').modal('show');
+
+         let sucursal = document.getElementById('cmbEmpresaS').value;
+        let filtro = document.getElementById('txtDesprodS').value || '';
+
+        document.getElementById('txtTipoEntSal').value = 'S';
+
+        tbl_lista_productos(sucursal,filtro,'S');
+
+
+    });
+
 
     document.getElementById('txtCantidad').addEventListener('change',()=>{
 
@@ -469,17 +721,32 @@ function addListeners(){
 
         F.showToast('Producto agregado a la lista');
     
-        let coddoc = document.getElementById('cmbCoddoc').value;
-        let codprod = document.getElementById('txtCodprod').value;
-        let desprod = document.getElementById('txtDesprod').value;
+        let coddoc = document.getElementById('cmbCoddoc' + tipoentsal).value;
+        let codprod = document.getElementById('txtCodprod' + tipoentsal).value;
+        let desprod = document.getElementById('txtDesprod' + tipoentsal).value;
         let totalcosto = (Number(costo)*Number(cantidad));
 
             $("#modal_cantidad").modal('hide');
-       
+
+            if(tipoentsal=='E'){
                 db_movinv.insert_temp_movinv_entrada(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
                 .then(()=>{
                     tbl_temp_entrada();
                 })
+                
+            }else{
+                 db_movinv.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
+                .then(()=>{
+                    tbl_temp_salida();
+                })
+            }
+            
+        
+
+
+
+
+
 
 
     });
@@ -490,14 +757,14 @@ function addListeners(){
     // modal cantidad
     
 
-    let btnGuardar = document.getElementById('btnGuardar');
-    btnGuardar.addEventListener('click',()=>{
+    let btnGuardarE = document.getElementById('btnGuardarE');
+    btnGuardarE.addEventListener('click',()=>{
 
         F.Confirmacion('¿Está seguro que desea Guardar este movimiento?')
         .then((value)=>{
             if(value==true){
 
-                insert_movimiento('')
+                insert_movimiento('E')
                 .then(()=>{
                     F.Aviso('Documento guardado exitosamente!!')
                 })
@@ -513,7 +780,25 @@ function addListeners(){
     });
 
 
-  
+    let btnGuardarS = document.getElementById('btnGuardarS');
+    btnGuardarS.addEventListener('click',()=>{
+
+        F.Confirmacion('¿Está seguro que desea Guardar este movimiento?')
+        .then((value)=>{
+            if(value==true){
+
+                insert_movimiento('S')
+                .then(()=>{
+                    F.Aviso('Documento guardado exitosamente!!')
+                })
+                .catch(()=>{
+                    F.AvisoError('No se pudo guardar');
+                })
+
+            }
+        })
+        
+    });
 
 
 };
@@ -649,8 +934,8 @@ function get_producto(codprod,desprod,costo,entsal){
 
   
 
-        document.getElementById('txtCodprod').value = codprod;
-        document.getElementById('txtDesprod').value = desprod;
+        document.getElementById('txtCodprod' + entsal).value = codprod;
+        document.getElementById('txtDesprod' + entsal).value = desprod;
         
 
 
@@ -735,7 +1020,7 @@ function delete_temp_salida(idrow,idbtn){
 function tbl_temp_entrada(){
 
     
-    let container = document.getElementById('tblDataMovimiento');
+    let container = document.getElementById('tblDataEntrada');
     container.innerHTML = GlobalLoader;
 
     let str = '';

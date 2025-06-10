@@ -83,9 +83,25 @@ let Menu = {
             F.AvisoError('No tiene permitido entrar a esta sección');
         }
     },
-    nueva_salida:()=>{         
+    nueva_salida:()=>{     
+
+        F.Aviso('Opcion en construccion');return;
+    
         if(Menu.verify()==true){
             F.loadScript('../views/view_inventario_salidas.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
+    },
+    nueva_entrega_prestamo:()=>{  
+        
+        F.Aviso('Opcion en construccion');return;
+
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_inventario_prestamo.js','root')
             .then(async()=>{
                 initView();
             })
