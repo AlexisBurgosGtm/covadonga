@@ -46,7 +46,7 @@ function getView(){
                             <img class="" width="80px" height="80px" src="./favicon.png">
                         </div>
                         <div class="col-6">
-                            <h2 class="text-left negrita text-base">Nueva Orden de Entrada</h2>
+                            <h2 class="text-left negrita text-base">Nueva Orden de Salida</h2>
                             <h5 class="negrita text-danger" id="lbItems"></h5>
                         </div>
                     </div>
@@ -137,20 +137,25 @@ function getView(){
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
                             <div class="form-group">
-                                <label class="negrita text-secondary">Empresa / Bodega</label>
+                                <label class="negrita text-secondary">Empresa / Bodega (Salida)</label>
                                 <select class="form-control negrita" id="cmbEmpresa">
-                                </select>
+                                </select>                              
+                            </div>
 
-                              
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Empresa / Bodega (Entrada)</label>
+                                <select class="form-control negrita" id="cmbEmpresaEntrada">
+                                </select>                              
                             </div>
 
                             <div class="form-group">
                               
-
                                 <label class="negrita text-secondary">Proyecto / Area</label>
                                 <select class="form-control negrita" id="cmbProyectos">
                                 </select>
                             </div>
+
+                            
 
                             <div class="form-group">
                                 <label class="negrita text-secondary">Documento sistema</label>
@@ -368,11 +373,12 @@ function addListeners(){
         })
       
         document.getElementById('cmbEmpresa').innerHTML = str;
+        document.getElementById('cmbEmpresaEntrada').innerHTML = str;
 
     })
     .catch(()=>{
        document.getElementById('cmbEmpresa').innerHTML = "<option value=''>No se cargaron las empresas</option>";
-
+       document.getElementById('cmbEmpresaEntrada').innerHTML = "<option value=''>No se cargaron las empresas</option>";
     });
     //cargando empresas
 
@@ -421,7 +427,7 @@ function addListeners(){
    
 
      //cargando coddoc entradas
-    GF.data_coddoc('%','ENT')
+    GF.data_coddoc('%','SAL')
     .then((data)=>{
         
         let str = '';
@@ -466,7 +472,7 @@ function addListeners(){
 
         document.getElementById('txtTipoEntSal').value = 'E';
 
-        tbl_lista_productos(sucursal,filtro,'E');
+        tbl_lista_productos(sucursal,filtro,'S');
 
 
     });
@@ -511,7 +517,7 @@ function addListeners(){
 
             $("#modal_cantidad").modal('hide');
        
-                db_movinv.insert_temp_movinv_entrada(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
+                db_movinv.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
                 .then(()=>{
                     tbl_temp_entrada();
                 })
@@ -597,6 +603,7 @@ function insert_movimiento(entsal){
          let json_details;
 
         let sucursal = document.getElementById('cmbEmpresa').value;
+        let sucursal_entrada = document.getElementById('cmbEmpresaEntrada').value;
         let coddoc = document.getElementById('cmbCoddoc').value;
         let correlativo = document.getElementById('txtCorrelativo').value;
         let mes = 0;

@@ -430,11 +430,11 @@ let GF = {
     
 
         },
-        data_lista_productos:(sucursal,filtro)=>{
+        data_lista_productos:(sucursal,filtro,tipo)=>{
 
             return new Promise((resolve,reject)=>{
 
-                axios.post(GlobalUrlCalls + '/general/listado_productos',{sucursal:sucursal,filtro:filtro})
+                axios.post(GlobalUrlCalls + '/general/listado_productos',{sucursal:sucursal,filtro:filtro,tipo:tipo})
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
@@ -587,6 +587,33 @@ let GF = {
             return new Promise((resolve,reject)=>{
 
                 axios.post(GlobalUrlCalls + '/empleados/delete_empleado', {codigo:codemp})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        data_documentos:(sucursal,tipo,mes,anio)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/select_documentos',{sucursal:sucursal,tipo:tipo,mes:mes,anio:anio})
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;

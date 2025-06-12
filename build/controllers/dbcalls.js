@@ -51,7 +51,7 @@ let db_movinv = {
         })            
     },
     select_temp_movinv_entrada:()=>{
-
+      
         return new Promise(async(resolve,reject)=>{
             var response = await connection.select({
                 from: "temp_entrada",                
@@ -97,6 +97,15 @@ let db_movinv = {
                 where: {
                     ID: Number(id)
                 }
+            });
+            if(rowsDeleted>0){resolve()}else{reject()}
+        })            
+    },
+    delete_temp_movinv_entrada_all:()=>{
+       
+        return new Promise(async(resolve,reject)=>{
+            var rowsDeleted = await connection.remove({
+                from: "temp_entrada"
             });
             if(rowsDeleted>0){resolve()}else{reject()}
         })            

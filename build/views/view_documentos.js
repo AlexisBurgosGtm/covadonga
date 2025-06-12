@@ -48,7 +48,7 @@ function getView(){
                          
                             <div class="form-group">
                                 <label class="negrita text-secondary">Tipo Documento</label>
-                                <select class="negrita text-danger form-control" id="cmbMovimiento">
+                                <select class="negrita text-danger form-control" id="cmbTipo">
                                     <option value="ENT">ENTRADA DE INVENTARIO</option>
                                     <option value="SAL">SALIDA DE INVENTARIO</option>
                                     <option value="COM">COMPRAS</option>
@@ -80,8 +80,8 @@ function getView(){
                                     <td>EMPRESA / BODEGA</td>
                                     <td>DOCUMENTO</td>
                                     <td>FECHA</td>
-                                    <td>RESPONSABLES</td>
-                                    <td>IMPORTE</td>
+                                    <td>RECIBE/SOLICITA</td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -186,12 +186,16 @@ function addListeners(){
     F.get_combo_anios('cmbAnio');
 
  
+    document.getElementById('cmbMes').addEventListener('change',()=>{
+        tbl_movimientos(); 
+    });
 
+    document.getElementById('cmbAnio').addEventListener('change',()=>{
+        tbl_movimientos(); 
+    });
 
 
     tbl_movimientos();
-
-
 
 };
 
@@ -205,11 +209,37 @@ function initView(){
 
 function tbl_movimientos(){
 
-    let tipo = document.getElementById('cmbMovimiento').value;
+    let tipo = document.getElementById('cmbTipo').value;
     let mes = document.getElementById('cmbMes').value;
     let anio = document.getElementById('cmbAnio').value;
 
+    let container = document.getElementById('tblDataDocumentos');
+    container.innerHTML = GlobalLoader;
 
+    GF.data_documentos(GlobalEmpnit,tipo,mes,anio)
+    .then((data)=>{
+        let str = '';
+        data.recordset.map((r)=>{
+            str += `
+            <tr>
+                <td>${r.EMPRESA}</td>
+                <td>${r.CODDOC}-${r.CORRELATIVO}</td>
+                <td>${F.convertDateNormal(r.FECHA)}</td>
+                <td>${r.RECIBE}
+                    <br>
+                    <small class="negrita">${r.SOLICITA}</small>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            `
+        })
+        container.innerHTML = str;
+    })
+    .catch(()=>{
+        container.innerHTML = 'No se cargaron datos...';
+    })
     
 
 };
