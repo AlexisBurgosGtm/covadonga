@@ -112,10 +112,8 @@ let Menu = {
     },
     traslados:()=>{  
         
-        F.Aviso('Opcion en construccion');return;
-
         if(Menu.verify()==true){
-            F.loadScript('../views/view_inventario_prestamo.js','root')
+            F.loadScript('../views/view_traslados.js','root')
             .then(async()=>{
                 initView();
             })
