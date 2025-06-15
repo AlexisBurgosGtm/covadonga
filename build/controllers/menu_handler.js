@@ -63,9 +63,11 @@ let Menu = {
             F.AvisoError('No tiene permitido entrar a esta sección');
         }
     },
-    nueva_compra:()=>{         
+    nueva_compra:()=>{      
+          F.Aviso('Opcion en construccion');return;
+
         if(Menu.verify()==true){
-            F.loadScript('../views/view_inventario_entrada.js','root')
+            F.loadScript('../views/view_compra.js','root')
             .then(async()=>{
                 initView();
             })

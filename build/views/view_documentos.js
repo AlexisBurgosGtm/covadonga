@@ -186,6 +186,11 @@ function addListeners(){
     F.get_combo_anios('cmbAnio');
 
  
+    document.getElementById('cmbTipo').addEventListener('change',()=>{
+        tbl_movimientos(); 
+    });
+
+
     document.getElementById('cmbMes').addEventListener('change',()=>{
         tbl_movimientos(); 
     });

@@ -42,7 +42,7 @@ router.post("/select_documentos", async(req,res)=>{
 
 router.post("/insert_documento", async(req,res)=>{
 
-        const {sucursal,coddoc,correlativo,mes,anio,fecha,hora,codproyecto,codsolicita,codrecibe,noorden,
+        const {sucursal,sucursal_recibe,coddoc,correlativo,mes,anio,fecha,hora,codproyecto,codsolicita,codrecibe,noorden,
                 obs,items,totalcosto,json_details
         } = req.body;
 
@@ -51,14 +51,14 @@ router.post("/insert_documento", async(req,res)=>{
                 INSERT INTO ORDERS 
                 (EMPNIT,CODDOC,CORRELATIVO,MES,ANIO,FECHA,HORA,CODPROYECTO,
                         CODEMP_SOLICITA,CODEMP_RECIBE,NO_ORDEN,OBS,STATUS,
-                        ITEMS,TOTALCOSTO,JSON_DETAILS)
+                        ITEMS,TOTALCOSTO,JSON_DETAILS,EMPNIT_RECIBE)
                 SELECT '${sucursal}' AS EMPNIT,'${coddoc}' AS CODDOC,${correlativo} AS CORRELATIVO,
                 MONTH('${fecha}') AS MES, YEAR('${fecha}') AS ANIO,'${fecha}' AS FECHA,
                 '${hora}' AS HORA,${codproyecto} AS CODPROYECTO,
                 ${codsolicita} AS CODEMP_SOLICITA,${codrecibe} AS CODEMP_RECIBE,
                 '${noorden}' AS NO_ORDEN,'${obs}' AS OBS,'O' AS STATUS,
                 ${items} AS ITEMS, ${totalcosto} AS TOTALCOSTO,
-                '${json_details}' AS JSON_DETAILS;
+                '${json_details}' AS JSON_DETAILS, '${sucursal_recibe}' AS EMPNIT_RECIBE;
         `
 
         let qry_docproductos = qry_docproductos_sql(sucursal,coddoc,correlativo,fecha,json_details);
@@ -145,7 +145,7 @@ router.post("/listado_productos", async(req,res)=>{
         ORDER BY view_invsaldo_productos_empresas.CODPROD
         `
 
-        console.log(qry)
+     
         
         execute.QueryToken(res,qry,'')
 

@@ -436,7 +436,7 @@ function addListeners(){
         .then((data)=>{document.getElementById('txtCorrelativo').value=data})
         .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
   
-        tbl_temp_entrada();
+        
 
     })
     .catch(()=>{
@@ -523,6 +523,8 @@ function addListeners(){
 
     
     // modal cantidad
+    
+    tbl_temp_entrada();
     
 
     let btnGuardar = document.getElementById('btnGuardar');
@@ -631,6 +633,7 @@ function insert_movimiento(entsal){
                 json_details = data;
 
                 let datos = {sucursal:sucursal,
+                    sucursal_recibe:sucursal,
                     coddoc:coddoc,
                     correlativo:correlativo,
                     mes:mes,

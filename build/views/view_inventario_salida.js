@@ -6,10 +6,10 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                             ${view.movimiento_entrada_productos()}
+                             ${view.movimiento_salida_productos()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
-                           ${view.movimiento_entrada_encabezado()}
+                           ${view.movimiento_salida_encabezado()}
                         </div>
                         <div class="tab-pane fade" id="tres" role="tabpanel" aria-labelledby="home-tab">
                            
@@ -36,7 +36,7 @@ function getView(){
                
             `
         },
-        movimiento_entrada_productos: ()=>{
+        movimiento_salida_productos: ()=>{
             return `
             <div class="card card-rounded col-12">
                 <div class="card-body p-4">
@@ -123,7 +123,7 @@ function getView(){
             
             `
         },
-        movimiento_entrada_encabezado: ()=>{
+        movimiento_salida_encabezado: ()=>{
             return `
          
             <div class="card card-rounded col-12">
@@ -442,8 +442,7 @@ function addListeners(){
         .then((data)=>{document.getElementById('txtCorrelativo').value=data})
         .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
   
-        tbl_temp_entrada();
-
+      
     })
     .catch(()=>{
         document.getElementById('cmbCoddoc').innerHTML = "<option value=''></option>";
@@ -519,7 +518,7 @@ function addListeners(){
        
                 db_movinv.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
                 .then(()=>{
-                    tbl_temp_entrada();
+                    tbl_temp_salida();
                 })
 
 
@@ -529,7 +528,8 @@ function addListeners(){
 
     
     // modal cantidad
-    
+    tbl_temp_salida();
+
 
     let btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.addEventListener('click',()=>{
@@ -603,7 +603,8 @@ function insert_movimiento(entsal){
          let json_details;
 
         let sucursal = document.getElementById('cmbEmpresa').value;
-        let sucursal_entrada = document.getElementById('cmbEmpresaEntrada').value;
+    
+        let sucursal_recibe = document.getElementById('cmbEmpresaEntrada').value;
         let coddoc = document.getElementById('cmbCoddoc').value;
         let correlativo = document.getElementById('txtCorrelativo').value;
         let mes = 0;
@@ -621,7 +622,7 @@ function insert_movimiento(entsal){
         let items = 0; let varTotalCosto = 0;
 
  
-        db_movinv.select_temp_movinv_entrada()
+        db_movinv.select_temp_movinv_salida()
         .then((data)=>{
 
             data.map((r)=>{
@@ -638,6 +639,7 @@ function insert_movimiento(entsal){
                 json_details = data;
 
                 let datos = {sucursal:sucursal,
+                    sucursal_recibe: sucursal_recibe,
                     coddoc:coddoc,
                     correlativo:correlativo,
                     mes:mes,
@@ -689,9 +691,9 @@ function clean_data(){
 
 
 
-    db_movinv.delete_temp_movinv_entrada_all()
+    db_movinv.delete_temp_movinv_salida_all()
     .then(()=>{
-        tbl_temp_entrada();
+        tbl_temp_salida();
     })
 
 
@@ -767,7 +769,7 @@ function get_producto(codprod,desprod,costo,entsal){
 
 
 
-function tbl_temp_entrada(){
+function tbl_temp_salida(){
 
     
     let container = document.getElementById('tblDataMovimiento');
@@ -778,7 +780,7 @@ function tbl_temp_entrada(){
     let varTotal = 0;
     let varItem = 0;
 
-    db_movinv.select_temp_movinv_entrada()
+    db_movinv.select_temp_movinv_salida()
     .then((data)=>{
         
         data.map((r)=>{
@@ -798,7 +800,7 @@ function tbl_temp_entrada(){
                 <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
                 <td>
                     <button class="btn btn-danger btn-circle btn-md hand shadow" id="${idbtn}"
-                     onclick="delete_temp_entrada('${r.ID}','${idbtn}')">
+                     onclick="delete_temp_salida('${r.ID}','${idbtn}')">
                         <i class="fal fa-trash"></i>
                      </button>
                 </td>
@@ -814,14 +816,14 @@ function tbl_temp_entrada(){
 
 };
 
-function delete_temp_entrada(idrow,idbtn){
+function delete_temp_salida(idrow,idbtn){
 
       F.Confirmacion('¿Está seguro que desea ELIMINAR esta linea?')
         .then((value)=>{
             if(value==true){
-                    db_movinv.delete_temp_movinv_entrada_id(idrow)
+                    db_movinv.delete_temp_movinv_salida_id(idrow)
                     .then(()=>{
-                        tbl_temp_entrada();
+                        tbl_temp_salida();
                     })
             }
         })
