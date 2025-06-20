@@ -296,6 +296,27 @@ function getView(){
                             <div class="card card-rounded">
                                 <div class="card-body p-4">
 
+                                    <div class="form-group">
+                                        <label>Escriba para buscar...</label>
+                                        <input type="text"
+                                        placeholder='Escriba para filtrar...'
+                                        class="form-control negrita text-danger"
+                                        id="txtBuscarHistorial"
+                                        <F.FiltrarTabla('tblHistorial','txtBuscarHistorial')>>
+                                    </div>
+
+                                    <table class="table h-full col-12 table-bordered" id="tblHistorial">
+                                        <thead class="bg-secondary text-white">
+                                            <tr>
+                                                <td>FECHA</td>
+                                                <td>DOCUMENTO</td>
+                                                <td>ENTRADA</td>
+                                                <td>SALIDA</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tblDataHistorial">
+                                        </tbody>
+                                    </table>
 
                                     
                                 </div>
