@@ -926,6 +926,29 @@ let F = {
           return resultado;
 
       },
+      limpiarTextoExport: (texto) =>{
+
+          let resultado = '';
+
+          var ignorarMayMin = true;
+          var reemplazarCon = "";
+          var reemplazarQue = '"';
+          reemplazarQue = reemplazarQue.replace(/[\\^$.|?*+()[{]/g, "\\$&"),
+          reemplazarCon = reemplazarCon.replace(/\$(?=[$&`"'\d])/g, "$$$$"),
+          modif = "g" + (ignorarMayMin ? "i" : ""),
+          regex = new RegExp(reemplazarQue, modif);
+          resultado = texto.replace(regex,reemplazarCon);
+          resultado = resultado.replace('´','');
+          resultado = resultado.replace("'","");
+          resultado = resultado.replace("#","");
+          resultado = resultado.replace("&","");
+          resultado = resultado.replace("%","");
+          resultado = resultado.replace(/(\r\n|\n|\r)/gm, ""); //quita el enter o salto de linea
+
+          
+          return resultado;
+
+      },
       devuelveFecha: (idInputFecha)=>{
           let fe = new Date(document.getElementById(idInputFecha).value);
           let ae = fe.getFullYear();

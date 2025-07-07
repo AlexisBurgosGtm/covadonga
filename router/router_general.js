@@ -5,12 +5,53 @@ const router = express.Router();
 
 
 
+
+
+
+
+
+
+router.post("/select_traslados_recibidos_pendientes", async(req,res)=>{
+
+        const {sucursal} = req.body;
+
+        let qry = `
+        SELECT ORDERS.ID,ORDERS.EMPNIT, EMPRESAS.EMPRESA, 
+                ORDERS.CODDOC, ORDERS.CORRELATIVO, 
+                ORDERS.FECHA, ORDERS.HORA, 
+                ORDERS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO, 
+                  ISNULL(EMPLEADOS_1.NOMEMP,'') AS SOLICITA, 
+				  ISNULL(EMPLEADOS.NOMEMP,'') AS RECIBE, 
+                                  ORDERS.NO_ORDEN, ORDERS.OBS, 
+                                  ORDERS.STATUS,
+                                  ORDERS.ITEMS,
+                                  ORDERS.TOTALCOSTO
+        FROM     ORDERS LEFT OUTER JOIN
+                        EMPLEADOS ON ORDERS.CODEMP_RECIBE = EMPLEADOS.CODEMP LEFT OUTER JOIN
+                        EMPLEADOS AS EMPLEADOS_1 ON ORDERS.CODEMP_SOLICITA = EMPLEADOS_1.CODEMP LEFT OUTER JOIN
+                        PROYECTOS ON ORDERS.CODPROYECTO = PROYECTOS.CODPROYECTO LEFT OUTER JOIN
+                        TIPODOCUMENTOS ON ORDERS.CODDOC = TIPODOCUMENTOS.CODDOC LEFT OUTER JOIN
+                        EMPRESAS ON ORDERS.EMPNIT = EMPRESAS.EMPNIT
+        WHERE  
+                (TIPODOCUMENTOS.TIPODOC='SAL')
+	        AND (ORDERS.EMPNIT_RECIBE='${sucursal}')
+		AND (ORDERS.FECHA_RECIBE IS NULL)
+        `
+    
+                console.log(qry)
+                
+        execute.QueryToken(res,qry,'')
+
+});
+
+
+
 router.post("/select_documentos", async(req,res)=>{
 
         const {sucursal,tipo,mes,anio} = req.body;
 
         let qry = `
-        SELECT ORDERS.EMPNIT, EMPRESAS.EMPRESA, 
+        SELECT ORDERS.ID,ORDERS.EMPNIT, EMPRESAS.EMPRESA, 
                 ORDERS.CODDOC, ORDERS.CORRELATIVO, 
                 ORDERS.FECHA, ORDERS.HORA, 
                 ORDERS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO, 
@@ -157,12 +198,75 @@ router.post("/select_empresas", async(req,res)=>{
         //const {sucursal} = req.body;
 
         let qry = `
-        SELECT  EMPNIT, EMPRESA FROM EMPRESAS;
+        SELECT  EMPNIT, EMPRESA, HABILITADO FROM EMPRESAS WHERE HABILITADO='SI';
         `
     
         execute.QueryToken(res,qry,'')
 
 });
+
+router.post("/select_empresas_listado", async(req,res)=>{
+
+        //const {sucursal} = req.body;
+
+        let qry = `
+        SELECT  EMPNIT, EMPRESA, HABILITADO FROM EMPRESAS;
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+router.post("/delete_empresa", async(req,res)=>{
+
+        const {sucursal} = req.body;
+
+        let qry = `
+        DELETE FROM EMPRESAS WHERE EMPNIT='${sucursal}';
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+router.post("/update_status_empresa", async(req,res)=>{
+
+        const {sucursal,st} = req.body;
+
+        let qry = `
+        UPDATE EMPRESAS SET HABILITADO='${st}' WHERE EMPNIT='${sucursal}';
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+router.post("/insert_empresa", async(req,res)=>{
+
+        const {sucursal,empresa} = req.body;
+
+        let qry = `
+        INSERT INTO EMPRESAS (EMPNIT,EMPRESA,HABILITADO)
+        SELECT '${sucursal}' AS EMPNIT, '${empresa}' AS EMPRESA, 'SI' AS HABILITADO;
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+
+router.post("/edit_empresa", async(req,res)=>{
+
+        const {sucursal,empresa} = req.body;
+
+        let qry = `
+        UPDATE EMPRESAS SET EMPRESA='${empresa}' WHERE EMPNIT='${sucursal}';
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
 
 
 router.post("/select_proyectos", async(req,res)=>{

@@ -430,6 +430,142 @@ let GF = {
     
 
         },
+        data_listado_empresas_todas:()=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/select_empresas_listado')
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        delete_empresa:(sucursal)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/delete_empresa', {sucursal:sucursal})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        update_empresa_status:(sucursal,newSt)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/update_status_empresa', {
+                    sucursal:sucursal,st:newSt})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        insert_empresa:(sucursal,nombre)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/insert_empresa', {sucursal:sucursal,empresa:nombre})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        edit_empresa:(sucursal,nombre)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/edit_empresa', {sucursal:sucursal,empresa:nombre})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
         data_lista_productos:(sucursal,filtro,tipo)=>{
 
             return new Promise((resolve,reject)=>{
@@ -614,6 +750,35 @@ let GF = {
             return new Promise((resolve,reject)=>{
 
                 axios.post(GlobalUrlCalls + '/general/select_documentos',{sucursal:sucursal,tipo:tipo,mes:mes,anio:anio})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        data_traslados_recibidos_pendientes:(sucursal)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/select_traslados_recibidos_pendientes',{
+                    sucursal:sucursal
+                })
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
