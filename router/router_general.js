@@ -10,23 +10,16 @@ router.post("/select_traslados_recibidos_pendientes", async(req,res)=>{
         const {sucursal} = req.body;
 
         let qry = `
-                SELECT ORDERS.ID,ORDERS.EMPNIT, EMPRESAS.EMPRESA, 
-                        ORDERS.CODDOC, ORDERS.CORRELATIVO, 
-                        ORDERS.FECHA, ORDERS.HORA, 
-                        ORDERS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO, 
-                        ISNULL(EMPLEADOS_1.NOMEMP,'') AS SOLICITA, 
-			ISNULL(EMPLEADOS.NOMEMP,'') AS RECIBE, 
-                        ORDERS.NO_ORDEN, ORDERS.OBS, 
-                        ORDERS.STATUS,
-                        ORDERS.ITEMS,
-                        ORDERS.TOTALCOSTO,
-                        ORDERS.EMPNIT_RECIBE
-                FROM ORDERS LEFT OUTER JOIN
-                        EMPLEADOS ON ORDERS.CODEMP_RECIBE = EMPLEADOS.CODEMP LEFT OUTER JOIN
-                        EMPLEADOS AS EMPLEADOS_1 ON ORDERS.CODEMP_SOLICITA = EMPLEADOS_1.CODEMP LEFT OUTER JOIN
-                        PROYECTOS ON ORDERS.CODPROYECTO = PROYECTOS.CODPROYECTO LEFT OUTER JOIN
-                        TIPODOCUMENTOS ON ORDERS.CODDOC = TIPODOCUMENTOS.CODDOC LEFT OUTER JOIN
-                        EMPRESAS ON ORDERS.EMPNIT = EMPRESAS.EMPNIT
+                SELECT ORDERS.ID, ORDERS.EMPNIT, EMPRESAS.EMPRESA, ORDERS.CODDOC, ORDERS.CORRELATIVO, ORDERS.FECHA, ORDERS.HORA, ORDERS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO, 
+                  ISNULL(EMPLEADOS_1.NOMEMP, '') AS SOLICITA, ISNULL(EMPLEADOS.NOMEMP, '') AS RECIBE, ORDERS.NO_ORDEN, ORDERS.OBS, ORDERS.STATUS, ORDERS.ITEMS, ORDERS.TOTALCOSTO, ORDERS.EMPNIT_RECIBE, 
+                        ORDERS.CODEMP_SOLICITA, 
+                        ORDERS.CODEMP_RECIBE
+                FROM     ORDERS LEFT OUTER JOIN
+                  EMPLEADOS ON ORDERS.CODEMP_RECIBE = EMPLEADOS.CODEMP LEFT OUTER JOIN
+                  EMPLEADOS AS EMPLEADOS_1 ON ORDERS.CODEMP_SOLICITA = EMPLEADOS_1.CODEMP LEFT OUTER JOIN
+                  PROYECTOS ON ORDERS.CODPROYECTO = PROYECTOS.CODPROYECTO LEFT OUTER JOIN
+                  TIPODOCUMENTOS ON ORDERS.CODDOC = TIPODOCUMENTOS.CODDOC LEFT OUTER JOIN
+                  EMPRESAS ON ORDERS.EMPNIT = EMPRESAS.EMPNIT
                 WHERE  
                         (TIPODOCUMENTOS.TIPODOC='SAL')
 	                AND (ORDERS.EMPNIT_RECIBE='${sucursal}')
@@ -72,6 +65,41 @@ router.post("/select_documentos", async(req,res)=>{
     
                 console.log(qry)
                 
+        execute.QueryToken(res,qry,'')
+
+});
+router.post("/select_detalle_documento", async(req,res)=>{
+
+        const {sucursal,coddoc,correlativo} = req.body;
+
+        let qry = `
+        SELECT ORDERS.FECHA, ORDERS.HORA, 
+                ORDERS.CODPROYECTO, 
+                PROYECTOS.NOMPROYECTO AS PROYECTO, 
+                ORDERS.CODEMP_SOLICITA, 
+                EMPLEADOS.NOMEMP AS SOLICITA, 
+                ORDERS.CODEMP_RECIBE, 
+                EMPLEADOS_1.NOMEMP AS RECIBE, 
+                ORDERS.NO_ORDEN, 
+                ORDERS.OBS, 
+                ORDERS_DETAILS.CODPROD, 
+                ORDERS_DETAILS.DESPROD, 
+                ORDERS_DETAILS.CODMEDIDA, 
+                ORDERS_DETAILS.CANTIDAD, 
+                ORDERS_DETAILS.COSTO, 
+                ORDERS_DETAILS.TOTALCOSTO
+        FROM ORDERS_DETAILS RIGHT OUTER JOIN
+                PROYECTOS RIGHT OUTER JOIN
+                ORDERS LEFT OUTER JOIN
+                EMPLEADOS AS EMPLEADOS_1 ON ORDERS.CODEMP_RECIBE = EMPLEADOS_1.CODEMP LEFT OUTER JOIN
+                EMPLEADOS ON ORDERS.CODEMP_SOLICITA = EMPLEADOS.CODEMP ON PROYECTOS.CODPROYECTO = ORDERS.CODPROYECTO ON ORDERS_DETAILS.CORRELATIVO = ORDERS.CORRELATIVO AND 
+                ORDERS_DETAILS.CODDOC = ORDERS.CODDOC AND ORDERS_DETAILS.EMPNIT = ORDERS.EMPNIT
+        WHERE (ORDERS.EMPNIT = '${sucursal}') AND 
+                (ORDERS.CODDOC = '${coddoc}') AND 
+                (ORDERS.CORRELATIVO = ${correlativo})
+                `
+    
+           
         execute.QueryToken(res,qry,'')
 
 });

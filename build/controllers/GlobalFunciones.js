@@ -908,6 +908,37 @@ let GF = {
     
 
         },
+        data_detalle_documento:(sucursal,coddoc,correlativo)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/select_detalle_documento',{
+                                    sucursal:sucursal,
+                                    coddoc:coddoc,
+                                    correlativo:correlativo
+                                })
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
         data_traslados_recibidos_pendientes:(sucursal)=>{
 
             return new Promise((resolve,reject)=>{

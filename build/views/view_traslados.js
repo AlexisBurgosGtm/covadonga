@@ -6,7 +6,7 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                            ${view.vista_listado()}
+                            ${view.vista_listado() + view.modal_detalle_entrada()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
                            ${view.vista_datos_entrada()}
@@ -68,6 +68,7 @@ function getView(){
                                     <td>DOCUMENTO</td>
                                     <td>DESDE (ORIGEN)</td>
                                     <td>ITEMS</td>
+                                    <td></td>
                                     <td></td>
                                 </tr>
                             </thead>
@@ -173,14 +174,14 @@ function getView(){
           
             `
         },
-        modal_datos_entrada:()=>{
+        modal_detalle_entrada:()=>{
             return `
-              <div id="modal_datos_entrada" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+              <div id="modal_detalle_entrada" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-right modal-xl">
                     <div class="modal-content">
                         <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
                             <h4 class="m-0 text-center color-white" id="">
-                                DATOS PARA GENERAR LA NUEVA ENTRADA A BODEGA
+                                PRODUCTOS AGREGADOS A LA ENTRADA
                             </h4>
                         </div>
                         <div class="modal-body p-4">
@@ -189,6 +190,20 @@ function getView(){
                                 <div class="card-body p-4">
 
 
+                                    <div class="table-responsive col-12">
+                                        <table class="table table-bordered h-full col-12">
+                                            <thead class="bg-base text-white">
+                                                <tr>
+                                                    <td>CODIGO</td>
+                                                    <td>PRODUCTO</td>
+                                                    <td>CANTIDAD</td>
+                                                    <td>COSTO</td>
+                                                    <td>TOTALCOSTO</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tblDataDetalle"></tbody>
+                                        </table>
+                                    </div>
 
 
 
@@ -270,8 +285,13 @@ function listeners_finalizar(){
     
     document.getElementById('txtFecha').value = F.getFecha();
 
-   setInterval(() => {
-        document.getElementById('txtHora').value = F.getHora();
+    setInterval(() => {
+        try {
+            document.getElementById('txtHora').value = F.getHora();    
+        } catch (error) {
+            
+        }
+        
    }, 1000);
 
 
@@ -407,8 +427,14 @@ function get_listado(){
                 <td>${r.EMPRESA}</td>
                 <td>${r.ITEMS}</td>
                 <td>
+                    <button class="btn btn-info btn-md btn-circle hand shadow"
+                        onclick="get_detalle_documento('${r.EMPNIT}','${r.CODDOC}','${r.CORRELATIVO}')">
+                        <i class="fal fa-list"></i>
+                    </button>
+                </td>
+                <td>
                     <button id="${idBtnGen}" 
-                        class="btn btn-md btn-info hand shadow" 
+                        class="btn btn-md btn-success hand shadow" 
                         onclick="generar_entrada('${r.EMPNIT}','${r.CODDOC}','${r.CORRELATIVO}','${r.EMPNIT_RECIBE}')">
                         <i class="fal fa-download"></i>Generar Entrada
                     </button>
@@ -450,7 +476,7 @@ function generar_entrada(sucursal_salida,coddoc,correlativo,sucursal_recibe){
 
     return;
     
-    $("#modal_datos_entrada").modal('show');
+   
 
     F.Confirmacion('¿Está seguro que desea GENERAR esta ENTRADA DE BODEGA?')
     .then((value)=>{
@@ -458,6 +484,39 @@ function generar_entrada(sucursal_salida,coddoc,correlativo,sucursal_recibe){
 
         }
     })
+
+
+
+};
+
+
+function get_detalle_documento(sucursal,coddoc,correlativo){
+
+        $("#modal_detalle_entrada").modal('show');
+    
+        let container = document.getElementById('tblDataDetalle');
+        container.innerHTML = GlobalLoader;
+
+        GF.data_detalle_documento(sucursal,coddoc,correlativo)
+        .then((data)=>{
+                let str = '';
+                data.recordset.map((r)=>{
+                    str += `
+                    <tr>
+                        <td>${r.CODPROD}</td>
+                        <td>${r.DESPROD}</td>
+                        <td>${r.CANTIDAD}</td>
+                        <td>${F.setMoneda(r.COSTO,'Q')}</td>
+                        <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                    </tr>
+                    `
+                })
+                container.innerHTML = str;
+
+        })
+        .catch(()=>{
+            container.innerHTML = 'No se cargaron datos...' 
+        })
 
 
 
