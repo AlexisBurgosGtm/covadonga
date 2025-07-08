@@ -53,6 +53,16 @@ let Menu = {
             F.AvisoError('No tiene permitido entrar a esta sección');
         }
     },
+    proyectos:()=>{         
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_proyectos.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
+    },
     documentos:()=>{         
         if(Menu.verify()==true){
             F.loadScript('../views/view_documentos.js','root')

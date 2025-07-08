@@ -5,44 +5,42 @@ const router = express.Router();
 
 
 
-
-
-
-
-
-
 router.post("/select_traslados_recibidos_pendientes", async(req,res)=>{
 
         const {sucursal} = req.body;
 
         let qry = `
-        SELECT ORDERS.ID,ORDERS.EMPNIT, EMPRESAS.EMPRESA, 
-                ORDERS.CODDOC, ORDERS.CORRELATIVO, 
-                ORDERS.FECHA, ORDERS.HORA, 
-                ORDERS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO, 
-                  ISNULL(EMPLEADOS_1.NOMEMP,'') AS SOLICITA, 
-				  ISNULL(EMPLEADOS.NOMEMP,'') AS RECIBE, 
-                                  ORDERS.NO_ORDEN, ORDERS.OBS, 
-                                  ORDERS.STATUS,
-                                  ORDERS.ITEMS,
-                                  ORDERS.TOTALCOSTO
-        FROM     ORDERS LEFT OUTER JOIN
+                SELECT ORDERS.ID,ORDERS.EMPNIT, EMPRESAS.EMPRESA, 
+                        ORDERS.CODDOC, ORDERS.CORRELATIVO, 
+                        ORDERS.FECHA, ORDERS.HORA, 
+                        ORDERS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO, 
+                        ISNULL(EMPLEADOS_1.NOMEMP,'') AS SOLICITA, 
+			ISNULL(EMPLEADOS.NOMEMP,'') AS RECIBE, 
+                        ORDERS.NO_ORDEN, ORDERS.OBS, 
+                        ORDERS.STATUS,
+                        ORDERS.ITEMS,
+                        ORDERS.TOTALCOSTO,
+                        ORDERS.EMPNIT_RECIBE
+                FROM ORDERS LEFT OUTER JOIN
                         EMPLEADOS ON ORDERS.CODEMP_RECIBE = EMPLEADOS.CODEMP LEFT OUTER JOIN
                         EMPLEADOS AS EMPLEADOS_1 ON ORDERS.CODEMP_SOLICITA = EMPLEADOS_1.CODEMP LEFT OUTER JOIN
                         PROYECTOS ON ORDERS.CODPROYECTO = PROYECTOS.CODPROYECTO LEFT OUTER JOIN
                         TIPODOCUMENTOS ON ORDERS.CODDOC = TIPODOCUMENTOS.CODDOC LEFT OUTER JOIN
                         EMPRESAS ON ORDERS.EMPNIT = EMPRESAS.EMPNIT
-        WHERE  
-                (TIPODOCUMENTOS.TIPODOC='SAL')
-	        AND (ORDERS.EMPNIT_RECIBE='${sucursal}')
-		AND (ORDERS.FECHA_RECIBE IS NULL)
-        `
+                WHERE  
+                        (TIPODOCUMENTOS.TIPODOC='SAL')
+	                AND (ORDERS.EMPNIT_RECIBE='${sucursal}')
+		        AND (ORDERS.FECHA_RECIBE IS NULL)
+                `
     
                 console.log(qry)
                 
         execute.QueryToken(res,qry,'')
 
 });
+
+
+
 
 
 
@@ -193,6 +191,10 @@ router.post("/listado_productos", async(req,res)=>{
 });
 
 
+
+
+
+
 router.post("/select_empresas", async(req,res)=>{
 
         //const {sucursal} = req.body;
@@ -254,7 +256,6 @@ router.post("/insert_empresa", async(req,res)=>{
 
 });
 
-
 router.post("/edit_empresa", async(req,res)=>{
 
         const {sucursal,empresa} = req.body;
@@ -269,6 +270,9 @@ router.post("/edit_empresa", async(req,res)=>{
 
 
 
+
+
+
 router.post("/select_proyectos", async(req,res)=>{
 
         const {sucursal} = req.body;
@@ -278,12 +282,84 @@ router.post("/select_proyectos", async(req,res)=>{
                 PROYECTOS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO
         FROM PROYECTOS LEFT OUTER JOIN
                 EMPRESAS ON PROYECTOS.EMPNIT = EMPRESAS.EMPNIT
-        WHERE PROYECTOS.EMPNIT LIKE '${sucursal}';
+        WHERE PROYECTOS.EMPNIT LIKE '${sucursal}' AND PROYECTOS.HABILITADO='SI';
         `
     
         execute.QueryToken(res,qry,'')
 
 });
+
+router.post("/select_proyectos_todos", async(req,res)=>{
+
+        //const {sucursal} = req.body;
+
+        let qry = `
+        SELECT PROYECTOS.EMPNIT, EMPRESAS.EMPRESA, 
+                PROYECTOS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO, PROYECTOS.HABILITADO
+        FROM PROYECTOS LEFT OUTER JOIN
+                EMPRESAS ON PROYECTOS.EMPNIT = EMPRESAS.EMPNIT;
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+router.post("/delete_proyecto", async(req,res)=>{
+
+        const {codigo} = req.body;
+
+        let qry = `
+        DELETE FROM PROYECTOS WHERE CODPROYECTO=${codigo};
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+router.post("/update_status_proyecto", async(req,res)=>{
+
+        const {codigo,st} = req.body;
+
+        let qry = `
+        UPDATE PROYECTOS SET HABILITADO='${st}' WHERE CODPROYECTO=${codigo};
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+router.post("/insert_proyecto", async(req,res)=>{
+
+        const {sucursal,nombre} = req.body;
+
+        let qry = `
+        INSERT INTO PROYECTOS (EMPNIT,NOMPROYECTO,HABILITADO)
+        SELECT '${sucursal}' AS EMPNIT, '${nombre}' AS NOMPROYECTO, 'SI' AS HABILITADO;
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+router.post("/edit_proyecto", async(req,res)=>{
+
+        const {sucursal,codigo,nombre} = req.body;
+
+        let qry = `
+        UPDATE PROYECTOS 
+                SET EMPNIT='${sucursal}',
+                        NOMPROYECTO='${nombre}'
+        WHERE CODPROYECTO=${codigo};
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+
+
+
+
 
 
 

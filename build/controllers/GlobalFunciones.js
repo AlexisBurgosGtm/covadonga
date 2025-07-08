@@ -403,6 +403,142 @@ let GF = {
     
 
         },
+        data_listado_proyectos_todos:()=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/select_proyectos_todos')
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        update_proyecto_status:(codigo,newSt)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/update_status_proyecto', {
+                    codigo:codigo,st:newSt})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        delete_proyecto:(codigo)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/delete_proyecto', {codigo:codigo})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        insert_proyecto:(sucursal,nombre)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/insert_proyecto', {sucursal:sucursal,nombre:nombre})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        edit_proyecto:(sucursal,codigo,nombre)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/edit_proyecto', {sucursal:sucursal,codigo:codigo,nombre:nombre})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
         data_listado_empresas:()=>{
 
             return new Promise((resolve,reject)=>{
