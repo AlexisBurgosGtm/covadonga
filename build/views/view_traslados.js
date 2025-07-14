@@ -137,7 +137,7 @@ function getView(){
                             </div>
 
                             <div class="form-group">
-                                <label class="negrita text-secondary">Fecha y Hora del Despacho</label>
+                                <label class="negrita text-secondary">Fecha y Hora Ingreso</label>
                                 <div class="input-group">
                                     <input type="date" class="form-control negrita" id="txtFecha">
                                     <input type="text" class="form-control negrita" id="txtHora" disabled="true">
@@ -149,8 +149,23 @@ function getView(){
 
                                 <label class="negrita text-secondary">Total Costo</label>
                                 <h1 class="negrita text-danger" id="lbTotalCosto"></h1>
-                                
-                                
+
+                                <br>
+                                <div class="form-group">
+                                    <label class="negrita text-secondary">Total items</label>
+                                    <input disabled="true" type="text" class="form-control negrita text-danger" id="txtItems">
+                                </div>
+
+                                <br>
+                                <div class="form-group">
+                                    <label class="negrita text-secondary">Documento Origen</label>
+                                    <div class="input-group">
+                                        <input disabled="true" type="text" class="form-control negrita text-danger" id="txtSucursalOrigen">
+                                        <input disabled="true" type="text" class="form-control negrita text-danger" id="txtCoddocOrigen">
+                                        <input disabled="true" type="text" class="form-control negrita text-danger" id="txtCorrelativoOrigen">
+                                    </div>
+                                </div>
+
                             </div>
 
                         
@@ -295,7 +310,6 @@ function listeners_finalizar(){
    }, 1000);
 
 
-
     //carga de empleados
     GF.data_listado_empleados('%')
     .then((data)=>{
@@ -351,10 +365,7 @@ function listeners_finalizar(){
             `
         })
         document.getElementById('cmbCoddoc').innerHTML = str;
-        GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
-        .then((data)=>{document.getElementById('txtCorrelativo').value=data})
-        .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
-  
+        cargar_correlativo_entrada();
         
 
     })
@@ -364,47 +375,100 @@ function listeners_finalizar(){
     });
     //cargando coddoc entradas
 
+    document.getElementById('cmbCoddoc').addEventListener('change',()=>{
+        cargar_correlativo_entrada();
+    })
+
 
 
     
     let btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.addEventListener('click',()=>{
 
-        F.Confirmacion('¿Está seguro que desea Guardar este movimiento?')
-        .then((value)=>{
-            if(value==true){
+        F.showToast('Cargando correlativo documento nuevo...')
 
-              
-                btnGuardar.disabled = true;
-                btnGuardar.innerHTML = `<i class="fal fa-spin fa-save"></i>`;
-                
-                insert_movimiento('')
-                .then(()=>{
+        cargar_correlativo_entrada()
+        .then(()=>{
+
+            F.Confirmacion('¿Está seguro que desea Guardar este movimiento?')
+                .then((value)=>{
+                    if(value==true){
+
                     
-                    F.Aviso('Documento guardado exitosamente!!');
-                    
-                    btnGuardar.disabled = false;
-                    btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-                    
-                    clean_data();
-                    
+                        btnGuardar.disabled = true;
+                        btnGuardar.innerHTML = `<i class="fal fa-spin fa-save"></i>`;
+                        
+                        let coddoc_origen = document.getElementById('txtCoddocOrigen').value;
+                        let correlativo_origen = document.getElementById('txtCorrelativoOrigen').value;
+                        let sucursal_origen = document.getElementById('txtSucursalOrigen').value;
+
+                        let sucursal = document.getElementById('cmbEmpresa').value;
+                        let codemp_recibe  = document.getElementById('cmbRecibe').value;
+                        let codproyecto = document.getElementById('cmbProyectos').value;
+                        let fecha = F.devuelveFecha('txtFecha');
+                        let hora = document.getElementById('txtHora').value;
+                        let coddoc = document.getElementById('cmbCoddoc').value;
+                        let correlativo = document.getElementById('txtCorrelativo').value;
+                        let obs = F.limpiarTexto(document.getElementById('txtObs').value) || '';
+
+                        
+                        GF.insert_traslado_entrada(sucursal_origen,coddoc_origen,correlativo_origen,sucursal,codemp_recibe,
+                                codproyecto,fecha,hora,coddoc,correlativo,obs
+                        )
+                        .then(()=>{
+                            
+                            F.Aviso('Documento guardado exitosamente!!');
+                            
+                            btnGuardar.disabled = false;
+                            btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+
+                            document.getElementById('tab-uno').click();
+                            
+                            clean_data();
+                            
+                            get_listado();
+                        })
+                        .catch((error)=>{
+                            
+                            console.log(error);
+
+                            F.AvisoError('No se pudo guardar');
+
+                            btnGuardar.disabled = false;
+                            btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+
+                        })
+
+                    }
                 })
-                .catch(()=>{
-                    
-                    F.AvisoError('No se pudo guardar');
 
-                    btnGuardar.disabled = false;
-                    btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-
-                })
-
-            }
         })
+        .catch(()=>{
+            F.AvisoError('No se cargo el correlativo, quizas hay problemas de conexion')
+        })
+
+        
 
 
 
     });
 
+
+};
+
+function cargar_correlativo_entrada(){
+
+    return new Promise((resolve,reject)=>{
+        GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
+        .then((data)=>{
+            document.getElementById('txtCorrelativo').value=data;
+            resolve();
+        })
+        .catch((data)=>{
+            document.getElementById('txtCorrelativo').value=data;
+            reject();
+        })
+    })
 
 };
 
@@ -435,7 +499,7 @@ function get_listado(){
                 <td>
                     <button id="${idBtnGen}" 
                         class="btn btn-md btn-success hand shadow" 
-                        onclick="generar_entrada('${r.EMPNIT}','${r.CODDOC}','${r.CORRELATIVO}','${r.EMPNIT_RECIBE}')">
+                        onclick="generar_entrada('${r.EMPNIT}','${r.CODDOC}','${r.CORRELATIVO}','${r.EMPNIT_RECIBE}','${r.CODPROYECTO}','${r.TOTALCOSTO}','${r.ITEMS}')">
                         <i class="fal fa-download"></i>Generar Entrada
                     </button>
                 </td>
@@ -459,32 +523,22 @@ function get_listado(){
 
 
 
-function generar_entrada(sucursal_salida,coddoc,correlativo,sucursal_recibe){
+function generar_entrada(sucursal_salida,coddoc,correlativo,sucursal_recibe,codproyecto,totalcosto,items){
 
     document.getElementById('tab-dos').click();
 
 
+    document.getElementById('txtSucursalOrigen').value = sucursal_salida;
+    document.getElementById('txtCoddocOrigen').value = coddoc;
+    document.getElementById('txtCorrelativoOrigen').value = correlativo;
+    
+    document.getElementById('lbTotalCosto').innerText = F.setMoneda(totalcosto,'Q');
+    document.getElementById('txtItems').value = items;
+
     document.getElementById('cmbEmpresa').value = sucursal_recibe;
+    document.getElementById('cmbProyectos').value = codproyecto;
 
-    
-
-
-        
-
-
-        
-
-    return;
-    
-   
-
-    F.Confirmacion('¿Está seguro que desea GENERAR esta ENTRADA DE BODEGA?')
-    .then((value)=>{
-        if(value==true){
-
-        }
-    })
-
+    cargar_correlativo_entrada();
 
 
 };
@@ -520,4 +574,8 @@ function get_detalle_documento(sucursal,coddoc,correlativo){
 
 
 
+};
+
+function clean_data(){
+    document.getElementById('txtObs').value = '';
 };

@@ -968,5 +968,43 @@ let GF = {
     
 
         },
+        insert_traslado_entrada:(sucursal_origen,coddoc_origen,correlativo_origen,sucursal,codemp_recibe,codproyecto,fecha,hora,coddoc,correlativo,obs)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/insert_traslado_entrada', {
+                    sucursal_origen:sucursal_origen,
+                    coddoc_origen:coddoc_origen,
+                    correlativo_origen:correlativo_origen,
+                    sucursal:sucursal,
+                    codemp_recibe:codemp_recibe,
+                    codproyecto:codproyecto,
+                    fecha:fecha,
+                    hora:hora,
+                    coddoc:coddoc,
+                    correlativo:correlativo,
+                    obs:obs
+                })
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+
+        }
 };
 

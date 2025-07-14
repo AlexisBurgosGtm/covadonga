@@ -31,7 +31,80 @@ router.post("/select_traslados_recibidos_pendientes", async(req,res)=>{
         execute.QueryToken(res,qry,'')
 
 });
+router.post("/insert_traslado_entrada", async(req,res)=>{
 
+        const {sucursal_origen,coddoc_origen,correlativo_origen,sucursal,
+                codemp_recibe,codproyecto,fecha,hora,coddoc,correlativo,totalcosto,items,obs} = req.body;
+
+        let qry_documentos = `
+        INSERT INTO ORDERS (
+                EMPNIT,CODDOC,CORRELATIVO,MES,ANIO,FECHA,HORA,CODPROYECTO,CODEMP_SOLICITA,
+                CODEMP_RECIBE,NO_ORDEN,OBS,STATUS,F_ENTREGA,F_RECIBE,USUARIO,ITEMS,
+                        TOTALCOSTO,EMPNIT_RECIBE,FECHA_RECIBE,JSON_DETAILS
+                )
+                SELECT '${sucursal}' AS EMPNIT,
+                        '${coddoc}' AS CODDOC,
+                        ${correlativo} AS CORRELATIVO,
+                        MONTH('${fecha}') AS MES,
+                        YEAR('${fecha}') AS ANIO,
+                        '${fecha}' AS FECHA,
+                        '${hora}' AS HORA,
+                        ${codproyecto} AS CODPROYECTO,
+                        0 AS CODEMP_SOLICITA,
+                        ${codemp_recibe} AS CODEMP_RECIBE,
+                        NO_ORDEN,
+                        '${obs}' AS OBS,
+                        'O' AS STATUS,
+                        '' AS F_ENTREGA,
+                        '' AS F_RECIBE,
+                        '' AS USUARIO,
+                        ITEMS,
+                        TOTALCOSTO,
+                        '${sucursal}' AS EMPNIT_RECIBE,
+                        '${fecha}' AS FECHA_RECIBE,
+                        JSON_DETAILS
+                FROM ORDERS 
+                        WHERE EMPNIT='${sucursal_origen}' AND 
+                                CODDOC='${coddoc_origen}' AND 
+                                CORRELATIVO=${correlativo_origen};
+                `
+
+        let qry_docproductos = `
+                INSERT INTO ORDERS_DETAILS (
+                        EMPNIT,MES,ANIO,
+                        CODDOC,CORRELATIVO,
+                        CODPROD,DESPROD,CODMEDIDA,CANTIDAD,
+                        COSTO,TOTALCOSTO,CODPROYECTO
+                )
+                SELECT '${sucursal}' AS EMPNIT,
+                        MONTH('${fecha}') AS MES,
+                        YEAR('${fecha}') AS ANIO,
+                        '${coddoc}' AS CODDOC,
+                        ${correlativo} AS CORRELATIVO,
+                        CODPROD,DESPROD,CODMEDIDA,CANTIDAD,
+                        COSTO,TOTALCOSTO,0 AS CODPROYECTO
+                FROM ORDERS_DETAILS
+                WHERE EMPNIT='${sucursal_origen}' AND 
+                        CODDOC='${coddoc_origen}' AND 
+                        CORRELATIVO=${correlativo_origen};
+                `
+        let qry_update_documento_origen = `
+                UPDATE ORDERS SET FECHA_RECIBE='${fecha}'
+                WHERE EMPNIT='${sucursal_origen}' AND 
+                        CODDOC='${coddoc_origen}' AND 
+                        CORRELATIVO=${correlativo_origen};
+                `
+
+        let newCorrelativo = Number(correlativo)+1;
+        let qry_correlativo = `
+                UPDATE TIPODOCUMENTOS SET CORRELATIVO=${newCorrelativo} WHERE CODDOC='${coddoc}';
+        `
+
+        let qry = qry_documentos + qry_docproductos + qry_correlativo + qry_update_documento_origen;
+    
+        execute.QueryToken(res,qry,'')
+
+});
 
 
 
@@ -42,29 +115,23 @@ router.post("/select_documentos", async(req,res)=>{
         const {sucursal,tipo,mes,anio} = req.body;
 
         let qry = `
-        SELECT ORDERS.ID,ORDERS.EMPNIT, EMPRESAS.EMPRESA, 
-                ORDERS.CODDOC, ORDERS.CORRELATIVO, 
-                ORDERS.FECHA, ORDERS.HORA, 
-                ORDERS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO, 
-                  ISNULL(EMPLEADOS_1.NOMEMP,'') AS SOLICITA, 
-				  ISNULL(EMPLEADOS.NOMEMP,'') AS RECIBE, 
-                                  ORDERS.NO_ORDEN, ORDERS.OBS, 
-                                  ORDERS.STATUS,
-                                  ORDERS.ITEMS,
-                                  ORDERS.TOTALCOSTO
-        FROM     ORDERS LEFT OUTER JOIN
-                        EMPLEADOS ON ORDERS.CODEMP_RECIBE = EMPLEADOS.CODEMP LEFT OUTER JOIN
-                        EMPLEADOS AS EMPLEADOS_1 ON ORDERS.CODEMP_SOLICITA = EMPLEADOS_1.CODEMP LEFT OUTER JOIN
-                        PROYECTOS ON ORDERS.CODPROYECTO = PROYECTOS.CODPROYECTO LEFT OUTER JOIN
-                        TIPODOCUMENTOS ON ORDERS.CODDOC = TIPODOCUMENTOS.CODDOC LEFT OUTER JOIN
-                        EMPRESAS ON ORDERS.EMPNIT = EMPRESAS.EMPNIT
+        SELECT ORDERS.ID, ORDERS.EMPNIT, EMPRESAS_1.EMPRESA, ORDERS.CODDOC, ORDERS.CORRELATIVO, ORDERS.FECHA, ORDERS.HORA, ORDERS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO, 
+                  ISNULL(EMPLEADOS_1.NOMEMP, '') AS SOLICITA, ISNULL(EMPLEADOS.NOMEMP, '') AS RECIBE, ORDERS.NO_ORDEN, ORDERS.OBS, ORDERS.STATUS, ORDERS.ITEMS, ORDERS.TOTALCOSTO, 
+                  ISNULL(EMPRESAS.EMPRESA,'') AS EMPRESA_ORIGEN, 
+                  ISNULL(ORDERS.FECHA_RECIBE, ORDERS.FECHA) AS FECHA_RECIBE
+FROM     ORDERS LEFT OUTER JOIN
+                  EMPRESAS ON ORDERS.EMPNIT_RECIBE = EMPRESAS.EMPNIT LEFT OUTER JOIN
+                  EMPLEADOS ON ORDERS.CODEMP_RECIBE = EMPLEADOS.CODEMP LEFT OUTER JOIN
+                  EMPLEADOS AS EMPLEADOS_1 ON ORDERS.CODEMP_SOLICITA = EMPLEADOS_1.CODEMP LEFT OUTER JOIN
+                  PROYECTOS ON ORDERS.CODPROYECTO = PROYECTOS.CODPROYECTO LEFT OUTER JOIN
+                  TIPODOCUMENTOS ON ORDERS.CODDOC = TIPODOCUMENTOS.CODDOC LEFT OUTER JOIN
+                  EMPRESAS AS EMPRESAS_1 ON ORDERS.EMPNIT = EMPRESAS_1.EMPNIT
         WHERE  (ORDERS.MES = ${mes}) 
                 AND (ORDERS.ANIO = ${anio})
                 AND (TIPODOCUMENTOS.TIPODOC='${tipo}')  
                 `
     
-                console.log(qry)
-                
+               
         execute.QueryToken(res,qry,'')
 
 });

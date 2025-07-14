@@ -43,7 +43,13 @@ function getView(){
 
                     <div class="row">
                         <div class="col-6">
-                            <img class="" width="80px" height="80px" src="./favicon.png">
+                            
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Empresa / Bodega (Salida)</label>
+                                <select class="form-control negrita" id="cmbEmpresa">
+                                </select>                              
+                            </div>
+
                         </div>
                         <div class="col-6">
                             <h2 class="text-left negrita text-base">Nueva Orden de Salida</h2>
@@ -136,11 +142,6 @@ function getView(){
                     <div class="row">
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
-                            <div class="form-group">
-                                <label class="negrita text-secondary">Empresa / Bodega (Salida)</label>
-                                <select class="form-control negrita" id="cmbEmpresa">
-                                </select>                              
-                            </div>
 
                             <div class="form-group">
                                 <label class="negrita text-secondary">Empresa / Bodega (Entrada)</label>
@@ -356,7 +357,12 @@ function addListeners(){
     document.getElementById('txtFecha').value = F.getFecha();
 
    setInterval(() => {
-        document.getElementById('txtHora').value = F.getHora();
+        try {
+            document.getElementById('txtHora').value = F.getHora();    
+        } catch (error) {
+            
+        }
+        
    }, 1000);
 
 

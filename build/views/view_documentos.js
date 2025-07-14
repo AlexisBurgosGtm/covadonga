@@ -6,7 +6,7 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                            ${view.vista_listado()}
+                            ${view.vista_listado() + view.modal_detalle_documento()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
                             
@@ -81,6 +81,7 @@ function getView(){
                                     <td>DOCUMENTO</td>
                                     <td>FECHA</td>
                                     <td>RECIBE/SOLICITA</td>
+                                    <td>FECHA RECIBIDO / ORIGEN</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -113,45 +114,40 @@ function getView(){
 
             `
         },
-        modal_lista_productos:()=>{
+        modal_detalle_documento:()=>{
             return `
-              <div id="modal_productos" 
-              class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+              <div id="modal_detalle_documento" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-right modal-xl">
                     <div class="modal-content">
                         <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
                             <h4 class="m-0 text-center color-white" id="">
-                                Seleccione un Producto
+                                PRODUCTOS AGREGADOS A LA ENTRADA
                             </h4>
                         </div>
                         <div class="modal-body p-4">
                             
                             <div class="card card-rounded">
                                 <div class="card-body p-4">
-                                    
-                                    <div class="table-responsive">
-                                        
-                                        <div class="form-group">
-                                            <input type="text" class="negrita text-base border-warning form-control" 
-                                                id="txtBuscarProducto" 
-                                                oninput="F.FiltrarTabla('tblProductos','txtBuscarProducto')"
-                                                placeholder="Escriba para filtrar...."
-                                            >
-                                        </div>
 
-                                        <table class="table table-bordered h-full col-12" id="tblProductos">
-                                            <thead class="bg-secondary text-white">
+
+                                    <div class="table-responsive col-12">
+                                        <table class="table table-bordered h-full col-12">
+                                            <thead class="bg-base text-white">
                                                 <tr>
                                                     <td>CODIGO</td>
                                                     <td>PRODUCTO</td>
-                                                    <td>EXISTENCIA</td>
-                                                    <td>MARCA</td>
-                                                    <td></td>
+                                                    <td>CANTIDAD</td>
+                                                    <td>COSTO</td>
+                                                    <td>TOTALCOSTO</td>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tblDataProductos"></tbody>
+                                            <tbody id="tblDataDetalle"></tbody>
                                         </table>
                                     </div>
+
+
+
+
 
                                 </div>
                             </div>
@@ -169,7 +165,7 @@ function getView(){
                 </div>
             </div>
             `
-        }
+        },
     }
 
     root.innerHTML = view.body();
@@ -234,9 +230,26 @@ function tbl_movimientos(){
                     <br>
                     <small class="negrita">${r.SOLICITA}</small>
                 </td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>${F.convertDateNormal(r.FECHA_RECIBE)}
+                    <br>
+                    <small class="negrita">${r.EMPRESA_ORIGEN}</small>
+                </td>
+                <td>
+                    <button class="btn btn-secondary btn-md btn-circle hand shadow"
+                    onclick="get_detalle_documento('${r.EMPNIT}','${r.CODDOC}','${r.CORRELATIVO}')">
+                        <i class="fal fa-list"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-info btn-md btn-circle hand shadow">
+                        <i class="fal fa-edit"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-md btn-circle hand shadow">
+                        <i class="fal fa-trash"></i>
+                    </button>
+                </td>
             </tr>
             `
         })
@@ -246,5 +259,37 @@ function tbl_movimientos(){
         container.innerHTML = 'No se cargaron datos...';
     })
     
+
+};
+
+function get_detalle_documento(sucursal,coddoc,correlativo){
+
+        $("#modal_detalle_documento").modal('show');
+    
+        let container = document.getElementById('tblDataDetalle');
+        container.innerHTML = GlobalLoader;
+
+        GF.data_detalle_documento(sucursal,coddoc,correlativo)
+        .then((data)=>{
+                let str = '';
+                data.recordset.map((r)=>{
+                    str += `
+                    <tr>
+                        <td>${r.CODPROD}</td>
+                        <td>${r.DESPROD}</td>
+                        <td>${r.CANTIDAD}</td>
+                        <td>${F.setMoneda(r.COSTO,'Q')}</td>
+                        <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                    </tr>
+                    `
+                })
+                container.innerHTML = str;
+
+        })
+        .catch(()=>{
+            container.innerHTML = 'No se cargaron datos...' 
+        })
+
+
 
 };
