@@ -615,7 +615,7 @@ function insert_movimiento(entsal){
         let codproyecto = document.getElementById('cmbProyectos').value;
         //let codsolicita = document.getElementById('cmbSolicita').value;
         let codsolicita = 0;
-        let codrecibe = 0;
+        let codrecibe = document.getElementById('cmbRecibe').value;
         let noorden = '';
         let obs = F.limpiarTexto(document.getElementById('txtObs').value);
 

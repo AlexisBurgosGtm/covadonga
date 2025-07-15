@@ -52,7 +52,7 @@ function getView(){
 
                         </div>
                         <div class="col-6">
-                            <h2 class="text-left negrita text-base">Nueva Orden de Salida</h2>
+                            <h2 class="text-left negrita text-base">Prestamo de Herramienta</h2>
                             <h5 class="negrita text-danger" id="lbItems"></h5>
                         </div>
                     </div>
@@ -433,7 +433,7 @@ function addListeners(){
    
 
      //cargando coddoc entradas
-    GF.data_coddoc('%','SAL')
+    GF.data_coddoc('%','PRS')
     .then((data)=>{
         
         let str = '';
@@ -522,7 +522,7 @@ function addListeners(){
 
             $("#modal_cantidad").modal('hide');
        
-                db_movinv.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
+                db_prestamo.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
                 .then(()=>{
                     tbl_temp_salida();
                 })
@@ -628,7 +628,7 @@ function insert_movimiento(entsal){
         let items = 0; let varTotalCosto = 0;
 
  
-        db_movinv.select_temp_movinv_salida()
+        db_prestamo.select_temp_movinv_salida()
         .then((data)=>{
 
             data.map((r)=>{
@@ -688,7 +688,7 @@ function insert_movimiento(entsal){
         });
        
 
-        //if(entsal=='S'){db_movinv.select_temp_movinv_salida().then((data)=>{json_details = data}); codrecibe = document.getElementById('cmbRecibe'+ entsal).value;};
+        //if(entsal=='S'){db_prestamo.select_temp_movinv_salida().then((data)=>{json_details = data}); codrecibe = document.getElementById('cmbRecibe'+ entsal).value;};
     })
 
 };
@@ -697,7 +697,7 @@ function clean_data(){
 
 
 
-    db_movinv.delete_temp_movinv_salida_all()
+    db_prestamo.delete_temp_movinv_salida_all()
     .then(()=>{
         tbl_temp_salida();
     })
@@ -722,7 +722,7 @@ function tbl_lista_productos(sucursal,filtro,entsal){
     let container = document.getElementById('tblDataProductos');
     container.innerHTML = GlobalLoader;
  
-    GF.data_lista_productos(sucursal,filtro,'INSUMO')
+    GF.data_lista_productos(sucursal,filtro,'HERRAMIENTA')
     .then((data)=>{
         let str = '';
         data.recordset.map((r)=>{
@@ -786,7 +786,7 @@ function tbl_temp_salida(){
     let varTotal = 0;
     let varItem = 0;
 
-    db_movinv.select_temp_movinv_salida()
+    db_prestamo.select_temp_movinv_salida()
     .then((data)=>{
         
         data.map((r)=>{
@@ -827,7 +827,7 @@ function delete_temp_salida(idrow,idbtn){
       F.Confirmacion('¿Está seguro que desea ELIMINAR esta linea?')
         .then((value)=>{
             if(value==true){
-                    db_movinv.delete_temp_movinv_salida_id(idrow)
+                    db_prestamo.delete_temp_movinv_salida_id(idrow)
                     .then(()=>{
                         tbl_temp_salida();
                     })

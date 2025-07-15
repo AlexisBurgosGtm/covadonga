@@ -1,4 +1,4 @@
-const DbName = "covadonga_v2";
+const DbName = "covadonga_v4";
 
 
 
@@ -32,12 +32,41 @@ var tbl_temp_entrada = {
     }
 };
 
+var tbl_temp_prestamo = {
+    name: 'temp_prestamo',
+    columns: {
+        ID:{ primaryKey: true, autoIncrement: true },
+        EMPNIT:{dataType: "string"},
+        CODDOC:{dataType: "string"},
+        CODPROD:{dataType: "string"},
+        DESPROD:{dataType: "string"},
+        CODMEDIDA:{dataType: "string"},
+        CANTIDAD:{dataType: "number"},
+        COSTO:{dataType: "number"},
+        TOTALCOSTO:{dataType: "number"}
+    }
+};
+
+var tbl_temp_compra = {
+    name: 'temp_compra',
+    columns: {
+        ID:{ primaryKey: true, autoIncrement: true },
+        EMPNIT:{dataType: "string"},
+        CODDOC:{dataType: "string"},
+        CODPROD:{dataType: "string"},
+        DESPROD:{dataType: "string"},
+        CODMEDIDA:{dataType: "string"},
+        CANTIDAD:{dataType: "number"},
+        COSTO:{dataType: "number"},
+        TOTALCOSTO:{dataType: "number"}
+    }
+};
 
 
 
 var database = {
     name: DbName,
-    tables: [tbl_temp_salida,tbl_temp_entrada]
+    tables: [tbl_temp_salida, tbl_temp_entrada, tbl_temp_prestamo, tbl_temp_compra]
 };
  
 // initiate jsstore connection

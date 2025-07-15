@@ -84,7 +84,6 @@ let Menu = {
         }
     },
     nueva_compra:()=>{      
-          F.Aviso('Opcion en construccion');return;
 
         if(Menu.verify()==true){
             F.loadScript('../views/view_compra.js','root')
@@ -119,10 +118,9 @@ let Menu = {
     },
     nueva_entrega_prestamo:()=>{  
         
-        F.Aviso('Opcion en construccion');return;
 
         if(Menu.verify()==true){
-            F.loadScript('../views/view_inventario_prestamo.js','root')
+            F.loadScript('../views/view_inventario_prestamo_herramienta.js','root')
             .then(async()=>{
                 initView();
             })
@@ -134,6 +132,17 @@ let Menu = {
         
         if(Menu.verify()==true){
             F.loadScript('../views/view_traslados.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
+    },
+    config:()=>{  
+        
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_config.js','root')
             .then(async()=>{
                 initView();
             })

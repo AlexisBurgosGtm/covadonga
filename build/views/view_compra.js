@@ -6,10 +6,10 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                             ${view.movimiento_salida_productos()}
+                             ${view.movimiento_entrada_productos()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
-                           ${view.movimiento_salida_encabezado()}
+                           ${view.movimiento_entrada_encabezado()}
                         </div>
                         <div class="tab-pane fade" id="tres" role="tabpanel" aria-labelledby="home-tab">
                            
@@ -36,7 +36,7 @@ function getView(){
                
             `
         },
-        movimiento_salida_productos: ()=>{
+        movimiento_entrada_productos: ()=>{
             return `
             <div class="card card-rounded col-12">
                 <div class="card-body p-4">
@@ -45,14 +45,14 @@ function getView(){
                         <div class="col-6">
                             
                             <div class="form-group">
-                                <label class="negrita text-secondary">Empresa / Bodega (Salida)</label>
+                                <label class="negrita text-secondary">Empresa / Bodega</label>
                                 <select class="form-control negrita" id="cmbEmpresa">
-                                </select>                              
+                                </select>
                             </div>
 
                         </div>
                         <div class="col-6">
-                            <h2 class="text-left negrita text-base">Nueva Orden de Salida</h2>
+                            <h2 class="text-left negrita text-base">Nueva Compra</h2>
                             <h5 class="negrita text-danger" id="lbItems"></h5>
                         </div>
                     </div>
@@ -129,7 +129,7 @@ function getView(){
             
             `
         },
-        movimiento_salida_encabezado: ()=>{
+        movimiento_entrada_encabezado: ()=>{
             return `
          
             <div class="card card-rounded col-12">
@@ -142,21 +142,13 @@ function getView(){
                     <div class="row">
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
-
-                            <div class="form-group">
-                                <label class="negrita text-secondary">Empresa / Bodega (Entrada)</label>
-                                <select class="form-control negrita" id="cmbEmpresaEntrada">
-                                </select>                              
-                            </div>
-
                             <div class="form-group">
                               
+
                                 <label class="negrita text-secondary">Proyecto / Area</label>
                                 <select class="form-control negrita" id="cmbProyectos">
                                 </select>
                             </div>
-
-                            
 
                             <div class="form-group">
                                 <label class="negrita text-secondary">Documento sistema</label>
@@ -178,7 +170,7 @@ function getView(){
                         
                             <div class="form-group">
 
-                                <label class="negrita text-secondary">Persona que Recibe</label>
+                                <label class="negrita text-secondary">Persona que Solicita</label>
                                 <select class="form-control negrita"  id="cmbRecibe">
                                 </select>
 
@@ -252,6 +244,7 @@ function getView(){
                                         <table class="table table-bordered h-full col-12" id="tblProductos">
                                             <thead class="bg-secondary text-white">
                                                 <tr>
+                                                    <td>TIPO</td>
                                                     <td>CODIGO</td>
                                                     <td>PRODUCTO</td>
                                                     <td>EXISTENCIA</td>
@@ -357,12 +350,13 @@ function addListeners(){
     document.getElementById('txtFecha').value = F.getFecha();
 
    setInterval(() => {
+    
         try {
-            document.getElementById('txtHora').value = F.getHora();    
+            document.getElementById('txtHora').value = F.getHora();
         } catch (error) {
             
         }
-        
+    
    }, 1000);
 
 
@@ -379,12 +373,11 @@ function addListeners(){
         })
       
         document.getElementById('cmbEmpresa').innerHTML = str;
-        document.getElementById('cmbEmpresaEntrada').innerHTML = str;
 
     })
     .catch(()=>{
        document.getElementById('cmbEmpresa').innerHTML = "<option value=''>No se cargaron las empresas</option>";
-       document.getElementById('cmbEmpresaEntrada').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+
     });
     //cargando empresas
 
@@ -433,7 +426,7 @@ function addListeners(){
    
 
      //cargando coddoc entradas
-    GF.data_coddoc('%','SAL')
+    GF.data_coddoc('%','COM')
     .then((data)=>{
         
         let str = '';
@@ -448,7 +441,8 @@ function addListeners(){
         .then((data)=>{document.getElementById('txtCorrelativo').value=data})
         .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
   
-      
+        
+
     })
     .catch(()=>{
         document.getElementById('cmbCoddoc').innerHTML = "<option value=''></option>";
@@ -477,7 +471,7 @@ function addListeners(){
 
         document.getElementById('txtTipoEntSal').value = 'E';
 
-        tbl_lista_productos(sucursal,filtro,'S');
+        tbl_lista_productos(sucursal,filtro,'E');
 
 
     });
@@ -522,9 +516,9 @@ function addListeners(){
 
             $("#modal_cantidad").modal('hide');
        
-                db_movinv.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
+                db_compra.insert_temp_movinv_entrada(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
                 .then(()=>{
-                    tbl_temp_salida();
+                    tbl_temp_entrada();
                 })
 
 
@@ -534,8 +528,9 @@ function addListeners(){
 
     
     // modal cantidad
-    tbl_temp_salida();
-
+    
+    tbl_temp_entrada();
+    
 
     let btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.addEventListener('click',()=>{
@@ -609,8 +604,6 @@ function insert_movimiento(entsal){
          let json_details;
 
         let sucursal = document.getElementById('cmbEmpresa').value;
-    
-        let sucursal_recibe = document.getElementById('cmbEmpresaEntrada').value;
         let coddoc = document.getElementById('cmbCoddoc').value;
         let correlativo = document.getElementById('txtCorrelativo').value;
         let mes = 0;
@@ -620,15 +613,15 @@ function insert_movimiento(entsal){
       
         let codproyecto = document.getElementById('cmbProyectos').value;
         //let codsolicita = document.getElementById('cmbSolicita').value;
-        let codsolicita = 0;
-        let codrecibe = document.getElementById('cmbRecibe').value;
+        let codsolicita = document.getElementById('cmbRecibe').value;
+        let codrecibe = 0;
         let noorden = '';
         let obs = F.limpiarTexto(document.getElementById('txtObs').value);
 
         let items = 0; let varTotalCosto = 0;
 
  
-        db_movinv.select_temp_movinv_salida()
+        db_compra.select_temp_movinv_entrada()
         .then((data)=>{
 
             data.map((r)=>{
@@ -645,7 +638,7 @@ function insert_movimiento(entsal){
                 json_details = data;
 
                 let datos = {sucursal:sucursal,
-                    sucursal_recibe: sucursal_recibe,
+                    sucursal_recibe:sucursal,
                     coddoc:coddoc,
                     correlativo:correlativo,
                     mes:mes,
@@ -688,7 +681,7 @@ function insert_movimiento(entsal){
         });
        
 
-        //if(entsal=='S'){db_movinv.select_temp_movinv_salida().then((data)=>{json_details = data}); codrecibe = document.getElementById('cmbRecibe'+ entsal).value;};
+        //if(entsal=='S'){db_compra.select_temp_movinv_salida().then((data)=>{json_details = data}); codrecibe = document.getElementById('cmbRecibe'+ entsal).value;};
     })
 
 };
@@ -697,9 +690,9 @@ function clean_data(){
 
 
 
-    db_movinv.delete_temp_movinv_salida_all()
+    db_compra.delete_temp_movinv_entrada_all()
     .then(()=>{
-        tbl_temp_salida();
+        tbl_temp_entrada();
     })
 
 
@@ -722,13 +715,14 @@ function tbl_lista_productos(sucursal,filtro,entsal){
     let container = document.getElementById('tblDataProductos');
     container.innerHTML = GlobalLoader;
  
-    GF.data_lista_productos(sucursal,filtro,'INSUMO')
+    GF.data_lista_productos(sucursal,filtro,'%')
     .then((data)=>{
         let str = '';
         data.recordset.map((r)=>{
             str += `
             <tr class="hand"
                 onclick="get_producto('${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.DESPROD)}','${r.COSTO}','${entsal}')">
+                <td class="negrita text-info">${r.TIPO}</td>
                 <td>${F.limpiarTexto(r.CODPROD)}</td>
                 <td>${F.limpiarTexto(r.DESPROD)}</td>
                 <td>${r.EXISTENCIA}</td>
@@ -775,7 +769,7 @@ function get_producto(codprod,desprod,costo,entsal){
 
 
 
-function tbl_temp_salida(){
+function tbl_temp_entrada(){
 
     
     let container = document.getElementById('tblDataMovimiento');
@@ -786,7 +780,7 @@ function tbl_temp_salida(){
     let varTotal = 0;
     let varItem = 0;
 
-    db_movinv.select_temp_movinv_salida()
+    db_compra.select_temp_movinv_entrada()
     .then((data)=>{
         
         data.map((r)=>{
@@ -806,7 +800,7 @@ function tbl_temp_salida(){
                 <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
                 <td>
                     <button class="btn btn-danger btn-circle btn-md hand shadow" id="${idbtn}"
-                     onclick="delete_temp_salida('${r.ID}','${idbtn}')">
+                     onclick="delete_temp_entrada('${r.ID}','${idbtn}')">
                         <i class="fal fa-trash"></i>
                      </button>
                 </td>
@@ -822,14 +816,14 @@ function tbl_temp_salida(){
 
 };
 
-function delete_temp_salida(idrow,idbtn){
+function delete_temp_entrada(idrow,idbtn){
 
       F.Confirmacion('¿Está seguro que desea ELIMINAR esta linea?')
         .then((value)=>{
             if(value==true){
-                    db_movinv.delete_temp_movinv_salida_id(idrow)
+                    db_compra.delete_temp_movinv_entrada_id(idrow)
                     .then(()=>{
-                        tbl_temp_salida();
+                        tbl_temp_entrada();
                     })
             }
         })

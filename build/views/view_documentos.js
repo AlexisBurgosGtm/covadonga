@@ -74,6 +74,15 @@ function getView(){
             <div class="card card-rounded shadow">
                 <div class="card-body p-2">
                     <div class="table-responsive col-12">
+                        
+                        <div class="form-group">
+                            <label class="text-secondary negrita">Escriba para buscar...</label>
+                            <input type="text" class="form-control negrita text-secondary border-base"
+                            placeholder="Escriba para buscar..."
+                            id="txtBuscar"
+                            oninput="F.FiltrarTabla('tblDocumentos','txtBuscar')">
+                        </div>
+
                         <table class="table table-responsive table-hover col-12" id="tblDocumentos">
                             <thead class="bg-base text-white">
                                 <tr>
@@ -221,6 +230,7 @@ function tbl_movimientos(){
     .then((data)=>{
         let str = '';
         data.recordset.map((r)=>{
+            let idbtnEliminar = `btnEliminar${r.ID}`;
             str += `
             <tr>
                 <td>${r.EMPRESA}</td>
@@ -246,7 +256,9 @@ function tbl_movimientos(){
                     </button>
                 </td>
                 <td>
-                    <button class="btn btn-danger btn-md btn-circle hand shadow">
+                    <button class="btn btn-danger btn-md btn-circle hand shadow"
+                    id="${idbtnEliminar}"
+                    onclick="eliminar_documento('${r.EMPNIT}','${r.CODDOC}','${r.CORRELATIVO}','${idbtnEliminar}')">
                         <i class="fal fa-trash"></i>
                     </button>
                 </td>
@@ -291,5 +303,39 @@ function get_detalle_documento(sucursal,coddoc,correlativo){
         })
 
 
+
+};
+
+function eliminar_documento(sucursal,coddoc,correlativo,idbtn){
+
+    let btn = document.getElementById(idbtn);
+
+    F.Confirmacion('Esta seguro que desea ELIMINAR este documento?')
+    .then((value)=>{
+        if(value==true){
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fal fa-trash fa-spin"></i>`;
+
+            GF.delete_documento(sucursal,coddoc,correlativo)
+            .then(()=>{
+
+                F.Aviso('Documento ELIMINADO exitosamente!!');
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fal fa-trash"></i>`;
+
+                tbl_movimientos();
+            })
+            .catch(()=>{
+
+                F.AvisoError('No se pudo ELIMINAR');
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fal fa-trash"></i>`;
+                
+            })
+
+
+        }
+    })
 
 };

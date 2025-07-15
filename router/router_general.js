@@ -171,6 +171,20 @@ router.post("/select_detalle_documento", async(req,res)=>{
 
 });
 
+router.post("/delete_documento", async(req,res)=>{
+
+        const {sucursal,coddoc,correlativo} = req.body;
+
+        let qry = `
+                DELETE FROM ORDERS WHERE EMPNIT='${sucursal}' AND CODDOC='${coddoc}' AND CORRELATIVO=${correlativo};
+                DELETE FROM ORDERS_DETAILS WHERE EMPNIT='${sucursal}' AND CODDOC='${coddoc}' AND CORRELATIVO=${correlativo};
+                `
+    
+               
+        execute.QueryToken(res,qry,'')
+
+});
+
 
 
 
@@ -245,23 +259,7 @@ router.post("/listado_productos", async(req,res)=>{
 
         const {sucursal,filtro,tipo} = req.body;
 
-        let qryX= `
-        SELECT  EMPRESAS.EMPNIT, 
-                EMPRESAS.EMPRESA, 
-                PRODUCTOS.CODPROD, 
-                PRODUCTOS.DESPROD,
-                ISNULL(PRODUCTOS.COSTO,0) AS COSTO, 
-                ISNULL(invsaldo_inventario_sucursales.TOTALUNIDADES, 0) AS EXISTENCIA, 
-                ISNULL(invsaldo_inventario_sucursales.TOTALCOSTO, 0) AS TOTALCOSTO, 
-                CLASIFICACIONES.DESCRIPCION AS DESMARCA
-        FROM CLASIFICACIONES RIGHT OUTER JOIN
-                PRODUCTOS ON CLASIFICACIONES.CODIGO = PRODUCTOS.CODMARCA CROSS JOIN
-                EMPRESAS LEFT OUTER JOIN
-                invsaldo_inventario_sucursales ON EMPRESAS.EMPNIT = invsaldo_inventario_sucursales.EMPNIT
-        WHERE EMPRESAS.EMPNIT='${sucursal}' AND PRODUCTOS.DESPROD LIKE '%${filtro}%'
-        AND PRODUCTOS.TIPO='${tipo}'
-        ORDER BY PRODUCTOS.CODPROD
-        `
+      
 
         let qry = `
         SELECT view_invsaldo_productos_empresas.EMPNIT, 
@@ -269,11 +267,14 @@ router.post("/listado_productos", async(req,res)=>{
                 view_invsaldo_productos_empresas.CODPROD, 
                 view_invsaldo_productos_empresas.DESPROD,
                 view_invsaldo_productos_empresas.COSTO, 
-                ISNULL(invsaldo_inventario_sucursales.TOTALUNIDADES, 0) AS EXISTENCIA, ISNULL(invsaldo_inventario_sucursales.TOTALCOSTO, 0) AS TOTALCOSTO, view_invsaldo_productos_empresas.DESMARCA, 
-                view_invsaldo_productos_empresas.HABILITADO
+                ISNULL(invsaldo_inventario_sucursales.TOTALUNIDADES, 0) AS EXISTENCIA, 
+                ISNULL(invsaldo_inventario_sucursales.TOTALCOSTO, 0) AS TOTALCOSTO, 
+                view_invsaldo_productos_empresas.DESMARCA, 
+                view_invsaldo_productos_empresas.HABILITADO,
+                view_invsaldo_productos_empresas.TIPO
         FROM    view_invsaldo_productos_empresas LEFT OUTER JOIN
                 invsaldo_inventario_sucursales ON view_invsaldo_productos_empresas.CODPROD = invsaldo_inventario_sucursales.CODPROD AND view_invsaldo_productos_empresas.EMPNIT = invsaldo_inventario_sucursales.EMPNIT
-        WHERE  (view_invsaldo_productos_empresas.TIPO = '${tipo}') 
+        WHERE  (view_invsaldo_productos_empresas.TIPO LIKE '%${tipo}%') 
                 AND (view_invsaldo_productos_empresas.EMPNIT = '${sucursal}') 
                 AND (view_invsaldo_productos_empresas.DESPROD LIKE '%${filtro}%')
         ORDER BY view_invsaldo_productos_empresas.CODPROD
