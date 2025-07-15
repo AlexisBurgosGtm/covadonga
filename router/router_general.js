@@ -255,13 +255,83 @@ function qry_docproductos_sql(sucursal,coddoc,correlativo,fecha,json){
 };
 
 
+router.post("/insert_documento_prestamo", async(req,res)=>{
+
+        const {sucursal,sucursal_recibe,coddoc,correlativo,mes,anio,fecha,hora,codproyecto,codsolicita,codrecibe,noorden,
+                obs,items,totalcosto,json_details
+        } = req.body;
+
+
+        let qry_documentos = `
+                INSERT INTO ORDERS 
+                (EMPNIT,CODDOC,CORRELATIVO,MES,ANIO,FECHA,HORA,CODPROYECTO,
+                        CODEMP_SOLICITA,CODEMP_RECIBE,NO_ORDEN,OBS,STATUS,
+                        ITEMS,TOTALCOSTO,JSON_DETAILS,EMPNIT_RECIBE)
+                SELECT '${sucursal}' AS EMPNIT,'${coddoc}' AS CODDOC,${correlativo} AS CORRELATIVO,
+                MONTH('${fecha}') AS MES, YEAR('${fecha}') AS ANIO,'${fecha}' AS FECHA,
+                '${hora}' AS HORA,${codproyecto} AS CODPROYECTO,
+                ${codsolicita} AS CODEMP_SOLICITA,${codrecibe} AS CODEMP_RECIBE,
+                '${noorden}' AS NO_ORDEN,'${obs}' AS OBS,'O' AS STATUS,
+                ${items} AS ITEMS, ${totalcosto} AS TOTALCOSTO,
+                '${json_details}' AS JSON_DETAILS, '${sucursal_recibe}' AS EMPNIT_RECIBE;
+        `
+
+        let qry_docproductos = qry_docproductos_sql_prestamo(sucursal,coddoc,correlativo,fecha,codrecibe,json_details);
+
+        let nuevo_correlativo = Number(correlativo)+1;
+        let qry_tipodocumentos = `UPDATE TIPODOCUMENTOS SET CORRELATIVO=${nuevo_correlativo} WHERE CODDOC='${coddoc}';`
+       
+        
+        let qry = qry_documentos + qry_docproductos + qry_tipodocumentos;
+    
+ 
+
+        execute.QueryToken(res,qry,'')
+
+
+});
+
+function qry_docproductos_sql_prestamo(sucursal,coddoc,correlativo,fecha,codemp,json){
+
+        let strQry = '';
+
+        let data = JSON.parse(json)
+        data.map((r)=>{
+                strQry += `
+                INSERT INTO ORDERS_DETAILS
+                        (EMPNIT,MES,ANIO,CODDOC,CORRELATIVO,CODPROD,DESPROD,CODMEDIDA,
+                        CANTIDAD,COSTO,TOTALCOSTO,CODPROYECTO)
+                SELECT '${sucursal}' AS EMPNIT,
+                        MONTH('${fecha}') AS MES,
+                        YEAR('${fecha}') AS ANIO, 
+                        '${coddoc}' AS CODDOC, 
+                        ${correlativo} AS CORRELATIVO,
+                        '${r.CODPROD}' AS CODPROD,
+                        '${r.DESPROD}' AS DESPROD,
+                        '${r.CODMEDIDA}' CODMEDIDA,
+                        ${r.CANTIDAD} CANTIDAD,
+                        ${r.COSTO} COSTO,
+                        ${r.TOTALCOSTO} TOTALCOSTO,
+                        0 AS CODPROYECTO;
+                UPDATE PRODUCTOS SET CODEMP_RESPONSABLE=${codemp} WHERE CODPROD='${r.CODPROD}';
+                `
+        })
+
+        return strQry;
+
+};
+
+
+
+
+
 router.post("/listado_productos", async(req,res)=>{
 
         const {sucursal,filtro,tipo} = req.body;
 
-      
 
-        let qry = `
+
+        let qryx = `
         SELECT view_invsaldo_productos_empresas.EMPNIT, 
                 view_invsaldo_productos_empresas.EMPRESA, 
                 view_invsaldo_productos_empresas.CODPROD, 
@@ -280,6 +350,29 @@ router.post("/listado_productos", async(req,res)=>{
         ORDER BY view_invsaldo_productos_empresas.CODPROD
         `
 
+        let qry = `
+        SELECT view_invsaldo_productos_empresas.EMPNIT, 
+                view_invsaldo_productos_empresas.EMPRESA, 
+                view_invsaldo_productos_empresas.CODPROD, 
+                view_invsaldo_productos_empresas.DESPROD, 
+                view_invsaldo_productos_empresas.COSTO, 
+                ISNULL(invsaldo_inventario_sucursales.TOTALUNIDADES, 0) AS EXISTENCIA, 
+                ISNULL(invsaldo_inventario_sucursales.TOTALCOSTO, 0) AS TOTALCOSTO, 
+                view_invsaldo_productos_empresas.DESMARCA, 
+                view_invsaldo_productos_empresas.HABILITADO, 
+                view_invsaldo_productos_empresas.TIPO, 
+                PRODUCTOS.CODEMP_RESPONSABLE, 
+                ISNULL(EMPLEADOS.NOMEMP,'') AS EMPLEADO
+        FROM     EMPLEADOS RIGHT OUTER JOIN
+                  PRODUCTOS ON EMPLEADOS.CODEMP = PRODUCTOS.CODEMP_RESPONSABLE RIGHT OUTER JOIN
+                  view_invsaldo_productos_empresas ON PRODUCTOS.CODPROD = view_invsaldo_productos_empresas.CODPROD LEFT OUTER JOIN
+                  invsaldo_inventario_sucursales ON view_invsaldo_productos_empresas.CODPROD = invsaldo_inventario_sucursales.CODPROD 
+                  AND view_invsaldo_productos_empresas.EMPNIT = invsaldo_inventario_sucursales.EMPNIT
+        WHERE  (view_invsaldo_productos_empresas.TIPO LIKE '%${tipo}%') 
+                AND (view_invsaldo_productos_empresas.EMPNIT = '${sucursal}') 
+                AND (view_invsaldo_productos_empresas.DESPROD LIKE '%${filtro}%')
+        ORDER BY view_invsaldo_productos_empresas.CODPROD
+        `
      
         
         execute.QueryToken(res,qry,'')
@@ -466,7 +559,7 @@ router.post("/select_coddoc", async(req,res)=>{
         let qry = `
         SELECT  CODDOC, CORRELATIVO 
             FROM TIPODOCUMENTOS
-            WHERE TIPODOC='${tipodoc}';
+            WHERE TIPODOC='${tipodoc}' AND HABILITADO='SI';
         `
     
         execute.QueryToken(res,qry,'')
@@ -492,3 +585,4 @@ router.post("/select_correlativo", async(req,res)=>{
 
 
 module.exports = router;
+

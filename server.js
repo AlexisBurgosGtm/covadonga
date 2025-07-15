@@ -6,7 +6,6 @@ try {
 };
   
 
-
 var express = require("express");
 var axios = require('axios');
 var app = express();
@@ -19,7 +18,7 @@ const execute = require('./connection');
 var router_productos = require('./router/router_productos.js');
 var router_empleados =require('./router/router_empleados.js');
 var router_general =require('./router/router_general.js');
-
+var router_config = require('./router/router_config.js');
 
 
 var http = require('http').Server(app);
@@ -81,15 +80,6 @@ app.get("/login",function(req,res){
 
 
 
-app.get("/despacho_finalizado",function(req,res){
-
-  const {empnit,coddoc,correlativo} = req.query;
-
-  io.emit('fin_despacho', empnit,coddoc,correlativo);
-
-  res.send('ok')
-
-}); 
 
 
 
@@ -98,7 +88,7 @@ app.get("/despacho_finalizado",function(req,res){
 app.use('/productos', router_productos);
 app.use('/empleados', router_empleados);
 app.use('/general', router_general);
-
+app.use('/config', router_config);
 
 
 
@@ -116,11 +106,7 @@ app.use("*",function(req,res){
 // SOCKET HANDLER
 io.on('connection', function(socket){
 
-      socket.on('MODO_SAT', (clave)=>{
-        execute.Query_system(`UPDATE SYSTEM_CONFIG SET ACTIVO='SI' WHERE CODIGO='MODO_SAT';`);
-        io.emit('MODO_SAT', clave);
-
-      });
+     
   
       socket.on('notificacion', (tipo,msn)=>{
         io.emit('notificacion', tipo, msn);

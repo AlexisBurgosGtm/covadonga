@@ -256,7 +256,7 @@ function getView(){
                                                     <td>PRODUCTO</td>
                                                     <td>EXISTENCIA</td>
                                                     <td>MARCA</td>
-                                                    <td></td>
+                                                    <td>ASIGNADO A</td>
                                                 </tr>
                                             </thead>
                                             <tbody id="tblDataProductos"></tbody>
@@ -662,7 +662,7 @@ function insert_movimiento(entsal){
                     json_details: JSON.stringify(json_details)
                 }
 
-                axios.post(GlobalUrlCalls + '/general/insert_documento',datos)
+                axios.post(GlobalUrlCalls + '/general/insert_documento_prestamo',datos)
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
@@ -733,7 +733,7 @@ function tbl_lista_productos(sucursal,filtro,entsal){
                 <td>${F.limpiarTexto(r.DESPROD)}</td>
                 <td>${r.EXISTENCIA}</td>
                 <td>${F.limpiarTexto(r.DESMARCA)}</td>
-                <td></td>
+                <td>${r.EMPLEADO}</td>
             </tr>
             `
         })
