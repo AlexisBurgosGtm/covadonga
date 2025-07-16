@@ -92,10 +92,10 @@ function getView(){
 
                             <tr>
                                 <td>
-                                    <h5 class="text-base">¿opcion 2?</h5>
+                                    <h5 class="text-base">¿Permite ver el costo en documentos?</h5>
                                 </td>
                                 <td>
-                                    <select class="form-control negrita text-danger" id="cmb">
+                                    <select class="form-control negrita text-danger" id="cmbCosto">
                                         <option value='SI'>SI</option>
                                         <option value='NO'>NO</option>
                                     </select>
@@ -144,44 +144,65 @@ function getView(){
         modal_datos_documento:()=>{
             return `
               <div id="modal_datos_documento" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-right modal-xl">
+                <div class="modal-dialog modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="dropdown-header bg-secondary d-flex justify-content-center align-items-center w-100">
                             <h4 class="m-0 text-center color-white" id="">
-                                TITULO
+                                Datos del Documento
                             </h4>
                         </div>
-                        <div class="modal-body p-2">
+                        <div class="modal-body p-4">
                             
                             <div class="card card-rounded">
                                 <div class="card-body p-4">
 
                                     <div class="form-group">
-                                        <label class="negrita text-base">A</label>
-                                        <input type="text" class="form-control" id="txt">
+                                        <label class="negrita text-base">Descripcion</label>
+                                        <input type="text" class="form-control" id="txtDescripcion">
                                     </div>
 
-                                     <div class="form-group">
-                                        <label class="negrita text-base">A</label>
-                                        <input type="text" class="form-control" id="txt">
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="negrita text-base">Serie Documento</label>
+                                                <input type="text" class="form-control" id="txtCoddoc">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="negrita text-base">Correlativo</label>
+                                                <input type="number" class="form-control" id="txtCorrelativo" value="1">
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                    
+
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="negrita text-base">Tipo Documento</label>
+                                                <select class="form-control" id="cmbTipodoc">
+                                                    <option value='ENT'>ENTRADA</option>
+                                                    <option value='SAL'>SALIDA</option>
+                                                    <option value='COM'>COMPRA</option>
+                                                    <option value='PRS'>PRESTAMO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="negrita text-base">Tipo inventario</label>
+                                                <select class="form-control" id="cmbInv">
+                                                    <option value='1'>ENTRADA</option>
+                                                    <option value='-1'>SALIDA</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="negrita text-base">A</label>
-                                        <input type="text" class="form-control" id="txt">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="negrita text-base">A</label>
-                                        <input type="text" class="form-control" id="txt">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="negrita text-base">A</label>
-                                        <input type="text" class="form-control" id="txt">
-                                    </div>
-
-
+                                    <br>
 
                                     <div class="row">
                                         <div class="col-6">
@@ -219,6 +240,44 @@ function getView(){
 function addListeners(){
 
     F.slideAnimationTabs();
+
+
+    document.getElementById('cmbExistencia').addEventListener('change',()=>{
+
+            document.getElementById('cmbExistencia').disabled = true;
+            F.showToast('Actualizando...');
+
+            let valor = document.getElementById('cmbExistencia').value;
+            GF.update_config('1',valor)
+            .then(()=>{
+                F.showToast('Valor actualizado exitosamente!!');
+                document.getElementById('cmbExistencia').disabled = false;
+            })
+            .catch(()=>{
+                F.AvisoError('No se pudo actualizar');
+                document.getElementById('cmbExistencia').disabled = false;
+            })
+
+    })
+
+
+     document.getElementById('cmbCosto').addEventListener('change',()=>{
+
+            document.getElementById('cmbCosto').disabled = true;
+            F.showToast('Actualizando...');
+
+            let valor = document.getElementById('cmbCosto').value;
+            GF.update_config('2',valor)
+            .then(()=>{
+                F.showToast('Valor actualizado exitosamente!!');
+                document.getElementById('cmbCosto').disabled = false;
+            })
+            .catch(()=>{
+                F.AvisoError('No se pudo actualizar');
+                document.getElementById('cmbCosto').disabled = false;
+            })
+
+    })
 
 
     tbl_tipodocumentos();

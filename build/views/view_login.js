@@ -138,7 +138,15 @@ function addListeners(){
     let btnLogin = document.getElementById('btnLogin');
     btnLogin.addEventListener('click',()=>{
         
+
         GlobalNivelUsuario=1;
+
+
+        GF.data_configuraciones()
+        .then((data)=>{
+            data_config_general = data.recordset;
+            console.log(data_config_general);
+        })
 
         document.getElementById('root_navbar').style = "visibility:visible";
         //Menu.inicio();

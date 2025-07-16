@@ -3,6 +3,34 @@ const express = require('express');
 const router = express.Router();
 
 
+router.post("/select_config", async(req,res)=>{
+
+        //const {id,valor} = req.body;
+
+
+        let qry = `
+                SELECT ID,VALOR FROM CONFIG;
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+
+router.post("/update_config", async(req,res)=>{
+
+        const {id,valor} = req.body;
+
+
+        let qry = `
+                UPDATE CONFIG SET VALOR='${valor}' WHERE ID=${id};
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+
 
 router.post("/select_tipodocumentos", async(req,res)=>{
 
