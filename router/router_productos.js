@@ -4,6 +4,37 @@ const router = express.Router();
 
 
 
+router.post("/kardex_producto", async(req,res)=>{
+
+        const {sucursal, codprod} = req.body;
+
+        let qry = `
+        SELECT ORDERS.EMPNIT, EMPRESAS.EMPRESA, 
+                ORDERS.CODDOC, ORDERS.CORRELATIVO, 
+                ORDERS.FECHA, ORDERS.HORA, 
+                TIPODOCUMENTOS.TIPODOC, 
+                TIPODOCUMENTOS.INV, 
+                ORDERS_DETAILS.CODPROD, 
+                ORDERS_DETAILS.DESPROD, 
+                ORDERS_DETAILS.CODMEDIDA, 
+                ORDERS_DETAILS.CANTIDAD, 
+                ORDERS_DETAILS.COSTO, 
+                ORDERS_DETAILS.TOTALCOSTO
+        FROM  ORDERS LEFT OUTER JOIN
+                  ORDERS_DETAILS ON ORDERS.CORRELATIVO = ORDERS_DETAILS.CORRELATIVO AND 
+                  ORDERS.CODDOC = ORDERS_DETAILS.CODDOC AND ORDERS.EMPNIT = ORDERS_DETAILS.EMPNIT LEFT OUTER JOIN
+                  EMPRESAS ON ORDERS.EMPNIT = EMPRESAS.EMPNIT LEFT OUTER JOIN
+                  TIPODOCUMENTOS ON ORDERS.CODDOC = TIPODOCUMENTOS.CODDOC
+WHERE  (ORDERS.EMPNIT LIKE '%${sucursal}%') AND 
+        (ORDERS_DETAILS.CODPROD = '${codprod}') AND 
+        (ORDERS.STATUS <> 'A')
+ORDER BY ORDERS.ID
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
 router.post("/insert_clasificacion", async(req,res)=>{
 
         const {sucursal, tipo,descripcion} = req.body;

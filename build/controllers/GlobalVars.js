@@ -20,6 +20,21 @@ let selected_clasificacion = '';
 
 
 let data_config_general = [];
+
+function get_config(id){
+
+    let valor = '';
+
+    data_config_general.map((r)=>{
+        if(Number(r.ID)==Number(id)){
+            valor = r.VALOR;
+        }
+    })
+    
+    return valor;
+    
+};
+
 let data_empresa_config = [];
 let data_usuario_config = [];
 

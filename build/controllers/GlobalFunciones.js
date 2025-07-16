@@ -317,6 +317,33 @@ let GF = {
     
 
         },
+        data_producto_kardex:(codprod,sucursal)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/productos/kardex_producto',{codprod:codprod,sucursal:sucursal})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
         data_coddoc:(sucursal,tipodoc)=>{
 
             return new Promise((resolve,reject)=>{
@@ -1069,6 +1096,38 @@ let GF = {
             return new Promise((resolve,reject)=>{
 
                 axios.post(GlobalUrlCalls + '/config/insert_tipodocumento', {
+                    coddoc:coddoc,
+                    correlativo:correlativo,
+                    descripcion:descripcion,
+                    inv:inv,
+                    tipodoc:tipodoc})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        edit_tipodocumento:(coddoc,correlativo,descripcion,inv,tipodoc)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/config/edit_tipodocumento', {
                     coddoc:coddoc,
                     correlativo:correlativo,
                     descripcion:descripcion,

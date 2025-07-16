@@ -6,7 +6,7 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                            ${view.vista_listado() + view.modal_datos_documento()}
+                            ${view.vista_listado() + view.modal_datos_documento() + view.modal_editar_documento()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
                            
@@ -74,13 +74,15 @@ function getView(){
         frag_generales:()=>{
             return `
             <div class="card card-rounded shadow col-12">
-                <div class="card-body p-4">
+                <div class="card-body p-2">
 
-                    <table class="table table-bordered">
+                    <h3 class="negrita text-base">Generales</h3>
+                    
+                    <table class="table table-bordered h-full">
                         <tbody>
                             <tr>
                                 <td>
-                                    <h5 class="text-base">¿Permite venta sin existencia?</h5>
+                                    <label class="negrita text-base">¿Permite movimientos sin existencia?</label>
                                 </td>
                                 <td>
                                     <select class="form-control negrita text-danger" id="cmbExistencia">
@@ -92,7 +94,7 @@ function getView(){
 
                             <tr>
                                 <td>
-                                    <h5 class="text-base">¿Permite ver el costo en documentos?</h5>
+                                    <label class="negrita text-base">¿Permite ver el costo en documentos (Nivel >3)?</label>
                                 </td>
                                 <td>
                                     <select class="form-control negrita text-danger" id="cmbCosto">
@@ -127,6 +129,7 @@ function getView(){
                                     <td>SERIE</td>
                                     <td>CORRELATIVO</td>
                                     <td>INV</td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -197,6 +200,7 @@ function getView(){
                                                 <select class="form-control" id="cmbInv">
                                                     <option value='1'>ENTRADA</option>
                                                     <option value='-1'>SALIDA</option>
+                                                    <option value='0'>NEUTRO</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -215,7 +219,6 @@ function getView(){
                                                 <i class="fal fa-save"></i>
                                             </button>
                                         </div>
-                                        
                                     </div>
 
                                 </div>
@@ -230,7 +233,97 @@ function getView(){
                 </div>
             </div>
             `
-        }
+        },
+        modal_editar_documento:()=>{
+            return `
+              <div id="modal_editar_documento" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="dropdown-header bg-info d-flex justify-content-center align-items-center w-100">
+                            <h4 class="m-0 text-center color-white" id="">
+                                Editar Documento
+                            </h4>
+                        </div>
+                        <div class="modal-body p-4">
+                            
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+
+                                    <div class="form-group">
+                                        <label class="negrita text-base">Descripcion</label>
+                                        <input type="text" class="form-control" id="txtDescripcionE">
+                                    </div>
+
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="negrita text-base">Serie Documento</label>
+                                                <input type="text" class="form-control" id="txtCoddocE" disabled="true">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="negrita text-base">Correlativo</label>
+                                                <input type="number" class="form-control" id="txtCorrelativoE" value="1">
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                    
+
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="negrita text-base">Tipo Documento</label>
+                                                <select class="form-control" id="cmbTipodocE">
+                                                    <option value='ENT'>ENTRADA</option>
+                                                    <option value='SAL'>SALIDA</option>
+                                                    <option value='COM'>COMPRA</option>
+                                                    <option value='PRS'>PRESTAMO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label class="negrita text-base">Tipo inventario</label>
+                                                <select class="form-control" id="cmbInvE">
+                                                    <option value='1'>ENTRADA</option>
+                                                    <option value='-1'>SALIDA</option>
+                                                    <option value='0'>NEUTRO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button class="btn btn-secondary btn-circle btn-xl hand shadow" data-dismiss="modal">
+                                                <i class="fal fa-arrow-left"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn btn-info btn-circle btn-xl hand shadow" id="btnGuardarE">
+                                                <i class="fal fa-save"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                                
+                           
+
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            `
+        },
     }
 
     root.innerHTML = view.body();
@@ -239,8 +332,12 @@ function getView(){
 
 function addListeners(){
 
+
     F.slideAnimationTabs();
 
+    document.getElementById('cmbExistencia').value = get_config(1);
+
+    document.getElementById('cmbCosto').value = get_config(2);
 
     document.getElementById('cmbExistencia').addEventListener('change',()=>{
 
@@ -261,7 +358,7 @@ function addListeners(){
     })
 
 
-     document.getElementById('cmbCosto').addEventListener('change',()=>{
+    document.getElementById('cmbCosto').addEventListener('change',()=>{
 
             document.getElementById('cmbCosto').disabled = true;
             F.showToast('Actualizando...');
@@ -299,9 +396,89 @@ function addListeners(){
     let btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.addEventListener('click',()=>{
 
+        F.Confirmacion('¿Está seguro que desea GUARDAR este documento?')
+        .then((value)=>{
+            if(value==true){
 
+                    let coddoc = document.getElementById('txtCoddoc').value || '';
+                    let correlativo = document.getElementById('txtCorrelativo').value || '1';
+                    let descripcion = document.getElementById('txtDescripcion').value || '';
+                    let tipodoc = document.getElementById('cmbTipodoc').value;
+                    let inv = document.getElementById('cmbInv').value;
+
+                    if(coddoc==''){F.AvisoError('Indique la serie del documento');return;};
+                    if(descripcion==''){F.AvisoError('Indique la descripcion del documento');return;};
+                    
+                    btnGuardar.disabled=true;
+                    btnGuardar.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
+
+                    GF.insert_tipodocumento(coddoc,correlativo,descripcion,inv,tipodoc)
+                    .then(()=>{
+                        F.Aviso('Documento creado exitosamente!!');
+
+                        btnGuardar.disabled=false;
+                        btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+
+                          $("#modal_datos_documento").modal('hide');
+
+
+                        tbl_tipodocumentos();
+                    })
+                    .catch(()=>{
+                        F.AvisoError('No se pudo guardar');
+                        btnGuardar.disabled=false;
+                        btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                    })
+
+
+            }
+        })
 
     });
+
+
+
+    let btnGuardarE = document.getElementById('btnGuardarE');
+    btnGuardarE.addEventListener('click',()=>{
+
+        F.Confirmacion('¿Está seguro que desea ACTUALIZAR este documento?')
+        .then((value)=>{
+            if(value==true){
+
+                    let coddoc = document.getElementById('txtCoddocE').value || '';
+                    let correlativo = document.getElementById('txtCorrelativoE').value || '1';
+                    let descripcion = document.getElementById('txtDescripcionE').value || '';
+                    let tipodoc = document.getElementById('cmbTipodocE').value;
+                    let inv = document.getElementById('cmbInvE').value;
+
+                    if(coddoc==''){F.AvisoError('Indique la serie del documento');return;};
+                    if(descripcion==''){F.AvisoError('Indique la descripcion del documento');return;};
+                    
+                    btnGuardarE.disabled = true;
+                    btnGuardarE.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
+
+                    GF.edit_tipodocumento(coddoc,correlativo,descripcion,inv,tipodoc)
+                    .then(()=>{
+                        F.Aviso('Documento actualizado exitosamente!!');
+                            $("#modal_editar_documento").modal('hide');
+
+                            btnGuardarE.disabled=false;
+                            btnGuardarE.innerHTML = `<i class="fal fa-save"></i>`;
+
+                        tbl_tipodocumentos();
+                    })
+                    .catch(()=>{
+                        F.AvisoError('No se pudo actualizar');
+                        btnGuardarE.disabled=false;
+                        btnGuardarE.innerHTML = `<i class="fal fa-save"></i>`;
+                    })
+
+
+            }
+        })
+
+    });
+
 
 
 
@@ -318,6 +495,10 @@ function initView(){
 
 function clean_data(){
 
+    document.getElementById('txtCoddoc').value = '';
+    document.getElementById('txtDescripcion').value = '';
+    document.getElementById('txtCorrelativo').value = '1';
+    
 
 };
 
@@ -353,6 +534,12 @@ function tbl_tipodocumentos(){
                         </button>
                     </td>
                     <td>
+                        <button class="btn btn-md btn-info btn-circle hand shadow" 
+                        onclick="edit_documento('${r.CODDOC}','${r.DESCRIPCION}','${r.CORRELATIVO}','${r.TIPODOC}','${r.INV}')">
+                            <i class="fal fa-edit"></i>
+                        </button>
+                    </td>
+                    <td>
                         <button class="btn btn-md btn-danger btn-circle hand shadow" 
                         id="${idbtnEliminar}"
                         onclick="eliminar_documento('${r.ID}','${idbtnEliminar}')">
@@ -368,6 +555,20 @@ function tbl_tipodocumentos(){
     .catch(()=>{
         container.innerHTML = 'No se cargaron datos...';
     })
+
+};
+
+function edit_documento(coddoc,descripcion,correlativo,tipodoc,tipoinv){
+
+    $("#modal_editar_documento").modal('show');
+
+    document.getElementById('txtCoddocE').value = coddoc;
+    document.getElementById('txtDescripcionE').value = descripcion;
+    document.getElementById('txtCorrelativoE').value = correlativo;
+    document.getElementById('cmbTipodocE').value = tipodoc;
+    document.getElementById('cmbInvE').value = tipoinv;
+    
+
 
 };
 

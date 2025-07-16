@@ -46,8 +46,8 @@ function getView(){
                         <table class="table table-responsive table-hover col-12">
                             <thead class="bg-base text-white">
                                 <tr>
-                                    <td>EMPRESA / BODEGA</td>
-                                    <td>PROYECTO</td>
+                                    <td>BODEGA</td>
+                                    <td>AREA</td>
                                     <td>EDITAR</td>
                                     <td>ACTIVA</td>
                                     <td>ELIMINAR</td>
@@ -84,12 +84,12 @@ function getView(){
                                  
 
                                     <div class="form-group">
-                                        <label class="negrita text-secondary">Empresa / Bodega</label>
+                                        <label class="negrita text-secondary">Bodega</label>
                                         <select class="negrita text-danger form-control" id="cmbEmpresa"></select>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="negrita text-secondary">Nombre del Proyecto</label>
+                                        <label class="negrita text-secondary">Nombre del Area</label>
                                         <input type="text" class="negrita text-danger form-control" id="txtDescripcion">
                                     </div>
 
@@ -108,7 +108,7 @@ function getView(){
                                         </div>
                                         
                                     </div>
-                                        <input type="number" class="negrita text-danger form-control" id="txtCodigo">
+                                        <input type="number" class="hidden negrita text-danger form-control" id="txtCodigo">
                                     <br>
 
                                 </div>

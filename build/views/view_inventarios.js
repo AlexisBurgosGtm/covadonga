@@ -97,190 +97,6 @@ function getView(){
 
             `
         },
-        modal_clasificaciones:()=>{
-            return `
-              <div id="modal_clasificaciones" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-right modal-xl">
-                    <div class="modal-content">
-                        <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
-                            <h4 class="m-0 text-center color-white" id="">
-                                Datos de la Nueva Clasificación/Empaque
-                            </h4>
-                        </div>
-                        <div class="modal-body p-4">
-                            
-                            <div class="card card-rounded">
-                                <div class="card-body p-4">
-
-
-                                    <div class="from-group">
-                                        <label class="negrita text-success">Descripcion</label>
-                                        <input type="text" class="form-control negrita" id="txtDesClasificacion">
-                                    </div>
-
-
-                                    <br>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <button class="btn btn-secondary btn-circle btn-xl hand shadow" data-dismiss="modal">
-                                                <i class="fal fa-arrow-left"></i>
-                                            </button>    
-                                        </div>
-                                        <div class="col-6">
-                                            <button class="btn btn-info btn-circle btn-xl hand shadow" id="btnGuardarClasificacion">
-                                                <i class="fal fa-save"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-
-                                
-                            
-
-                        </div>
-                    
-                    </div>
-                </div>
-            </div>
-            `
-        },
-        vista_detalles_producto:()=>{
-            return `
-                            <div class="card card-rounded col-sm-12 col-md-6 col-lg-6 col-lx-6">
-                                <div class="card-body p-4">
-                                
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label class="text-success negrita">CODIGO</label>
-                                                <input type="text" class="form-control negrita" id="txtCodprod">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label class="text-success negrita">CODIGO ALTERNO</label>
-                                                <input type="text" class="form-control negrita" id="txtCodprod2">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <br>
-
-                                    <div class="form-group">
-                                        <label class="text-success negrita">DESCRIPCION</label>
-                                        <input type="text" class="form-control negrita" id="txtDesprod">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="text-success negrita">DESCRIPCION 2</label>
-                                        <input type="text" class="form-control negrita" id="txtDesprod2">
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label class="text-success negrita">UNIDADES X CAJA</label>
-                                                <input type="number" class="form-control negrita"  id="txtUxc">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label class="text-success negrita">EMPAQUE</label>
-                                                <div class="input-group">
-                                                    <select class="form-control negrita"  id="txtCodmedida"></select>
-                                                    <button class="btn btn-success hand" id="btnClasifEmpaque">
-                                                        <i class="fal fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <br>
-
-                                      <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label class="text-success negrita">COSTO COMPRA</label>
-                                                <input type="number" class="form-control negrita"  id="txtCosto">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label class="text-success negrita">PRECIO VENTA</label>
-                                                <input type="text" class="form-control negrita"  id="txtPrecio">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <br>
-
-                                    <div class="form-group">
-                                        <label class="text-success negrita">TIPO DE PRODUCTO</label>
-                                        <div class="input-group">
-                                            <select class="form-control negrita" id="cmbTipo">
-                                                <option value='INSUMO'>INSUMO</option>
-                                                <option value='HERRAMIENTA'>HERRAMIENTA</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="text-success negrita">MARCA</label>
-                                        <div class="input-group">
-                                            <select class="form-control negrita" id="cmbMarca">
-                                            </select>
-                                            <button class="btn btn-success hand" id="btnClasifMarca">
-                                                <i class="fal fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="text-success negrita">RUBRO</label>
-                                        <div class="input-group">
-                                            <select class="form-control negrita" id="cmbRubro">
-                                            </select>
-                                              <button class="btn btn-success hand" id="btnClasifR1">
-                                                <i class="fal fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="text-success negrita">RUBRO 2</label>
-                                        <div class="input-group">
-                                            <select class="form-control negrita" id="cmbRubro2">
-                                            </select>
-                                            <button class="btn btn-success hand" id="btnClasifR2">
-                                                <i class="fal fa-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                 
-
-                                </div>
-                            </div>
-
-                            <button class="btn btn-secondary btn-bottom-l btn-xl btn-circle hand shadow" onclick="document.getElementById('tab-uno').click()">
-                                <i class="fal fa-arrow-left"></i>
-                            </button>
-
-                            <button class="btn btn-info btn-bottom-r btn-xl btn-circle hand shadow" id="btnGuardar">
-                                <i class="fal fa-save"></i>
-                            </button>
-
-
-            `
-        },
         modal_historial:()=>{
             return `
               <div id="modal_historial" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
@@ -296,15 +112,13 @@ function getView(){
                             <div class="card card-rounded">
                                 <div class="card-body p-4">
 
-                                    <h4 class="negrita text-danger" id="lbKardexDesprod"></h4>
-
                                     <div class="form-group">
                                         <label>Escriba para buscar...</label>
                                         <input type="text"
                                         placeholder='Escriba para filtrar...'
                                         class="form-control negrita text-danger"
                                         id="txtBuscarHistorial"
-                                        oninput="F.FiltrarTabla('tblHistorial','txtBuscarHistorial')">
+                                        <F.FiltrarTabla('tblHistorial','txtBuscarHistorial')>>
                                     </div>
 
                                     <table class="table h-full col-12 table-bordered" id="tblHistorial">
@@ -314,7 +128,6 @@ function getView(){
                                                 <td>DOCUMENTO</td>
                                                 <td>ENTRADA</td>
                                                 <td>SALIDA</td>
-                                                <td>PRESTAMO</td>
                                             </tr>
                                         </thead>
                                         <tbody id="tblDataHistorial">
@@ -894,65 +707,8 @@ function update_status_producto(codprod,st,idbtn){
 function historial_producto(codprod,desprod){
 
     $("#modal_historial").modal('show');
- 
-    document.getElementById('lbKardexDesprod').innerText = desprod;
+
     
-    tbl_kardex_producto(codprod);
-};
-
-function tbl_kardex_producto(codprod){
-
-    let container = document.getElementById('tblDataHistorial');
-
-
-    GF.data_producto_kardex(codprod,'%')
-    .then((data)=>{
-
-        let str = '';
-        data.recordset.map((r)=>{
-
-            let entrada = 0; let salida = 0; let prestamo=0;
-            switch (r.INV.toString()) {
-                case '0':
-                    prestamo = Number(r.CANTIDAD);
-                    entrada = 0;
-                    salida = 0;
-                    break;
-            case '1':
-                    prestamo = 0;
-                    entrada = Number(r.CANTIDAD);
-                    salida = 0;
-                    break;
-            case '-1':
-                    prestamo = 0;
-                    entrada = 0;
-                    salida = Number(r.CANTIDAD);
-                    break;
-            }
-            str +=  `
-                <tr>
-                    <td>${F.convertDateNormal(r.FECHA)}
-                        <br>
-                        <small class="negrita text-danger">Hora: ${r.HORA}</small>
-                    </td>
-                    <td>${r.EMPRESA}
-                        <br>
-                        <small class="negrita text-danger">${r.CODDOC}-${r.CORRELATIVO}</small>
-                    </td>
-                    <td>${entrada}</td>
-                    <td>${salida}</td>
-                    <td>${prestamo}</td>
-                </tr>
-                `
-        })
-        container.innerHTML = str;  
-
-    })
-    .catch(()=>{
-        container.innerHTML = 'No se cargaron datos...';
-    })
-
-
 
 };
 

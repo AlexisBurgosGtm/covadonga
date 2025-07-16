@@ -9,8 +9,8 @@ router.post("/select_config", async(req,res)=>{
 
 
         let qry = `
-                SELECT ID,VALOR FROM CONFIG;
-        `
+                SELECT ID, VALOR FROM CONFIG ORDER BY ID;
+                `
     
         execute.QueryToken(res,qry,'')
 
@@ -61,6 +61,24 @@ router.post("/insert_tipodocumento", async(req,res)=>{
                 0 AS OPER, '${tipodoc}' AS TIPODOC, 
                 'SI' AS HABILITADO;
         `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+router.post("/edit_tipodocumento", async(req,res)=>{
+
+        const {coddoc,correlativo,descripcion,inv,tipodoc} = req.body;
+
+
+        let qry = `
+        UPDATE TIPODOCUMENTOS
+                SET CORRELATIVO=${correlativo},
+                    DESCRIPCION='${descripcion}',
+                    TIPODOC='${tipodoc}',
+                    INV=${inv}
+                WHERE CODDOC='${coddoc}';
+                `
     
         execute.QueryToken(res,qry,'')
 

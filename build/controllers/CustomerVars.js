@@ -1,6 +1,6 @@
 
 //data_empresa_config.TIPO_PRECIO
-
+let data_configuraciones
 
 let tipo_empleados = [
     {codigo:1,descripcion:"GERENCIA"},
