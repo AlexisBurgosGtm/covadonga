@@ -4,6 +4,72 @@ const router = express.Router();
 
 
 
+
+router.post("/inventario_productos", async(req,res)=>{
+
+        const {sucursal, habilitado,existencia} = req.body;
+
+
+        let qry = '';
+
+        if(existencia=='SI'){
+                qry = `
+        
+                SELECT view_invsaldo_productos_empresas.EMPNIT, 
+                        view_invsaldo_productos_empresas.EMPRESA, 
+                        view_invsaldo_productos_empresas.CODPROD, 
+                        view_invsaldo_productos_empresas.DESPROD, 
+                        productos.COSTO, 
+                        productos.CODMEDIDA,
+                        ISNULL(invsaldo_inventario_sucursales.TOTALUNIDADES, 0) AS EXISTENCIA, 
+                        ISNULL(invsaldo_inventario_sucursales.TOTALCOSTO, 0) AS TOTALCOSTO, 
+                        view_invsaldo_productos_empresas.DESMARCA, 
+                        view_invsaldo_productos_empresas.HABILITADO, 
+                        view_invsaldo_productos_empresas.TIPO
+                FROM     EMPLEADOS RIGHT OUTER JOIN
+                        PRODUCTOS ON EMPLEADOS.CODEMP = PRODUCTOS.CODEMP_RESPONSABLE RIGHT OUTER JOIN
+                        view_invsaldo_productos_empresas ON PRODUCTOS.CODPROD = view_invsaldo_productos_empresas.CODPROD LEFT OUTER JOIN
+                        invsaldo_inventario_sucursales ON view_invsaldo_productos_empresas.CODPROD = invsaldo_inventario_sucursales.CODPROD 
+                        AND view_invsaldo_productos_empresas.EMPNIT = invsaldo_inventario_sucursales.EMPNIT
+                WHERE  (view_invsaldo_productos_empresas.EMPNIT = '${sucursal}')
+                        AND (view_invsaldo_productos_empresas.HABILITADO='${habilitado}')
+                        AND (ISNULL(invsaldo_inventario_sucursales.TOTALUNIDADES, 0)<>0)
+                ORDER BY view_invsaldo_productos_empresas.CODPROD
+                `
+   
+        }else{
+        
+                qry = `
+       
+                SELECT view_invsaldo_productos_empresas.EMPNIT, 
+                        view_invsaldo_productos_empresas.EMPRESA, 
+                        view_invsaldo_productos_empresas.CODPROD, 
+                        view_invsaldo_productos_empresas.DESPROD, 
+                        productos.COSTO, 
+                        productos.CODMEDIDA,
+                        ISNULL(invsaldo_inventario_sucursales.TOTALUNIDADES, 0) AS EXISTENCIA, 
+                        ISNULL(invsaldo_inventario_sucursales.TOTALCOSTO, 0) AS TOTALCOSTO, 
+                        view_invsaldo_productos_empresas.DESMARCA, 
+                        view_invsaldo_productos_empresas.HABILITADO, 
+                        view_invsaldo_productos_empresas.TIPO
+                FROM     EMPLEADOS RIGHT OUTER JOIN
+                        PRODUCTOS ON EMPLEADOS.CODEMP = PRODUCTOS.CODEMP_RESPONSABLE RIGHT OUTER JOIN
+                        view_invsaldo_productos_empresas ON PRODUCTOS.CODPROD = view_invsaldo_productos_empresas.CODPROD LEFT OUTER JOIN
+                        invsaldo_inventario_sucursales ON view_invsaldo_productos_empresas.CODPROD = invsaldo_inventario_sucursales.CODPROD 
+                        AND view_invsaldo_productos_empresas.EMPNIT = invsaldo_inventario_sucursales.EMPNIT
+                WHERE  (view_invsaldo_productos_empresas.EMPNIT = '${sucursal}')
+                        AND (view_invsaldo_productos_empresas.HABILITADO='${habilitado}')
+                ORDER BY view_invsaldo_productos_empresas.CODPROD
+                `
+   
+        }
+
+         
+        execute.QueryToken(res,qry,'')
+
+});
+
+
 router.post("/kardex_producto", async(req,res)=>{
 
         const {sucursal, codprod} = req.body;

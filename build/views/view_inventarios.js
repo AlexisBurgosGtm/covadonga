@@ -9,7 +9,7 @@ function getView(){
                             ${view.vista_listado() + view.modal_historial()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
-                           ${view.vista_detalles_producto() + view.modal_clasificaciones()}
+                          
                         </div>
                         <div class="tab-pane fade" id="tres" role="tabpanel" aria-labelledby="home-tab">
                             
@@ -38,22 +38,38 @@ function getView(){
         vista_listado:()=>{
             return `
             <div class="card card-rounded shadow">
-                <div class="card-body p-2">
+                <div class="card-body p-4">
                     
                     <div class="row">
                         
                         <div class="col-6">
-                            <h4 class="negrita text-danger">Catalogo de productos</h4>
-                            <h3 class="negrita text-success">COVADONGA</h3>
+                            <h4 class="negrita text-danger">Inventario de productos</h4>
+
+                             <div class="form-group">
+                                <label>Bodegas</label>
+                                <select class="negrita form-control" id="cmbEmpresas">
+                                   
+                                </select>
+                            </div>
                             
                         </div>
                         <div class="col-6">
+
+                         <h4 class="negrita text-danger">&nbsp</h4>
+
                             <div class="form-group">
-                                <label></label>
-                                <select class="negrita form-control" id="cmbStatus">
-                                    <option value='SI'>HABILITADOS</option>
-                                    <option value='NO'>DESHABILITADOS</option>
-                                </select>
+                                <label>Status  /  Filtro</label>
+                                <div class="input-group">
+                                    <select class="negrita form-control" id="cmbStatus">
+                                        <option value='SI'>HABILITADOS</option>
+                                        <option value='NO'>DESHABILITADOS</option>
+                                    </select>
+                                    <select class="negrita form-control" id="cmbStatusExistencia">
+                                        <option value='SI'>CON EXISTENCIA</option>
+                                        <option value='NO'>TODOS</option>
+                                    </select>
+                                </div>
+                                
                             </div>
                         </div>
 
@@ -62,11 +78,25 @@ function getView(){
                     <br>
 
                     <div class="table-responsive col-12">
-                        <div class="form-group">
-                            <label class="negrita">Escriba para filtrar...</label>
-                            <input type="text" class="negrita text-secondary form-control" id="txtBuscarProd" placeholder="Escriba para filtrar..."
-                            oninput="F.FiltrarTabla('tblProductos','txtBuscarProd')">
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <div class="form-group">
+                                    <label class="negrita">Escriba para filtrar...</label>
+                                    <input type="text" class="negrita text-secondary form-control" id="txtBuscarProd" placeholder="Escriba para filtrar..."
+                                    oninput="F.FiltrarTabla('tblProductos','txtBuscarProd')">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <br>
+                                <button class="btn btn-md btn-success hand shadow"
+                                onclick="F.exportTableToExcel('tblProductos','Inventario_actual')">
+                                    <i class="fal fa-share"></i> Exportar Excel
+                                </button>
+                            </div>
                         </div>
+
+                        <br>
 
                         <table class="table table-hover col-12 h-full" id="tblProductos">
                             <thead class="bg-base text-white">
@@ -75,12 +105,9 @@ function getView(){
                                     <td>CODIGOS</td>
                                     <td>DESCRIPCIONES</td>
                                     <td>EMPAQUE</td>
+                                    <td>EXISTENCIA</td>
                                     <td>COSTO</td>
-                                    <td>PRECIO</td>
-                                    <td>MARCA / RUBROS</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>TOTAL_COSTO</td>
                                     <td></td>
                                 </tr>
                             </thead>
@@ -91,10 +118,7 @@ function getView(){
                 </div>
             </div>
 
-            <button class="btn btn-success btn-xl btn-circle btn-bottom-r hand shadow" id="btnNuevo">
-                <i class="fal fa-plus"></i>
-            </button>
-
+        
             `
         },
         modal_historial:()=>{
@@ -112,13 +136,15 @@ function getView(){
                             <div class="card card-rounded">
                                 <div class="card-body p-4">
 
+                                    <h4 class="negrita text-danger" id="lbKardexDesprod"></h4>
+
                                     <div class="form-group">
                                         <label>Escriba para buscar...</label>
                                         <input type="text"
                                         placeholder='Escriba para filtrar...'
                                         class="form-control negrita text-danger"
                                         id="txtBuscarHistorial"
-                                        <F.FiltrarTabla('tblHistorial','txtBuscarHistorial')>>
+                                        oninput="F.FiltrarTabla('tblHistorial','txtBuscarHistorial')">
                                     </div>
 
                                     <table class="table h-full col-12 table-bordered" id="tblHistorial">
@@ -128,6 +154,7 @@ function getView(){
                                                 <td>DOCUMENTO</td>
                                                 <td>ENTRADA</td>
                                                 <td>SALIDA</td>
+                                                <td>PRESTAMO</td>
                                             </tr>
                                         </thead>
                                         <tbody id="tblDataHistorial">
@@ -156,259 +183,41 @@ function getView(){
 
 function addListeners(){
     
-            F.slideAnimationTabs();            
-
-            document.getElementById('btnNuevo').addEventListener('click',()=>{
-                
-                document.getElementById('txtCodprod').disabled = false;
-
-                document.getElementById('tab-dos').click();
-                clean_productos();
-
-            });
-
-            document.getElementById('cmbStatus').addEventListener('change',()=>{
-                get_tbl_productos();
-            })
-
-
-            GF.data_clasificaciones_todas()
-            .then((data)=>{
-
-                let strMarca = ''; let strR1 = ''; let strR2 = ''; let strMedidas = '';
-
-                data.recordset.map((r)=>{
-                        switch (r.TIPO) {
-                            case 'MARCA':
-                                strMarca += `<option value='${r.CODIGO}'>${r.DESCRIPCION}</option>`;
-                                break;
-                            case 'RUBRO':
-                                strR1  += `<option value='${r.CODIGO}'>${r.DESCRIPCION}</option>`;
-                                break;
-                            case 'RUBRO2':
-                                strR2  += `<option value='${r.CODIGO}'>${r.DESCRIPCION}</option>`;
-                                break;
-                            case 'MEDIDAS':
-                                strMedidas += `<option value='${r.DESCRIPCION}'>${r.DESCRIPCION}</option>`;
-                                break;
-                        };
-                });
-
-                document.getElementById('cmbMarca').innerHTML = strMarca;
-                document.getElementById('cmbRubro').innerHTML = strR1;
-                document.getElementById('cmbRubro2').innerHTML = strR2;
-                document.getElementById('txtCodmedida').innerHTML = strMedidas;
-
-            })
-            .catch(()=>{
-
-                document.getElementById('cmbMarca').innerHTML = `<option value='0'>-----</option>`;
-                document.getElementById('cmbRubro').innerHTML = `<option value='0'>-----</option>`;
-                document.getElementById('cmbRubro2').innerHTML = `<option value='0'>-----</option>`;
-                document.getElementById('txtCodmedida').innerHTML =`<option value=''>-----</option>`;
-            
-            })
-
-
-
-            let btnGuardar = document.getElementById('btnGuardar');
-            btnGuardar.addEventListener('click',()=>{
-
-                    let codprod = document.getElementById('txtCodprod').value || '';
-                    let codprod2 = document.getElementById('txtCodprod2').value  || codprod;
-                    let desprod = document.getElementById('txtDesprod').value  || '';
-                    let desprod2 = document.getElementById('txtDesprod2').value  || '';
-                    let uxc = document.getElementById('txtUxc').value  || '1';
-                    let codmedida = document.getElementById('txtCodmedida').value  || 'UNIDAD';
-                    let costo = document.getElementById('txtCosto').value  || '0';
-                    let precio = document.getElementById('txtPrecio').value  || '0';
-                    let codmarca = document.getElementById('cmbMarca').value;
-                    let codrubro = document.getElementById('cmbRubro').value;
-                    let codrubro2 = document.getElementById('cmbRubro2').value;
-                    let tipo = document.getElementById('cmbTipo').value;
-
-                    if(codprod==''){F.AvisoError('Escriba un código de producto');return;};
-                    if(desprod==''){F.AvisoError('Escriba un descripción de producto');return;};
-                        
-                    
-                    if(document.getElementById('txtCodprod').disabled==true){
-
-                        F.Confirmacion('¿Está seguro que desea ACTUALIZAR este producto?')
-                        .then((value)=>{
-
-                            if(value==true){
-
-                                btnGuardar.disabled = true;
-                                btnGuardar.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
-
-                                    GF.edit_producto(tipo,F.limpiarTexto(codprod),F.limpiarTexto(codprod2),F.limpiarTexto(desprod),F.limpiarTexto(desprod2),uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)
-                                    .then(()=>{
-
-                                        btnGuardar.disabled = false;
-                                        btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-
-                                            F.Aviso('Producto actualizado exitosamente!!');
-                                            document.getElementById('tab-uno').click();
-
-                                            get_tbl_productos();
-
-                                    })
-                                    .catch(()=>{
-
-                                        btnGuardar.disabled = false;
-                                        btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-
-                                        F.AvisoError('No se pudo actualizar este producto');
-                                        
-                                    })
-
-                            }
-
-                        })
-                    
-                    }else{
-
-                        F.Confirmacion('¿Está seguro que desea CREAR este producto?')
-                        .then((value)=>{
-
-                            if(value==true){
-
-                                btnGuardar.disabled = true;
-                                btnGuardar.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
-
-                                    GF.insert_producto(tipo,codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2)
-                                    .then(()=>{
-
-                                        btnGuardar.disabled = false;
-                                        btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-
-
-                                            F.Aviso('Producto creado exitosamente!!');
-                                            
-                                            document.getElementById('tab-uno').click();
-                                            
-                                            get_tbl_productos();
-
-                                    })
-                                    .catch(()=>{
-
-                                        btnGuardar.disabled = false;
-                                        btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-
-
-                                        F.AvisoError('No se pudo crear este producto');
-                                        
-                                    })
-
-                            }
-
-                        })
-                        
-                    }
-                    
-                    
-                    
-
-
-
-            });
-
-            get_tbl_productos();
-
-
-
-            document.getElementById('btnClasifMarca').addEventListener('click',()=>{
-
-                selected_clasificacion = 'MARCA';
-
-                document.getElementById('txtDesClasificacion').value = '';
-
-                $("#modal_clasificaciones").modal('show');
-
-
-
-            });
-
-            document.getElementById('btnClasifR1').addEventListener('click',()=>{
-
-
-                selected_clasificacion = 'RUBRO';
-
-                document.getElementById('txtDesClasificacion').value = '';
-
-                $("#modal_clasificaciones").modal('show');
-
-
-
-            });
-
-            document.getElementById('btnClasifR2').addEventListener('click',()=>{
-
-                selected_clasificacion = 'RUBRO2';
-
-                document.getElementById('txtDesClasificacion').value = '';
-                
-                $("#modal_clasificaciones").modal('show');
-
-
-
-
-            });
-
-            document.getElementById('btnClasifEmpaque').addEventListener('click',()=>{
-
-                selected_clasificacion = 'MEDIDAS';
-
-                document.getElementById('txtDesClasificacion').value = '';
-                
-                $("#modal_clasificaciones").modal('show');
-
-
-
-
-            });
-
-
-
-            let btnGuardarClasificacion = document.getElementById('btnGuardarClasificacion');
-            btnGuardarClasificacion.addEventListener('click',()=>{
-
-                let descripcion = document.getElementById('txtDesClasificacion').value || '';
-                if(descripcion==''){F.AvisoError('Escriba la descripción de la nueva clasificación');return;}
-
-                F.Confirmacion('¿Está seguro que desea crear este nueva clasificación?')
-                .then((value)=>{
-                    if(value==true){
-
-                        btnGuardarClasificacion.disabled = true;
-                        btnGuardarClasificacion.innerHTML = `<i class="fal fa-save fa-spin"></i>`;
-
-
-                        GF.insert_clasificacion(selected_clasificacion,descripcion)
-                        .then(()=>{
-
-                            btnGuardarClasificacion.disabled = false;
-                            btnGuardarClasificacion.innerHTML = `<i class="fal fa-save"></i>`;
-                       
-                            $("#modal_clasificaciones").modal('hide');
-
-                            get_clasificacion(selected_clasificacion);
-
-                        })
-                        .catch(()=>{
-                            F.AvisoError('No se creó la clasificación');
-                            btnGuardarClasificacion.disabled = false;
-                            btnGuardarClasificacion.innerHTML = `<i class="fal fa-save"></i>`;
-                       
-                        })
-
-
-                    }
-                })
-
-
-
-            });
+    F.slideAnimationTabs();            
+
+
+    //cargando empresas
+    GF.data_listado_empresas()
+    .then((data)=>{
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.EMPNIT}'>${r.EMPRESA}</option>
+            `
+        })
+      
+        document.getElementById('cmbEmpresas').innerHTML = str;
+        get_tbl_productos();
+      
+    })
+    .catch(()=>{
+       document.getElementById('cmbEmpresas').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+    });
+    //cargando empresas
+
+    document.getElementById('cmbStatus').addEventListener('change',()=>{
+        get_tbl_productos();
+    })
+
+     document.getElementById('cmbEmpresas').addEventListener('change',()=>{
+        get_tbl_productos();
+    })
+
+    
+     document.getElementById('cmbStatusExistencia').addEventListener('change',()=>{
+        get_tbl_productos();
+    })
 
 
 
@@ -422,76 +231,19 @@ function initView(){
 };
 
 
-function get_clasificacion(tipo){
-
-    GF.data_clasificaciones_tipo(tipo)
-        .then((data)=>{
-
-            let str = ''; 
-
-            data.recordset.map((r)=>{
-                str += `<option value='${r.CODIGO}'>${r.DESCRIPCION}</option>`;
-            });
-
-            switch (tipo) {
-                case 'MARCA':
-                    document.getElementById('cmbMarca').innerHTML = str;
-                    break;
-                case 'RUBRO':
-                    document.getElementById('cmbRubro').innerHTML = str
-                    break;
-                case 'RUBRO2':
-                    document.getElementById('cmbRubro2').innerHTML = str
-                    break;
-                case 'MEDIDAS':
-                    document.getElementById('txtCodmedida').innerHTML = str
-                    break;
-            };
-
-        })
-        .catch(()=>{
-
-                switch (tipo) {
-                    case 'MARCA':
-                        document.getElementById('cmbMarca').innerHTML = '';
-                        break;
-                    case 'RUBRO':
-                        document.getElementById('cmbRubro').innerHTML = '';
-                        break;
-                    case 'RUBRO2':
-                        document.getElementById('cmbRubro2').innerHTML = '';
-                        break;
-                    case 'MEDIDAS':
-                        document.getElementById('txtCodmedida').innerHTML = '';
-                        break;
-                };
-           
-        })
-};
-
-
-
-function clean_productos(){
-
-        document.getElementById('txtCodprod').value ='';
-        document.getElementById('txtCodprod2').value ='';
-        document.getElementById('txtDesprod').value ='';
-        document.getElementById('txtDesprod2').value ='';
-        document.getElementById('txtUxc').value ='1';
-        document.getElementById('txtCosto').value ='0';
-        document.getElementById('txtPrecio').value ='0';
-
-};
-
 
 function get_data_productos(st){
 
+    let sucursal = document.getElementById('cmbEmpresas').value;
+    let existencia = document.getElementById('cmbStatusExistencia').value;
+
     return new Promise((resolve,reject)=>{
     
-        axios.post(GlobalUrlCalls + '/productos/select_productos',
+        axios.post(GlobalUrlCalls + '/productos/inventario_productos',
             {
-                sucursal:GlobalEmpnit,
-                habilitado:st
+                sucursal:sucursal,
+                habilitado:st,
+                existencia:existencia
             })
         .then((response) => {
             if(response.status.toString()=='200'){
@@ -537,50 +289,20 @@ function get_tbl_productos(){
             <tr>
                 <td>${r.TIPO}</td>
                 <td><b class="text-danger">${r.CODPROD}</b>
-                    <br>
-                    <small>${r.CODPROD2}</small>
                 </td>
-                <td>${r.DESPROD}
+                <td>${r.DESPROD.replace('&','').replace('%','')}
                     <br>
-                    <small>${r.DESPROD2}</small>
+                    <small class="negrita">${r.DESMARCA}</small>
                 </td>
                 <td>${r.CODMEDIDA}</td>
+                <td>${r.EXISTENCIA}</td>
                 <td>${F.setMoneda(r.COSTO,'Q')}</td>
-                <td>${F.setMoneda(r.PRECIO,'Q')}</td>
-                <td>${r.MARCA}
-                    <br>
-                    <small class="text-info negrita">${r.RUBRO}</small>
-                    <br>
-                    <small class="text-secondary negrita">${r.RUBRO2}</small>
-                </td>
-                <td>
-                    <button class="btn btn-md btn-circle ${classBtnSt} hand shadow"
-                    id="${btnST}"
-                    onclick="update_status_producto('${F.limpiarTexto(r.CODPROD)}','${r.HABILITADO}','${btnST}')"
-                    >
-                        <i class="fal fa-sync"></i>
-                    </button>
-                </td>
-                <td>
-                    <button class="btn btn-md btn-circle btn-info hand shadow"
-                    onclick="edit_producto('${r.TIPO}','${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.CODPROD2)}','${F.limpiarTexto(r.DESPROD)}','${F.limpiarTexto(r.DESPROD2)}','${r.UXC}','${r.CODMEDIDA}','${r.COSTO}','${r.PRECIO}','${r.CODMARCA}','${r.CODRUBRO}','${r.CODRUBRO2}')"
-                    >
-                        <i class="fal fa-edit"></i>
-                    </button>
-                </td>
+                <td>${F.setMoneda((Number(r.COSTO)*Number(r.EXISTENCIA)),'Q')}</td>
                 <td>
                     <button class="btn btn-md btn-circle btn-warning hand shadow"
                     onclick="historial_producto('${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.DESPROD)}')"
                     >
                         <i class="fal fa-list"></i>
-                    </button>
-                </td>
-                <td>
-                    <button class="btn btn-md btn-circle btn-danger hand shadow"
-                    id="${btnE}"
-                    onclick="delete_producto('${r.CODPROD}','${btnE}')" >
-
-                        <i class="fal fa-trash"></i>
                     </button>
                 </td>
                 
@@ -598,119 +320,71 @@ function get_tbl_productos(){
 };
 
 
-function edit_producto(tipo,codprod,codprod2,desprod,desprod2,uxc,codmedida,costo,precio,codmarca,codrubro,codrubro2){
 
-    F.Confirmacion('¿Está seguro que desea EDITAR este producto?')
-    .then((value)=>{
-        if(value==true){
-
-
-            document.getElementById('txtCodprod').disabled = true;
-
-            document.getElementById('txtCodprod').value = codprod;
-            document.getElementById('txtCodprod2').value =codprod2;
-            document.getElementById('txtDesprod').value = desprod;
-            document.getElementById('txtDesprod2').value = desprod2;
-            document.getElementById('txtUxc').value = uxc;
-            document.getElementById('txtCodmedida').value = codmedida;
-            document.getElementById('txtCosto').value = costo;
-            document.getElementById('txtPrecio').value = precio;
-            document.getElementById('cmbMarca').value = codmarca;
-            document.getElementById('cmbRubro').value = codrubro;
-            document.getElementById('cmbRubro2').value = codrubro2;
-            document.getElementById('cmbTipo').value = tipo;
-    
-    
-            document.getElementById('tab-dos').click();
-
-
-
-        }
-    })
-
-
-
-
-};
-
-function delete_producto(codprod,idbtn){
-
-    let btn = document.getElementById(idbtn);
-
-    F.Confirmacion('¿Está seguro que desea ELIMINAR este Producto?')
-    .then((value)=>{
-        if(value==true){
-
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fal fa-trash fa-spin"></i>`;
-
-            GF.delete_producto(codprod)
-            .then(()=>{
-
-                F.Aviso('Producto eliminado exitosamente!!');
-
-                get_tbl_productos();
-
-
-            })
-            .catch(()=>{
-                
-                F.AvisoError('No se pudo ELIMINAR, probablemente ya tenga movimientos asociados, DESHABILITELO en su lugar');
-                btn.disabled = false;
-                btn.innerHTML = `<i class="fal fa-trash"></i>`;
-
-            })
-
-
-        }
-    })
-
-
-};
-
-function update_status_producto(codprod,st,idbtn){
-
-
-    let btn = document.getElementById(idbtn);
-
-    let strMsn = ''; let stStatus = '';
-    if(st=='SI'){
-        strMsn= '¿Está seguro que desea DESACTIVAR este producto?';
-        stStatus = 'NO';
-    }else{
-        strMsn= '¿Está seguro que desea ACTIVAR este producto?';
-        stStatus = 'SI';
-    }
-
-    F.Confirmacion(strMsn)
-    .then((value)=>{
-        if(value==true){
-
-            btn.disabled = true; btn.innerHTML = `<i class="fal fa-sync fa-spin"></i>`;
-
-            GF.update_st_producto(codprod,stStatus)
-            .then(()=>{
-                F.Aviso('Producto actualizado exitosamente!!');
-                get_tbl_productos();
-            })
-            .catch(()=>{
-                F.AvisoError('No se pudo actualizar');
-                btn.disabled = false; btn.innerHTML = `<i class="fal fa-sync"></i>`;
-            })
-
-
-        }
-    })
-
-};
 
 function historial_producto(codprod,desprod){
 
     $("#modal_historial").modal('show');
-
+ 
+    document.getElementById('lbKardexDesprod').innerText = desprod;
     
-
+    tbl_kardex_producto(codprod);
 };
 
+function tbl_kardex_producto(codprod){
+
+    let container = document.getElementById('tblDataHistorial');
+
+
+    GF.data_producto_kardex(codprod,'%')
+    .then((data)=>{
+
+        let str = '';
+        data.recordset.map((r)=>{
+
+            let entrada = 0; let salida = 0; let prestamo=0;
+            switch (r.INV.toString()) {
+                case '0':
+                    prestamo = Number(r.CANTIDAD);
+                    entrada = 0;
+                    salida = 0;
+                    break;
+            case '1':
+                    prestamo = 0;
+                    entrada = Number(r.CANTIDAD);
+                    salida = 0;
+                    break;
+            case '-1':
+                    prestamo = 0;
+                    entrada = 0;
+                    salida = Number(r.CANTIDAD);
+                    break;
+            }
+            str +=  `
+                <tr>
+                    <td>${F.convertDateNormal(r.FECHA)}
+                        <br>
+                        <small class="negrita text-danger">Hora: ${r.HORA}</small>
+                    </td>
+                    <td>${r.EMPRESA}
+                        <br>
+                        <small class="negrita text-danger">${r.CODDOC}-${r.CORRELATIVO}</small>
+                    </td>
+                    <td>${entrada}</td>
+                    <td>${salida}</td>
+                    <td>${prestamo}</td>
+                </tr>
+                `
+        })
+        container.innerHTML = str;  
+
+    })
+    .catch(()=>{
+        container.innerHTML = 'No se cargaron datos...';
+    })
+
+
+
+};
 
 
