@@ -465,6 +465,7 @@ function addListeners(){
 
         tbl_lista_productos(sucursal,filtro,'S');
 
+        document.getElementById('txtDesprod').value = '';
 
     });
 

@@ -474,6 +474,7 @@ function addListeners(){
 
         tbl_lista_productos(sucursal,filtro,'E');
 
+        document.getElementById('txtDesprod').value = '';
 
     });
 

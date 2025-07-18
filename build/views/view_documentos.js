@@ -86,7 +86,7 @@ function getView(){
                         <table class="table table-responsive table-hover col-12" id="tblDocumentos">
                             <thead class="bg-base text-white">
                                 <tr>
-                                    <td>EMPRESA / BODEGA</td>
+                                    <td>BODEGA</td>
                                     <td>DOCUMENTO</td>
                                     <td>FECHA</td>
                                     <td>RECIBE/SOLICITA</td>
@@ -152,6 +152,12 @@ function getView(){
                                             </thead>
                                             <tbody id="tblDataDetalle"></tbody>
                                         </table>
+
+                                        <div class="form-group">
+                                            <label class="negrita text-base">Observaciones</label>
+                                            <textarea class="form-control border-base" rows="4" id="txtObs"></textarea>
+                                        </div>
+
                                     </div>
 
 
@@ -234,7 +240,12 @@ function tbl_movimientos(){
             str += `
             <tr>
                 <td>${r.EMPRESA}</td>
-                <td>${r.CODDOC}-${r.CORRELATIVO}</td>
+                <td>${r.CODDOC}-${r.CORRELATIVO}
+                    <br>
+                    <small class="negrita">SERIE: ${r.FEL_SERIE}</small>
+                    <br>
+                    <small class="negrita">NUMERO: ${r.FEL_NUMERO}</small>
+                </td>
                 <td>${F.convertDateNormal(r.FECHA)}</td>
                 <td>${r.RECIBE}
                     <br>
@@ -246,7 +257,7 @@ function tbl_movimientos(){
                 </td>
                 <td>
                     <button class="btn btn-secondary btn-md btn-circle hand shadow"
-                    onclick="get_detalle_documento('${r.EMPNIT}','${r.CODDOC}','${r.CORRELATIVO}')">
+                    onclick="get_detalle_documento('${r.EMPNIT}','${r.CODDOC}','${r.CORRELATIVO}','${F.limpiarTexto(r.OBS)}')">
                         <i class="fal fa-list"></i>
                     </button>
                 </td>
@@ -274,9 +285,11 @@ function tbl_movimientos(){
 
 };
 
-function get_detalle_documento(sucursal,coddoc,correlativo){
+function get_detalle_documento(sucursal,coddoc,correlativo,obs){
 
         $("#modal_detalle_documento").modal('show');
+
+        document.getElementById('txtObs').value = obs;
     
         let container = document.getElementById('tblDataDetalle');
         container.innerHTML = GlobalLoader;

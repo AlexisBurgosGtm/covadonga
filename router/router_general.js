@@ -62,7 +62,7 @@ router.post("/select_traslados_recibidos_pendientes", async(req,res)=>{
 		        AND (ORDERS.FECHA_RECIBE IS NULL)
                 `
     
-                console.log(qry)
+              
                 
         execute.QueryToken(res,qry,'')
 
@@ -151,10 +151,21 @@ router.post("/select_documentos", async(req,res)=>{
         const {sucursal,tipo,mes,anio} = req.body;
 
         let qry = `
-        SELECT ORDERS.ID, ORDERS.EMPNIT, EMPRESAS_1.EMPRESA, ORDERS.CODDOC, ORDERS.CORRELATIVO, ORDERS.FECHA, ORDERS.HORA, ORDERS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO, 
-                  ISNULL(EMPLEADOS_1.NOMEMP, '') AS SOLICITA, ISNULL(EMPLEADOS.NOMEMP, '') AS RECIBE, ORDERS.NO_ORDEN, ORDERS.OBS, ORDERS.STATUS, ORDERS.ITEMS, ORDERS.TOTALCOSTO, 
+        SELECT ORDERS.ID, ORDERS.EMPNIT, EMPRESAS_1.EMPRESA, 
+                ORDERS.CODDOC, ORDERS.CORRELATIVO, 
+                ORDERS.FECHA, ORDERS.HORA, 
+                ORDERS.CODPROYECTO, PROYECTOS.NOMPROYECTO, PROYECTOS.DIRPROYECTO, 
+                  ISNULL(EMPLEADOS_1.NOMEMP, '') AS SOLICITA, 
+                  ISNULL(EMPLEADOS.NOMEMP, '') AS RECIBE,
+                   ORDERS.NO_ORDEN, 
+                   ORDERS.OBS, 
+                   ORDERS.STATUS, 
+                   ORDERS.ITEMS, 
+                   ORDERS.TOTALCOSTO, 
                   ISNULL(EMPRESAS.EMPRESA,'') AS EMPRESA_ORIGEN, 
-                  ISNULL(ORDERS.FECHA_RECIBE, ORDERS.FECHA) AS FECHA_RECIBE
+                  ISNULL(ORDERS.FECHA_RECIBE, ORDERS.FECHA) AS FECHA_RECIBE,
+                  ISNULL(ORDERS.FEL_SERIE,'') AS FEL_SERIE,
+                  ISNULL(ORDERS.FEL_NUMERO,'') AS FEL_NUMERO
 FROM     ORDERS LEFT OUTER JOIN
                   EMPRESAS ON ORDERS.EMPNIT_RECIBE = EMPRESAS.EMPNIT LEFT OUTER JOIN
                   EMPLEADOS ON ORDERS.CODEMP_RECIBE = EMPLEADOS.CODEMP LEFT OUTER JOIN
@@ -289,6 +300,49 @@ function qry_docproductos_sql(sucursal,coddoc,correlativo,fecha,json){
         return strQry;
 
 };
+
+router.post("/insert_documento_compra", async(req,res)=>{
+
+        const {sucursal,sucursal_recibe,coddoc,correlativo,mes,anio,fecha,hora,codproyecto,codsolicita,codrecibe,noorden,
+                obs,items,totalcosto,fel_serie,fel_numero,codempresa_conta,codprov,json_details
+        } = req.body;
+
+
+        let qry_documentos = `
+                INSERT INTO ORDERS 
+                (EMPNIT,CODDOC,CORRELATIVO,MES,ANIO,FECHA,HORA,CODPROYECTO,
+                        CODEMP_SOLICITA,CODEMP_RECIBE,NO_ORDEN,OBS,STATUS,
+                        ITEMS,TOTALCOSTO,JSON_DETAILS,EMPNIT_RECIBE,
+                        FEL_SERIE,FEL_NUMERO,CODEMP,CODPROV)
+                SELECT '${sucursal}' AS EMPNIT,'${coddoc}' AS CODDOC,${correlativo} AS CORRELATIVO,
+                MONTH('${fecha}') AS MES, YEAR('${fecha}') AS ANIO,'${fecha}' AS FECHA,
+                '${hora}' AS HORA,${codproyecto} AS CODPROYECTO,
+                ${codsolicita} AS CODEMP_SOLICITA,${codrecibe} AS CODEMP_RECIBE,
+                '${noorden}' AS NO_ORDEN,'${obs}' AS OBS,'O' AS STATUS,
+                ${items} AS ITEMS, ${totalcosto} AS TOTALCOSTO,
+                '${json_details}' AS JSON_DETAILS, '${sucursal_recibe}' AS EMPNIT_RECIBE,
+                '${fel_serie}' AS FEL_SERIE,
+                '${fel_numero}' AS FEL_NUMERO,
+                ${codempresa_conta} AS CODEMP,
+                ${codprov} AS CODPROV;
+        `
+
+        let qry_docproductos = qry_docproductos_sql(sucursal,coddoc,correlativo,fecha,json_details);
+
+        let nuevo_correlativo = Number(correlativo)+1;
+        let qry_tipodocumentos = `UPDATE TIPODOCUMENTOS SET CORRELATIVO=${nuevo_correlativo} WHERE CODDOC='${coddoc}';`
+    
+        
+        let qry = qry_documentos + qry_docproductos + qry_tipodocumentos;
+    
+
+        console.log(qry_documentos)
+ 
+
+        execute.QueryToken(res,qry,'')
+
+
+});
 
 
 router.post("/insert_documento_prestamo", async(req,res)=>{

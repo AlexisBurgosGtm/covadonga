@@ -513,6 +513,7 @@ function addListeners(){
 
         tbl_lista_productos(sucursal,filtro,'E');
 
+        document.getElementById('txtDesprod').value = '';
 
     });
 
@@ -680,6 +681,11 @@ function insert_movimiento(entsal){
         let noorden = '';
         let obs = F.limpiarTexto(document.getElementById('txtObs').value);
 
+        let fel_serie = document.getElementById('txtFELSerie').value || '';
+        let fel_numero = document.getElementById('txtFELNumero').value || '';
+        let codempresa_conta = document.getElementById('cmbEmpresaContable').value
+        let codprov = document.getElementById('cmbProveedor').value
+
         let items = 0; let varTotalCosto = 0;
 
  
@@ -714,10 +720,14 @@ function insert_movimiento(entsal){
                     obs:obs,
                     items:items,
                     totalcosto:varTotalCosto,
+                    fel_serie:fel_serie,
+                    fel_numero:fel_numero,
+                    codempresa_conta:codempresa_conta,
+                    codprov:codprov,
                     json_details: JSON.stringify(json_details)
                 }
 
-                axios.post(GlobalUrlCalls + '/general/insert_documento',datos)
+                axios.post(GlobalUrlCalls + '/general/insert_documento_compra',datos)
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
@@ -750,6 +760,11 @@ function insert_movimiento(entsal){
 
 function clean_data(){
 
+
+    document.getElementById('txtFELSerie').value = '';
+    document.getElementById('txtFELNumero').value = '';
+
+    document.getElementById('txtObs').value = '';
 
 
     db_compra.delete_temp_movinv_entrada_all()
