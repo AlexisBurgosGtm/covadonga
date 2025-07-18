@@ -185,7 +185,7 @@ router.post("/insert_producto", async(req,res)=>{
                 ${codmarca} AS CODMARCA,
                 ${codrubro} AS CODRUBRO,
                 ${codrubro2} AS CODRUBRO2,
-                '${tipo}' AS TIPO
+                '${tipo}' AS TIPO,
                 'SI' AS HABILITADO;
         `
 

@@ -45,7 +45,7 @@ function getView(){
                         <div class="col-6">
                             
                             <div class="form-group">
-                                <label class="negrita text-secondary">Empresa / Bodega</label>
+                                <label class="negrita text-secondary">Bodega Entrada</label>
                                 <select class="form-control negrita" id="cmbEmpresa">
                                 </select>
                             </div>
@@ -142,13 +142,29 @@ function getView(){
                     <div class="row">
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
-                            <div class="form-group">
-                              
+                           
 
-                                <label class="negrita text-secondary">Proyecto / Area</label>
-                                <select class="form-control negrita" id="cmbProyectos">
-                                </select>
-                            </div>
+                                <div class="form-group">
+                                    <label class="negrita text-secondary">Empresa Contable</label>
+                                    <select class="form-control negrita" id="cmbEmpresaContable">
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="negrita text-base">Documento FEL SAT</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control negrita border-info" id="txtFELSerie" placeholder="SERIE FEL">
+                                        <input type="text" class="form-control negrita border-info" id="txtFELNumero" placeholder="NUMERO FEL">  
+                                    </div>                               
+                                </div>
+                              
+                                <div class="form-group">
+                                    <label class="negrita text-secondary">Proveedor</label>
+                                    <select class="form-control negrita" id="cmbProveedor">
+                                    </select>
+                                </div>
+
+                            
 
                             <div class="form-group">
                                 <label class="negrita text-secondary">Documento sistema</label>
@@ -157,6 +173,8 @@ function getView(){
                                     <input type="text" class="form-control negrita" id="txtCorrelativo" disabled="true">
                                 </div>                               
                             </div>
+
+                             
 
                             <div class="form-group">
                                 <label class="negrita text-secondary">Observaciones</label>
@@ -169,12 +187,15 @@ function getView(){
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         
                             <div class="form-group">
+                                <label class="negrita text-secondary">Proyecto / Area</label>
+                                <select class="form-control negrita" id="cmbProyectos">
+                                </select>
+                            </div>
 
+                            <div class="form-group">
                                 <label class="negrita text-secondary">Persona que Solicita</label>
                                 <select class="form-control negrita"  id="cmbRecibe">
                                 </select>
-
-                                
                             </div>
 
                             <div class="form-group">
@@ -185,6 +206,8 @@ function getView(){
                                 </div>
                                 
                             </div>
+
+                          
 
                             <div class="form-group">
 
@@ -373,13 +396,17 @@ function addListeners(){
         })
       
         document.getElementById('cmbEmpresa').innerHTML = str;
-
+        cargar_proyectos();
     })
     .catch(()=>{
        document.getElementById('cmbEmpresa').innerHTML = "<option value=''>No se cargaron las empresas</option>";
 
     });
     //cargando empresas
+
+    document.getElementById('cmbEmpresa').addEventListener('change',()=>{
+        cargar_proyectos();
+    });
 
 
     //carga de empleados
@@ -401,25 +428,38 @@ function addListeners(){
     //carga de empleados
 
 
-     //cargando proyectos
-    GF.data_listado_proyectos('%')
+    
+    GF.data_select_empresas_conta()
     .then((data)=>{
-        
-        let str = '';
 
+        let str = '';
         data.recordset.map((r)=>{
             str += `
-            <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO} (${r.EMPRESA})</option>
+                <option value='${r.CODEMP}'>${r.NIT}-${r.RAZON_SOCIAL}</option>
             `
         })
-         document.getElementById('cmbProyectos').innerHTML = str;
-
+        document.getElementById('cmbEmpresaContable').innerHTML = str;
     })
     .catch(()=>{
-        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+         document.getElementById('cmbEmpresaContable').innerHTML = "<option value='0'>SIN EMPRESA</option>";
+    })
 
-    });
-    //cargando empresas
+
+
+     GF.data_select_proveedores()
+    .then((data)=>{
+
+        let str = '';
+        data.recordset.map((r)=>{
+            str += `
+                <option value='${r.CODPROV}'>${r.NIT}-${r.PROVEEDOR}</option>
+            `
+        })
+        document.getElementById('cmbProveedor').innerHTML = str;
+    })
+    .catch(()=>{
+         document.getElementById('cmbProveedor').innerHTML = "<option value='0'>SIN PROVEEDOR</option>";
+    })
 
 
 
@@ -476,9 +516,6 @@ function addListeners(){
 
     });
 
-
-  
-  
 
     document.getElementById('txtCantidad').addEventListener('input',()=>{
 
@@ -588,6 +625,31 @@ function get_total_costo(){
                 console.log(error)
                 document.getElementById('txtCostoTotal').value = '0.01';
             }
+};
+
+
+function cargar_proyectos(){
+
+    let sucursal = document.getElementById('cmbEmpresa').value;
+     //cargando proyectos
+    GF.data_listado_proyectos(sucursal)
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO}</option>
+            `
+        })
+         document.getElementById('cmbProyectos').innerHTML = str;
+
+    })
+    .catch(()=>{
+        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron los proyectos</option>";
+
+    });
+    
 };
 
 function initView(){

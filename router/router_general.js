@@ -3,6 +3,42 @@ const express = require('express');
 const router = express.Router();
 
 
+// EMPRESAS CONTABILIDAD
+router.post("/select_empresas_contabilidad", async(req,res)=>{
+
+        //const {sucursal,tipo,mes,anio} = req.body;
+
+        let qry = `
+        SELECT CODEMP,NIT,RAZON_SOCIAL,NOMBRE_COMERCIAL,DIRECCION
+        FROM EMPRESAS_CONTA;  
+                `
+               
+        execute.QueryToken(res,qry,'')
+
+});
+
+
+// EMPRESAS CONTABILIDAD
+
+
+
+//PROVEEDORES
+router.post("/select_proveedores", async(req,res)=>{
+
+        //const {sucursal,tipo,mes,anio} = req.body;
+
+        let qry = `
+        SELECT CODPROV,NIT,PROVEEDOR,DIRECCION,TELEFONO
+        FROM PROVEEDORES;  
+                `
+               
+        execute.QueryToken(res,qry,'')
+
+});
+
+//PROVEEDORES
+
+
 
 
 router.post("/select_traslados_recibidos_pendientes", async(req,res)=>{

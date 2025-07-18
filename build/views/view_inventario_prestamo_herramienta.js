@@ -381,6 +381,7 @@ function addListeners(){
         document.getElementById('cmbEmpresa').innerHTML = str;
         document.getElementById('cmbEmpresaEntrada').innerHTML = str;
 
+        cargar_proyectos();
     })
     .catch(()=>{
        document.getElementById('cmbEmpresa').innerHTML = "<option value=''>No se cargaron las empresas</option>";
@@ -388,6 +389,9 @@ function addListeners(){
     });
     //cargando empresas
 
+    document.getElementById('cmbEmpresaEntrada').addEventListener('change',()=>{
+        cargar_proyectos();
+    });
 
     //carga de empleados
     GF.data_listado_empleados('%')
@@ -408,25 +412,7 @@ function addListeners(){
     //carga de empleados
 
 
-     //cargando proyectos
-    GF.data_listado_proyectos('%')
-    .then((data)=>{
-        
-        let str = '';
-
-        data.recordset.map((r)=>{
-            str += `
-            <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO} (${r.EMPRESA})</option>
-            `
-        })
-         document.getElementById('cmbProyectos').innerHTML = str;
-
-    })
-    .catch(()=>{
-        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron las empresas</option>";
-
-    });
-    //cargando empresas
+   
 
 
 
@@ -593,6 +579,29 @@ function get_total_costo(){
                 console.log(error)
                 document.getElementById('txtCostoTotal').value = '0.01';
             }
+};
+
+function cargar_proyectos(){
+
+    let sucursal = document.getElementById('cmbEmpresaEntrada').value;
+      //cargando proyectos
+    GF.data_listado_proyectos(sucursal)
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO}</option>
+            `
+        })
+         document.getElementById('cmbProyectos').innerHTML = str;
+
+    })
+    .catch(()=>{
+        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron los proyectos/areas</option>";
+
+    });
 };
 
 function initView(){
