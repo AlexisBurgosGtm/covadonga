@@ -1179,6 +1179,100 @@ let F = {
             return 'pc';
           }
       },
+      notificacion_socket:(tipo,msn)=>{
+        
+        console.log('enviando notificacion socket');
+
+        try {
+          socket.emit('notificacion',tipo,msn)
+        } catch (error) {
+          console.log(error);
+        }
+        
+      },
+      enviar_documento_whatsapp: (sucursal,coddoc,correlativo)=>{
+
+
+        console.log('enviando whastapp')
+
+          let url= window.location.origin
+       
+              let numero = '57255092';
+
+              let stn = '502' + numero.toString();
+
+              let msg = '';
+              let strData = '';
+
+              GF.data_detalle_documento(sucursal,coddoc,correlativo)
+              .then((data)=>{
+                  
+                  data.recordset.map((r)=>{
+                      strData += '* ' + r.DESPROD + "-"  + r.CODMEDIDA + " Cant: " + r.CANTIDAD.toString() + "\n";
+                  })
+
+
+                    msg = `Nuevo traslado \n COVANDONGA \n --------------------------- \n ${strData} \n --------------------------- \n`
+                    
+                    msg = encodeURIComponent(msg);
+
+                    window.open('https://api.whatsapp.com/send?phone='+stn+'&text='+msg);
+            
+
+              })
+              .catch(()=>{
+                F.showToast('No se envio el mensaje')
+              })   
+
+      },
+      enviar_documento_whatsapp2: (sucursal,coddoc,correlativo)=>{
+
+
+         swal({
+            text: 'Escriba el número a donde se enviará el link de la aplicación:',
+            content: "input",
+            button: {
+              text: "Enviar Whatsapp",
+              closeModal: true,
+            },
+          })
+          .then(numero => {
+            if (!numero) throw null;
+            
+              let url= window.location.origin
+       
+              //let numero = '57255092';
+
+              let stn = '502' + numero.toString();
+
+              let msg = '';
+              let strData = '';
+
+              GF.data_detalle_documento(sucursal,coddoc,correlativo)
+              .then((data)=>{
+                  
+                  data.recordset.map((r)=>{
+                      strData += '* ' + r.DESPROD + "-"  + r.CODMEDIDA + " Cant: " + r.CANTIDAD.toString() + "\n";
+                  })
+
+
+                    msg = `Nuevo traslado \n COVANDONGA \n --------------------------- \n ${strData} \n --------------------------- \n`
+                    
+                    msg = encodeURIComponent(msg);
+
+                    window.open('https://api.whatsapp.com/send?phone='+stn+'&text='+msg);
+            
+
+              })
+              .catch(()=>{
+                F.showToast('No se envio el mensaje')
+              })   
+          
+          })  
+
+        
+
+      },
 };
 
 //export default funciones;

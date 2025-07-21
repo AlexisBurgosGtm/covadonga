@@ -112,10 +112,7 @@ io.on('connection', function(socket){
         io.emit('notificacion', tipo, msn);
       });
 
-      socket.on('nueva_cotizacion', (tipo,msn)=>{
-        io.emit('nueva_cotizacion', tipo, msn);
-      });
-
+   
       
   
 });

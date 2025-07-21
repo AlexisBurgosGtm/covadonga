@@ -94,6 +94,7 @@ function getView(){
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                 </tr>
                             </thead>
                             <tbody id="tblDataDocumentos">
@@ -254,6 +255,12 @@ function tbl_movimientos(){
                 <td>${F.convertDateNormal(r.FECHA_RECIBE)}
                     <br>
                     <small class="negrita">${r.EMPRESA_ORIGEN}</small>
+                </td>
+                <td>
+                    <button class="btn btn-success btn-md btn-circle hand shadow"
+                    onclick="F.enviar_documento_whatsapp2('${r.EMPNIT}','${r.CODDOC}','${r.CORRELATIVO}')">
+                        <i class="fal fa-paper-plane"></i>
+                    </button>
                 </td>
                 <td>
                     <button class="btn btn-secondary btn-md btn-circle hand shadow"

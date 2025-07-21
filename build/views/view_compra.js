@@ -32,7 +32,7 @@ function getView(){
                     </ul>
                     
                 </div>
-                ${view.modal_lista_productos() + view.modal_cantidad()}
+                ${view.modal_lista_productos() + view.modal_cantidad() + view.modal_proveedores()}
                
             `
         },
@@ -160,8 +160,13 @@ function getView(){
                               
                                 <div class="form-group">
                                     <label class="negrita text-secondary">Proveedor</label>
-                                    <select class="form-control negrita" id="cmbProveedor">
-                                    </select>
+                                    <div class="input-group">
+                                        <select class="form-control negrita" id="cmbProveedor">
+                                        </select>
+                                        <button class="btn btn-md btn-success hand" id="btnNuevoProveedor">
+                                            <i class="fal fa-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                             
@@ -207,16 +212,19 @@ function getView(){
                                 
                             </div>
 
-                          
-
                             <div class="form-group">
 
                                 <label class="negrita text-secondary">Total Costo</label>
                                 <h1 class="negrita text-danger" id="lbTotalCosto"></h1>
-                                
-                                
+                                                                
                             </div>
 
+                            <br><br>
+                            <div class="form-group">
+                                <button class="btn btn-danger hand shadow col-12" id="btnCargarCostos">
+                                    <i class="fal fa-download"></i>&nbsp Cargar Costos
+                                </button>
+                            </div>
                         
                         </div>
                     </div>
@@ -271,8 +279,8 @@ function getView(){
                                                     <td>CODIGO</td>
                                                     <td>PRODUCTO</td>
                                                     <td>EXISTENCIA</td>
+                                                    <td>COSTO</td>
                                                     <td>MARCA</td>
-                                                    <td></td>
                                                 </tr>
                                             </thead>
                                             <tbody id="tblDataProductos"></tbody>
@@ -356,7 +364,97 @@ function getView(){
                 </div>
             </div>
             `
-        }
+        },
+        modal_proveedores:()=>{
+            return `
+              <div id="modal_proveedores" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
+                            <h4 class="m-0 text-center color-white" id="">
+                                Crear Nuevo Proveedor
+                            </h4>
+                        </div>
+                        <div class="modal-body p-4">
+                            
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+                                    
+                                    <div class="row">
+                                        <div class="col-6">
+                                                <div class="form-group">
+                                                    <label class="negrita text-secondary">NIT</label>
+                                                    <input type="text" class="negrita text-secondary form-control" id="txtProvNit">
+                                                </div>
+                                        </div>
+                                        <div class="col-6">
+                                                <div class="form-group">
+                                                    <label class="negrita text-secondary">Telefono</label>
+                                                    <input type="text" class="negrita text-secondary form-control" id="txtProvTelefono">
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    
+
+                                    <div class="form-group">
+                                        <label class="negrita text-secondary">Proveedor</label>
+                                        <input type="text" class="negrita text-secondary form-control" id="txtProvNombre">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="negrita text-secondary">Direccion</label>
+                                        <input type="text" class="negrita text-secondary form-control" id="txtProvDireccion">
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button class="btn btn-secondary btn-md hand shadow"
+                                            data-dismiss="modal">
+                                                <i class="fal fa-arrow-left"></i>Cancelar
+                                            </button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn btn-info btn-md hand shadow" id="btnGuardarProveedor">
+                                                <i class="fal fa-save"></i>Guardar
+                                            </button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <br>
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+                                    <div class="table-responsive">
+                                        <table class="table  h-full col-12">
+                                            <thead class="bg-base text-white">
+                                                <tr>
+                                                    <td>NIT</td>
+                                                    <td>PROVEEDOR</td>
+                                                    <td>DIRECCION</td>
+                                                    <td>TELEFONO</td>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tblDataProveedores"></tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="number" id="txtProvCodigo" disabled="true" class="hidden">
+                                
+                           
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            `
+        },
     }
 
     root.innerHTML = view.body();
@@ -446,21 +544,7 @@ function addListeners(){
 
 
 
-     GF.data_select_proveedores()
-    .then((data)=>{
-
-        let str = '';
-        data.recordset.map((r)=>{
-            str += `
-                <option value='${r.CODPROV}'>${r.NIT}-${r.PROVEEDOR}</option>
-            `
-        })
-        document.getElementById('cmbProveedor').innerHTML = str;
-    })
-    .catch(()=>{
-         document.getElementById('cmbProveedor').innerHTML = "<option value='0'>SIN PROVEEDOR</option>";
-    })
-
+    listeners_provedores();
 
 
    
@@ -609,7 +693,187 @@ function addListeners(){
     });
 
 
+
+
+    let btnCargarCostos = document.getElementById('btnCargarCostos');
+    btnCargarCostos.addEventListener('click',()=>{
+
+        F.Confirmacion('¿Está seguro que desea CARGAR LOS NUEVOS COSTOS?')
+        .then((value)=>{
+            if(value==true){
+
+                btnCargarCostos.disabled = true;
+                
+                F.showToast('Actualizando costos....');
+
+                db_compra.select_temp_movinv_entrada()
+                .then((data)=>{
+                    
+                    data.map((r)=>{
+                        GF.update_costo_producto(r.CODPROD,r.COSTO)
+                        .then(()=>{
+                            F.showToast(`Actualizado: ${r.DESPROD}`);
+                        })
+                        .catch(()=>{
+                            F.showToast(`No se actualizo ${r.DESPROD}`);
+                        })
+                    
+                    })
+
+                    F.Aviso('Actualizacion de Costos finalizada');
+                    
+                    btnCargarCostos.disabled = false;
+                
+                })
+
+
+
+            }
+        })
+
+    });
   
+
+
+};
+
+
+
+function listeners_provedores(){
+    
+    
+
+
+
+    let btnNuevoProveedor = document.getElementById('btnNuevoProveedor');
+    btnNuevoProveedor.addEventListener('click',()=>{
+
+        $("#modal_proveedores").modal('show');
+
+        document.getElementById('txtProvNit').value = '';
+        document.getElementById('txtProvNombre').value = '';
+        document.getElementById('txtProvDireccion').value = '';
+        document.getElementById('txtProvTelefono').value = '';
+        
+
+    });
+
+
+    let btnGuardarProveedor = document.getElementById('btnGuardarProveedor');
+    btnGuardarProveedor.addEventListener('click',()=>{
+
+            let nit = document.getElementById('txtProvNit').value || '';
+            let proveedor = document.getElementById('txtProvNombre').value || '';
+            let direccion = document.getElementById('txtProvDireccion').value || 'CIUDAD';
+            let telefono = document.getElementById('txtProvTelefono').value = '';
+
+
+            if(nit==''){F.AvisoError('Indique el numero de NIT');return;};
+            if(proveedor==''){F.AvisoError('Indique el nombre');return;};
+
+            GF.insert_proveedor(nit,proveedor,direccion,telefono)
+            .then(()=>{
+                F.Aviso('Proveedor creado exitosamente!');
+                tbl_proveedores();
+                
+                document.getElementById('txtProvNit').value = '';
+                document.getElementById('txtProvNombre').value = '';
+                document.getElementById('txtProvDireccion').value = '';
+                document.getElementById('txtProvTelefono').value = '';
+            })
+            .catch(()=>{
+                F.AvisoError('No se pudo agregar');  
+            })
+
+            
+    });
+
+
+
+    tbl_proveedores();
+
+};
+
+function tbl_proveedores(){
+     GF.data_select_proveedores()
+    .then((data)=>{
+
+        let str = '';
+        let tbl = '';
+
+        data.recordset.map((r)=>{
+            let idBtnEliminar = `btnEliminar${r.CODPROV}`;
+            str += `
+                <option value='${r.CODPROV}'>${r.NIT}-${r.PROVEEDOR}</option>
+            `;
+            tbl += `
+            <tr>
+                <td>${r.NIT}</td>
+                <td>${r.PROVEEDOR}</td>
+                <td>${r.DIRECCION}</td>
+                <td>${r.TELEFONO}</td>
+                <td>
+                    <button class="btn btn-md btn-circle btn-danger hand shadow"
+                    id="${idBtnEliminar}"
+                    onclick="eliminar_proveedor('${r.CODPROV}','${idBtnEliminar}')">
+                        <i class="fal fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            `
+        })
+        document.getElementById('cmbProveedor').innerHTML = str;
+        document.getElementById('tblDataProveedores').innerHTML = tbl;
+
+    })
+    .catch(()=>{
+         document.getElementById('cmbProveedor').innerHTML = "<option value='0'>SIN PROVEEDOR</option>";
+        document.getElementById('tblDataProveedores').innerHTML = 'No se cargaron datos...';
+    })
+};
+
+function eliminar_proveedor(codprov,idbtn){
+
+    let btn = document.getElementById(idbtn);
+
+    F.Confirmacion('¿Está seguro que desea ELIMINAR este proveedor?')
+    .then((value)=>{
+        if(value==true){
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fal fa-trash fa-spin"></i>`;
+            
+            F.showToast('Verificando movimientos...');
+
+            GF.select_movimientos_proveedor(codprov)
+            .then(()=>{
+                //tiene movimientos, por ende no se elimina
+                F.AvisoError('Este proveedor tiene movimientos, no se puede ELIMINAR');
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fal fa-trash"></i>`;
+
+            })
+            .catch(()=>{
+                //no tiene movimientos, se puede eliminar
+                F.showToast('Eliminando Proveedor...');
+
+                GF.delete_proveedor(codprov)
+                .then(()=>{
+                    F.Aviso('Proveedor eliminado exitosamente!!');
+                    tbl_proveedores();
+                })
+                .catch(()=>{
+                    F.AvisoError('No se pudo ELIMINAR');
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fal fa-trash"></i>`;
+                })
+
+            })
+
+
+
+        }
+    })
 
 
 };
@@ -803,8 +1067,9 @@ function tbl_lista_productos(sucursal,filtro,entsal){
                 <td>${F.limpiarTexto(r.CODPROD)}</td>
                 <td>${F.limpiarTexto(r.DESPROD)}</td>
                 <td>${r.EXISTENCIA}</td>
+                <td>${F.setMoneda(r.COSTO,'Q')}</td>
                 <td>${F.limpiarTexto(r.DESMARCA)}</td>
-                <td></td>
+                
             </tr>
             `
         })

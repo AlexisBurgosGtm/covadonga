@@ -21,7 +21,7 @@ router.post("/select_empresas_contabilidad", async(req,res)=>{
 // EMPRESAS CONTABILIDAD
 
 
-
+// -----------------------------------
 //PROVEEDORES
 router.post("/select_proveedores", async(req,res)=>{
 
@@ -29,14 +29,65 @@ router.post("/select_proveedores", async(req,res)=>{
 
         let qry = `
         SELECT CODPROV,NIT,PROVEEDOR,DIRECCION,TELEFONO
-        FROM PROVEEDORES;  
+        FROM PROVEEDORES;  `               
+        execute.QueryToken(res,qry,'')
+
+});
+router.post("/insert_proveedor", async(req,res)=>{
+
+        const {nit,proveedor,direccion,telefono} = req.body;
+
+        let qry = `
+        INSERT INTO PROVEEDORES
+                (NIT,PROVEEDOR,DIRECCION,TELEFONO)
+        SELECT '${nit}' AS NIT, '${proveedor}' AS PROVEEDOR,
+                '${direccion}' AS DIRECCION, '${telefono}' AS TELEFONO;  
                 `
                
         execute.QueryToken(res,qry,'')
 
 });
+router.post("/edit_proveedor", async(req,res)=>{
+
+        const {codprov,nit,proveedor,direccion,telefono} = req.body;
+
+        let qry = `
+        UPDATE PROVEEDORES
+                SET 
+                        NIT='${nit}',
+                        PROVEEDOR='${proveedor}',
+                        DIRECCION='${direccion}',
+                        TELEFONO='${telefono}'
+        WHER CODPROV=${codprov};  
+                `
+               
+        execute.QueryToken(res,qry,'')
+
+});
+router.post("/delete_proveedor", async(req,res)=>{
+
+        const {codprov} = req.body;
+
+        let qry = `
+        DELETE FROM PROVEEDORES WHERE CODPROV=${codprov};  
+                `
+               
+        execute.QueryToken(res,qry,'')
+
+});
+router.post("/select_movimientos_proveedor", async(req,res)=>{
+
+        const {codprov} = req.body;
+
+        let qry = `
+        SELECT CODDOC,CORRELATIVO FROM ORDERS WHERE CODPROV=${codprov}; `
+                       
+        execute.QueryToken(res,qry,'')
+
+});
 
 //PROVEEDORES
+// -----------------------------------
 
 
 
@@ -264,7 +315,7 @@ router.post("/insert_documento", async(req,res)=>{
         
         let qry = qry_documentos + qry_docproductos + qry_tipodocumentos;
     
- 
+      
 
         execute.QueryToken(res,qry,'')
 
@@ -336,8 +387,7 @@ router.post("/insert_documento_compra", async(req,res)=>{
         let qry = qry_documentos + qry_docproductos + qry_tipodocumentos;
     
 
-        console.log(qry_documentos)
- 
+      
 
         execute.QueryToken(res,qry,'')
 

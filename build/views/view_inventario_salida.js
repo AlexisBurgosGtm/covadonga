@@ -530,6 +530,11 @@ function addListeners(){
     let btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.addEventListener('click',()=>{
 
+
+        let sucursal_origen = document.getElementById('cmbEmpresa').value;
+        let sucursal_recibe = document.getElementById('cmbEmpresaEntrada').value;
+        
+
         F.Confirmacion('¿Está seguro que desea Guardar este movimiento?')
         .then((value)=>{
             if(value==true){
@@ -542,15 +547,32 @@ function addListeners(){
                 .then(()=>{
                     
                     F.Aviso('Documento guardado exitosamente!!');
-                    
+
+                   
                     btnGuardar.disabled = false;
                     btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
                     
+                    
+                    if(sucursal_origen.toString()==sucursal_recibe.toString()){    
+                      
+                    }else{
+                        F.notificacion_socket('TRASLADO',`Se creado un nuevo traslado`);
+                        
+                        //let coddoc = document.getElementById('cmbCoddoc').value;
+                        //let correlativo = document.getElementById('txtCorrelativo').value;
+                        //F.enviar_documento_whatsapp(sucursal_origen,coddoc,correlativo);
+                    }
+
+                    
                     clean_data();
+
+                    
                     
                 })
-                .catch(()=>{
+                .catch((err)=>{
                     
+                    console.log(err)
+
                     F.AvisoError('No se pudo guardar');
 
                     btnGuardar.disabled = false;
@@ -611,7 +633,7 @@ function cargar_proyectos(){
 
     })
     .catch(()=>{
-        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron los proyectos/areas</option>";
+        document.getElementById('cmbProyectos').innerHTML = "<option value='0'>No se cargaron los proyectos/areas</option>";
 
     });
 };

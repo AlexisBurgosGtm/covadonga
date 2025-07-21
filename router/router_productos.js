@@ -242,6 +242,19 @@ router.post("/update_st_producto", async(req,res)=>{
 
 })
 
+router.post("/update_costo_producto", async(req,res)=>{
+
+        const{codprod,costo} = req.body;
+
+        let qry = `UPDATE PRODUCTOS
+                        SET COSTO=${costo}
+                        WHERE CODPROD='${codprod}';`
+               
+
+        execute.QueryToken(res,qry,'');
+
+})
+
 
 
 
