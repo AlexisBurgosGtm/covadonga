@@ -120,6 +120,13 @@ function getView(){
                     
                     <h3 class="negrita text-base">Tipo de Documentos</h3>
 
+                    <div class="form-group">
+                        <input type="text" class="form-control border-base negrita text-base"
+                        placeholder="Escriba para buscar..."
+                        id="txtBuscarDoc"
+                        oninput="F.FiltrarTabla('tblTipodocumentos','txtBuscarDoc')">
+                    </div>
+
                     <div class="table-responsive col-12">
                         <table class="table table-bordered h-full" id="tblTipodocumentos">
                             <thead class="bg-base text-white">
