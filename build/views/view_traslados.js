@@ -249,6 +249,9 @@ function getView(){
 
 function addListeners(){
 
+    
+    document.title = 'TRASLADOS PENDIENTES';
+
     F.slideAnimationTabs();
 
 

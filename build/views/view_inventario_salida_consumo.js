@@ -52,7 +52,7 @@ function getView(){
 
                         </div>
                         <div class="col-6">
-                            <h2 class="text-left negrita text-base">Prestamo de Herramienta</h2>
+                            <h2 class="text-left negrita text-base">Nueva Salida por Consumo</h2>
                             <h5 class="negrita text-danger" id="lbItems"></h5>
                         </div>
                     </div>
@@ -135,28 +135,19 @@ function getView(){
             <div class="card card-rounded col-12">
                 <div class="card-body p-4" style="font-size:90%">
 
-                   
                     <h4 class="negrita text-info text-center">Datos finales</h4>
                     <br>
                     
                     <div class="row">
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
-
-                            <div class="form-group">
-                                <label class="negrita text-secondary">Empresa / Bodega (Entrada)</label>
-                                <select class="form-control negrita" id="cmbEmpresaEntrada">
-                                </select>                              
-                            </div>
-
+                            
                             <div class="form-group">
                               
                                 <label class="negrita text-secondary">Proyecto / Area</label>
                                 <select class="form-control negrita" id="cmbProyectos">
                                 </select>
                             </div>
-
-                            
 
                             <div class="form-group">
                                 <label class="negrita text-secondary">Documento sistema</label>
@@ -177,12 +168,14 @@ function getView(){
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         
                             <div class="form-group">
-
                                 <label class="negrita text-secondary">Persona que Recibe</label>
                                 <select class="form-control negrita"  id="cmbRecibe">
                                 </select>
+                            </div>
 
-                                
+                             <div class="form-group">
+                                <label class="negrita text-secondary">Entregado a:</label>
+                                <input type="text" class="form-control negrita"  id="txtEntregado">               
                             </div>
 
                             <div class="form-group">
@@ -191,15 +184,11 @@ function getView(){
                                     <input type="date" class="form-control negrita" id="txtFecha">
                                     <input type="text" class="form-control negrita" id="txtHora" disabled="true">
                                 </div>
-                                
                             </div>
 
                             <div class="form-group">
-
                                 <label class="negrita text-secondary">Total Costo</label>
                                 <h1 class="negrita text-danger" id="lbTotalCosto"></h1>
-                                
-                                
                             </div>
 
                         
@@ -256,7 +245,7 @@ function getView(){
                                                     <td>PRODUCTO</td>
                                                     <td>EXISTENCIA</td>
                                                     <td>MARCA</td>
-                                                    <td>ASIGNADO A</td>
+                                                    <td></td>
                                                 </tr>
                                             </thead>
                                             <tbody id="tblDataProductos"></tbody>
@@ -351,8 +340,7 @@ function getView(){
 function addListeners(){
 
 
-    document.title = 'PRESTAMOS DE HERRAMIENTA';
-
+    document.title = 'SALIDA POR CONSUMO';
 
     F.slideAnimationTabs();
 
@@ -382,19 +370,22 @@ function addListeners(){
         })
       
         document.getElementById('cmbEmpresa').innerHTML = str;
-        document.getElementById('cmbEmpresaEntrada').innerHTML = str;
+        //document.getElementById('cmbEmpresaEntrada').innerHTML = str;
 
         cargar_proyectos();
+
     })
     .catch(()=>{
        document.getElementById('cmbEmpresa').innerHTML = "<option value=''>No se cargaron las empresas</option>";
-       document.getElementById('cmbEmpresaEntrada').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+       //document.getElementById('cmbEmpresaEntrada').innerHTML = "<option value=''>No se cargaron las empresas</option>";
     });
     //cargando empresas
 
-    document.getElementById('cmbEmpresaEntrada').addEventListener('change',()=>{
-        cargar_proyectos();
-    });
+
+    //document.getElementById('cmbEmpresaEntrada').addEventListener('change',()=>{
+      //   cargar_proyectos();
+    //})
+
 
     //carga de empleados
     GF.data_listado_empleados('%')
@@ -418,11 +409,10 @@ function addListeners(){
    
 
 
-
    
 
      //cargando coddoc entradas
-    GF.data_coddoc('%','PRS')
+    GF.data_coddoc('%','CON')
     .then((data)=>{
         
         let str = '';
@@ -512,7 +502,7 @@ function addListeners(){
 
             $("#modal_cantidad").modal('hide');
        
-                db_prestamo.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
+                db_movinv.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
                 .then(()=>{
                     tbl_temp_salida();
                 })
@@ -530,6 +520,11 @@ function addListeners(){
     let btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.addEventListener('click',()=>{
 
+
+        let sucursal_origen = document.getElementById('cmbEmpresa').value;
+        let sucursal_recibe = sucursal_origen; //document.getElementById('cmbEmpresaEntrada').value;
+        
+
         F.Confirmacion('¿Está seguro que desea Guardar este movimiento?')
         .then((value)=>{
             if(value==true){
@@ -542,15 +537,32 @@ function addListeners(){
                 .then(()=>{
                     
                     F.Aviso('Documento guardado exitosamente!!');
-                    
+
+                   
                     btnGuardar.disabled = false;
                     btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
                     
+                    
+                    if(sucursal_origen.toString()==sucursal_recibe.toString()){    
+                      
+                    }else{
+                        F.notificacion_socket('TRASLADO',`Se creado un nuevo traslado`);
+                        
+                        //let coddoc = document.getElementById('cmbCoddoc').value;
+                        //let correlativo = document.getElementById('txtCorrelativo').value;
+                        //F.enviar_documento_whatsapp(sucursal_origen,coddoc,correlativo);
+                    }
+
+                    
                     clean_data();
+
+                    
                     
                 })
-                .catch(()=>{
+                .catch((err)=>{
                     
+                    console.log(err)
+
                     F.AvisoError('No se pudo guardar');
 
                     btnGuardar.disabled = false;
@@ -585,9 +597,17 @@ function get_total_costo(){
             }
 };
 
+function initView(){
+
+    getView();
+    addListeners();
+
+};
+
+
 function cargar_proyectos(){
 
-    let sucursal = document.getElementById('cmbEmpresaEntrada').value;
+    let sucursal = document.getElementById('cmbEmpresa').value; //document.getElementById('cmbEmpresaEntrada').value;
       //cargando proyectos
     GF.data_listado_proyectos(sucursal)
     .then((data)=>{
@@ -603,17 +623,11 @@ function cargar_proyectos(){
 
     })
     .catch(()=>{
-        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron los proyectos/areas</option>";
+        document.getElementById('cmbProyectos').innerHTML = "<option value='0'>No se cargaron los proyectos/areas</option>";
 
     });
 };
 
-function initView(){
-
-    getView();
-    addListeners();
-
-};
 
 function insert_movimiento(entsal){
 
@@ -623,7 +637,7 @@ function insert_movimiento(entsal){
 
         let sucursal = document.getElementById('cmbEmpresa').value;
     
-        let sucursal_recibe = document.getElementById('cmbEmpresaEntrada').value;
+        let sucursal_recibe = sucursal //document.getElementById('cmbEmpresaEntrada').value;
         let coddoc = document.getElementById('cmbCoddoc').value;
         let correlativo = document.getElementById('txtCorrelativo').value;
         let mes = 0;
@@ -635,13 +649,14 @@ function insert_movimiento(entsal){
         //let codsolicita = document.getElementById('cmbSolicita').value;
         let codsolicita = 0;
         let codrecibe = document.getElementById('cmbRecibe').value;
+        let entregado = F.limpiarTexto(document.getElementById('txtEntregado').value) || '';
         let noorden = '';
         let obs = F.limpiarTexto(document.getElementById('txtObs').value);
 
         let items = 0; let varTotalCosto = 0;
 
  
-        db_prestamo.select_temp_movinv_salida()
+        db_movinv.select_temp_movinv_salida()
         .then((data)=>{
 
             data.map((r)=>{
@@ -672,10 +687,11 @@ function insert_movimiento(entsal){
                     obs:obs,
                     items:items,
                     totalcosto:varTotalCosto,
+                    entregado:entregado,
                     json_details: JSON.stringify(json_details)
                 }
 
-                axios.post(GlobalUrlCalls + '/general/insert_documento_prestamo',datos)
+                axios.post(GlobalUrlCalls + '/general/insert_documento',datos)
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
@@ -701,7 +717,7 @@ function insert_movimiento(entsal){
         });
        
 
-        //if(entsal=='S'){db_prestamo.select_temp_movinv_salida().then((data)=>{json_details = data}); codrecibe = document.getElementById('cmbRecibe'+ entsal).value;};
+        //if(entsal=='S'){db_movinv.select_temp_movinv_salida().then((data)=>{json_details = data}); codrecibe = document.getElementById('cmbRecibe'+ entsal).value;};
     })
 
 };
@@ -709,8 +725,11 @@ function insert_movimiento(entsal){
 function clean_data(){
 
 
+    document.getElementById('txtEntregado').value = '';
+    document.getElementById('txtObs').value = '';
 
-    db_prestamo.delete_temp_movinv_salida_all()
+
+    db_movinv.delete_temp_movinv_salida_all()
     .then(()=>{
         tbl_temp_salida();
     })
@@ -735,7 +754,7 @@ function tbl_lista_productos(sucursal,filtro,entsal){
     let container = document.getElementById('tblDataProductos');
     container.innerHTML = GlobalLoader;
  
-    GF.data_lista_productos(sucursal,filtro,'HERRAMIENTA')
+    GF.data_lista_productos(sucursal,filtro,'INSUMO')
     .then((data)=>{
         let str = '';
         data.recordset.map((r)=>{
@@ -746,7 +765,7 @@ function tbl_lista_productos(sucursal,filtro,entsal){
                 <td>${F.limpiarTexto(r.DESPROD)}</td>
                 <td>${r.EXISTENCIA}</td>
                 <td>${F.limpiarTexto(r.DESMARCA)}</td>
-                <td>${r.EMPLEADO}</td>
+                <td></td>
             </tr>
             `
         })
@@ -799,7 +818,7 @@ function tbl_temp_salida(){
     let varTotal = 0;
     let varItem = 0;
 
-    db_prestamo.select_temp_movinv_salida()
+    db_movinv.select_temp_movinv_salida()
     .then((data)=>{
         
         data.map((r)=>{
@@ -840,7 +859,7 @@ function delete_temp_salida(idrow,idbtn){
       F.Confirmacion('¿Está seguro que desea ELIMINAR esta linea?')
         .then((value)=>{
             if(value==true){
-                    db_prestamo.delete_temp_movinv_salida_id(idrow)
+                    db_movinv.delete_temp_movinv_salida_id(idrow)
                     .then(()=>{
                         tbl_temp_salida();
                     })

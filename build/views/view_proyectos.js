@@ -132,6 +132,9 @@ function getView(){
 
 function addListeners(){
 
+    
+    document.title = 'GESTION DE AREAS/PROYECTOS';
+
     document.getElementById('btnNuevo').addEventListener('click',()=>{
         $("#modal_datos").modal('show');
 

@@ -190,6 +190,8 @@ function getView(){
 
 function addListeners(){
 
+    
+    document.title = 'ARCHIVO DE DOCUMENTOS';
 
     F.slideAnimationTabs();
 

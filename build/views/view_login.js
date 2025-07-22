@@ -133,6 +133,9 @@ function getView(){
 function addListeners(){
 
     
+    document.title = 'INGRESO DE USUARIOS';
+
+    
     document.getElementById('root_navbar').style = "visibility:hidden";
     
     let btnLogin = document.getElementById('btnLogin');

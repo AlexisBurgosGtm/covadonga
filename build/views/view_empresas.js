@@ -128,6 +128,9 @@ function getView(){
 
 function addListeners(){
 
+
+    document.title = 'GESTION DE BODEGAS';
+
     document.getElementById('btnNuevo').addEventListener('click',()=>{
         $("#modal_datos").modal('show');
 

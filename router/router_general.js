@@ -289,7 +289,7 @@ router.post("/delete_documento", async(req,res)=>{
 router.post("/insert_documento", async(req,res)=>{
 
         const {sucursal,sucursal_recibe,coddoc,correlativo,mes,anio,fecha,hora,codproyecto,codsolicita,codrecibe,noorden,
-                obs,items,totalcosto,json_details
+                obs,items,totalcosto,entregado,json_details
         } = req.body;
 
 
@@ -297,14 +297,16 @@ router.post("/insert_documento", async(req,res)=>{
                 INSERT INTO ORDERS 
                 (EMPNIT,CODDOC,CORRELATIVO,MES,ANIO,FECHA,HORA,CODPROYECTO,
                         CODEMP_SOLICITA,CODEMP_RECIBE,NO_ORDEN,OBS,STATUS,
-                        ITEMS,TOTALCOSTO,JSON_DETAILS,EMPNIT_RECIBE)
+                        ITEMS,TOTALCOSTO,JSON_DETAILS,EMPNIT_RECIBE,ENTREGADO)
                 SELECT '${sucursal}' AS EMPNIT,'${coddoc}' AS CODDOC,${correlativo} AS CORRELATIVO,
                 MONTH('${fecha}') AS MES, YEAR('${fecha}') AS ANIO,'${fecha}' AS FECHA,
                 '${hora}' AS HORA,${codproyecto} AS CODPROYECTO,
                 ${codsolicita} AS CODEMP_SOLICITA,${codrecibe} AS CODEMP_RECIBE,
                 '${noorden}' AS NO_ORDEN,'${obs}' AS OBS,'O' AS STATUS,
                 ${items} AS ITEMS, ${totalcosto} AS TOTALCOSTO,
-                '${json_details}' AS JSON_DETAILS, '${sucursal_recibe}' AS EMPNIT_RECIBE;
+                '${json_details}' AS JSON_DETAILS, 
+                '${sucursal_recibe}' AS EMPNIT_RECIBE,
+                '${entregado}' AS ENTREGADO;
         `
 
         let qry_docproductos = qry_docproductos_sql(sucursal,coddoc,correlativo,fecha,json_details);

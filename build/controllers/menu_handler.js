@@ -126,6 +126,18 @@ let Menu = {
             F.AvisoError('No tiene permitido entrar a esta sección');
         }
     },
+    nueva_salida_consumo:()=>{     
+
+    
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_inventario_salida_consumo.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
+    },
     nueva_entrega_prestamo:()=>{  
         
 

@@ -465,6 +465,9 @@ function getView(){
 function addListeners(){
 
 
+    
+    document.title = 'COMPRAS';
+
     F.slideAnimationTabs();
 
 

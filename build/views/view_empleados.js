@@ -113,7 +113,7 @@ function getView(){
                             <option value='1'>GERENTE</option>
                             <option value='2'>BODEGUERO</option>
                             <option value='3'>OPERADOR BODEGA</option>
-                            <option value='4'>SUPERVISOR</option>
+                            <option value='4'>CONTABILIDAD</option>
                         </select>
                     </div>
 
@@ -167,6 +167,9 @@ function getView(){
 };
 
 function addListeners(){
+
+    
+    document.title = 'GESTION DE EMPLEADOS';
 
         
         F.slideAnimationTabs();

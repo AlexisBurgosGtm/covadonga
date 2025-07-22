@@ -45,14 +45,14 @@ function getView(){
                         <div class="col-6">
                             
                             <div class="form-group">
-                                <label class="negrita text-secondary">Empresa / Bodega (Salida)</label>
+                                <label class="negrita text-secondary">Bodega de Salida</label>
                                 <select class="form-control negrita" id="cmbEmpresa">
                                 </select>                              
                             </div>
 
                         </div>
                         <div class="col-6">
-                            <h2 class="text-left negrita text-base">Nueva Orden de Salida</h2>
+                            <h2 class="text-left negrita text-base">Nueva Traslado a otra Bodega</h2>
                             <h5 class="negrita text-danger" id="lbItems"></h5>
                         </div>
                     </div>
@@ -135,16 +135,14 @@ function getView(){
             <div class="card card-rounded col-12">
                 <div class="card-body p-4" style="font-size:90%">
 
-                   
                     <h4 class="negrita text-info text-center">Datos finales</h4>
                     <br>
                     
                     <div class="row">
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
-
                             <div class="form-group">
-                                <label class="negrita text-secondary">Empresa / Bodega (Entrada)</label>
+                                <label class="negrita text-secondary">Bodega de Entrada</label>
                                 <select class="form-control negrita" id="cmbEmpresaEntrada">
                                 </select>                              
                             </div>
@@ -155,8 +153,6 @@ function getView(){
                                 <select class="form-control negrita" id="cmbProyectos">
                                 </select>
                             </div>
-
-                            
 
                             <div class="form-group">
                                 <label class="negrita text-secondary">Documento sistema</label>
@@ -177,12 +173,14 @@ function getView(){
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         
                             <div class="form-group">
-
                                 <label class="negrita text-secondary">Persona que Recibe</label>
                                 <select class="form-control negrita"  id="cmbRecibe">
                                 </select>
+                            </div>
 
-                                
+                             <div class="form-group">
+                                <label class="negrita text-secondary">Entregado a:</label>
+                                <input type="text" class="form-control negrita"  id="txtEntregado">               
                             </div>
 
                             <div class="form-group">
@@ -191,15 +189,11 @@ function getView(){
                                     <input type="date" class="form-control negrita" id="txtFecha">
                                     <input type="text" class="form-control negrita" id="txtHora" disabled="true">
                                 </div>
-                                
                             </div>
 
                             <div class="form-group">
-
                                 <label class="negrita text-secondary">Total Costo</label>
                                 <h1 class="negrita text-danger" id="lbTotalCosto"></h1>
-                                
-                                
                             </div>
 
                         
@@ -350,6 +344,8 @@ function getView(){
 
 function addListeners(){
 
+
+    document.title = 'TRASLADOS A OTRAS BODEGAS';
 
     F.slideAnimationTabs();
 
@@ -533,12 +529,17 @@ function addListeners(){
 
         let sucursal_origen = document.getElementById('cmbEmpresa').value;
         let sucursal_recibe = document.getElementById('cmbEmpresaEntrada').value;
-        
+
+        if(sucursal_origen.toString()==sucursal_recibe.toString()){ 
+                F.AvisoError('No puede trasladar a la misma bodega');return;   
+        };
+
 
         F.Confirmacion('¿Está seguro que desea Guardar este movimiento?')
         .then((value)=>{
             if(value==true){
 
+              
               
                 btnGuardar.disabled = true;
                 btnGuardar.innerHTML = `<i class="fal fa-spin fa-save"></i>`;
@@ -659,6 +660,7 @@ function insert_movimiento(entsal){
         //let codsolicita = document.getElementById('cmbSolicita').value;
         let codsolicita = 0;
         let codrecibe = document.getElementById('cmbRecibe').value;
+        let entregado = F.limpiarTexto(document.getElementById('txtEntregado').value) || '';
         let noorden = '';
         let obs = F.limpiarTexto(document.getElementById('txtObs').value);
 
@@ -696,6 +698,7 @@ function insert_movimiento(entsal){
                     obs:obs,
                     items:items,
                     totalcosto:varTotalCosto,
+                    entregado:entregado,
                     json_details: JSON.stringify(json_details)
                 }
 
@@ -732,6 +735,9 @@ function insert_movimiento(entsal){
 
 function clean_data(){
 
+
+    document.getElementById('txtEntregado').value = '';
+    document.getElementById('txtObs').value = '';
 
 
     db_movinv.delete_temp_movinv_salida_all()

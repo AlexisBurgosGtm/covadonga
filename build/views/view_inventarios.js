@@ -182,6 +182,10 @@ function getView(){
 };
 
 function addListeners(){
+
+
+    
+    document.title = 'INVENTARIOS';
     
     F.slideAnimationTabs();            
 

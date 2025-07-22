@@ -342,6 +342,9 @@ function getView(){
 };
 
 function addListeners(){
+
+    
+    document.title = 'GESTION DE PRODUCTOS';
     
             F.slideAnimationTabs();            
 

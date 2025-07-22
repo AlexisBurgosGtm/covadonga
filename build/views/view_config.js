@@ -187,10 +187,11 @@ function getView(){
                                             <div class="form-group">
                                                 <label class="negrita text-base">Tipo Documento</label>
                                                 <select class="form-control" id="cmbTipodoc">
-                                                    <option value='ENT'>ENTRADA</option>
-                                                    <option value='SAL'>SALIDA</option>
-                                                    <option value='COM'>COMPRA</option>
-                                                    <option value='PRS'>PRESTAMO</option>
+                                                    <option value='ENT'>ENTRADA A BODEGA</option>
+                                                    <option value='CON'>SALIDA POR CONSUMO</option>
+                                                    <option value='SAL'>TRASLADOS A OTRA BODEGA</option>
+                                                    <option value='COM'>COMPRAS</option>
+                                                    <option value='PRS'>PRESTAMO DE HERRAMIENTA</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -332,6 +333,9 @@ function getView(){
 
 function addListeners(){
 
+
+    
+    document.title = 'CONFIGURACIONES';
 
     F.slideAnimationTabs();
 

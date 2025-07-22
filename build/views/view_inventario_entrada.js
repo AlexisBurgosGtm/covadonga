@@ -344,6 +344,8 @@ function getView(){
 
 function addListeners(){
 
+        document.title = 'ENTRADA DE INVENTARIO';
+
 
     F.slideAnimationTabs();
 
