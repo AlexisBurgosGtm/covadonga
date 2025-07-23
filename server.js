@@ -19,6 +19,7 @@ var router_productos = require('./router/router_productos.js');
 var router_empleados =require('./router/router_empleados.js');
 var router_general =require('./router/router_general.js');
 var router_config = require('./router/router_config.js');
+var router_bi = require('./router/router_bi.js');
 
 
 var http = require('http').Server(app);
@@ -89,6 +90,7 @@ app.use('/productos', router_productos);
 app.use('/empleados', router_empleados);
 app.use('/general', router_general);
 app.use('/config', router_config);
+app.use('/bi', router_bi);
 
 
 
