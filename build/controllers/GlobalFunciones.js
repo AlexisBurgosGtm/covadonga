@@ -118,6 +118,33 @@ let GF = {
     
 
         },
+        data_documentos_conta:(sucursal,mes,anio)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/select_documentos_conta',{sucursal:sucursal,mes:mes,anio:anio})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
         data_select_proveedores:()=>{
 
             return new Promise((resolve,reject)=>{

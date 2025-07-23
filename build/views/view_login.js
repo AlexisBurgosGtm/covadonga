@@ -142,19 +142,59 @@ function addListeners(){
     btnLogin.addEventListener('click',()=>{
         
 
-        GlobalNivelUsuario=1;
+        let u = document.getElementById('txtU').value || '';
+        let p = document.getElementById('txtP').value || '';
 
 
-        GF.data_configuraciones()
-        .then((data)=>{
-            data_config_general = data.recordset;
-            console.log(data_config_general);
+        btnLogin.disabled = true;
+        btnLogin.innerHTML = `<i class="fal fa-spin fa-unlock"></i>`;
+
+        login(u,p)
+        .then((datos)=>{
+
+                datos.recordset.map((r)=>{
+
+                    GlobalEmpnit = r.EMPNIT;
+                    GlobalCodUsuario = Number(r.CODIGO);
+                    GlobalUsuario = r.USUARIO;
+                    GlobalPass = r.CLAVE;
+                    GlobalNivelUsuario =Number(r.NIVEL)
+
+                })
+
+                F.showToast('Obteniendo configuraciones generales');
+
+                GF.data_configuraciones()
+                .then((data)=>{
+                    
+                    data_config_general = data.recordset;
+                    document.getElementById('root_navbar').style = "visibility:visible";
+
+                    Menu.inicio();
+                    
+                })
+                .catch(()=>{
+                    
+                    F.AvisoError('No se pudo iniciar, no se lograron obtener las configuraciones de sistema. Intente de nuevo.');
+
+                    btnLogin.disabled = false;
+                    btnLogin.innerHTML = `<i class="fal fa-lock"></i>`;
+                })
+
+        })
+        .catch(()=>{
+
+            F.AvisoError('No se pudo iniciar, verifique si sus datos de ingreso son correctos');
+
+            btnLogin.disabled = false;
+            btnLogin.innerHTML = `<i class="fal fa-lock"></i>`;
         })
 
-        document.getElementById('root_navbar').style = "visibility:visible";
-        //Menu.inicio();
-        Menu.traslados();
-    })
+
+
+       
+        
+    });
 
 
 
@@ -164,5 +204,40 @@ function initView(){
 
     getView();
     addListeners();
+
+};
+
+
+function login(u,p){
+
+    return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/empleados/login',
+                    {
+                        token:TOKEN,
+                        u:u,
+                        p:p
+                    })
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+
+    })
+
 
 };

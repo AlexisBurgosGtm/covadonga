@@ -14,14 +14,32 @@ let Menu = {
             })
     },
     inicio:()=>{         
-        if(Menu.verify()==true){
-            F.loadScript('../views/view_inicio.js','root')
-            .then(async()=>{
-                initView();
-            })
-        }else{
-            F.AvisoError('No tiene permitido entrar a esta sección');
+        
+        
+        switch (Number(GlobalNivelUsuario)) {
+            case 1: //gerente
+                Menu.inicio_gerencia();
+                break;
+            case 2: //bodeguero general
+                Menu.traslados();
+                break;
+
+            case 3: //bodeguero
+                Menu.traslados();        
+                break;
+
+            case 4: //contabilidad
+                Menu.inicio_contabilidad();
+                break;
+
         }
+
+        
+
+
+        
+
+
     },
     salir:()=>{
         F.Confirmacion('¿Está seguro que desea salir?')
@@ -32,6 +50,26 @@ let Menu = {
 
             }
         })
+    },
+    inicio_gerencia:()=>{         
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_inicio_gerencia.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
+    },
+    inicio_contabilidad:()=>{         
+        if(Menu.verify()==true){
+            F.loadScript('../views/view_inicio_contabilidad.js','root')
+            .then(async()=>{
+                initView();
+            })
+        }else{
+            F.AvisoError('No tiene permitido entrar a esta sección');
+        }
     },
     productos:()=>{         
         if(Menu.verify()==true){

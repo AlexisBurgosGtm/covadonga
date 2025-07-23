@@ -110,10 +110,10 @@ function getView(){
                     <div class="form-group">
                         <label class="negrita text-base">Puesto / Nivel</label>
                         <select class="form-control" id="cmbPuesto">
-                            <option value='1'>GERENTE</option>
-                            <option value='2'>BODEGUERO</option>
-                            <option value='3'>OPERADOR BODEGA</option>
-                            <option value='4'>CONTABILIDAD</option>
+                            <option value='1'>GERENTE (Nivel 1)</option>
+                            <option value='2'>BODEGUERO (Nivel 2)</option>
+                            <option value='3'>OPERADOR BODEGA (Nivel 3)</option>
+                            <option value='4'>CONTABILIDAD (Nivel 4)</option>
                         </select>
                     </div>
 

@@ -6,15 +6,16 @@ const router = express.Router();
 
 router.post("/login", async(req,res)=>{
 
-        const {usuario,clave} = req.body;
+        const {u,p} = req.body;
 
         let qry = `
-        SELECT EMPNIT, USUARIO, CLAVE
+        SELECT EMPNIT, CODEMP AS CODIGO, USUARIO, CLAVE, CODPUESTO AS NIVEL
         FROM EMPLEADOS
         WHERE   USUARIO<>'' 
                 AND CLAVE<>''
-                AND USUARIO='${usuario}'
-                AND CLAVE='${clave}';
+                AND USUARIO='${u}'
+                AND CLAVE='${p}'
+                AND HABILITADO='SI';
         `
     
         execute.QueryToken(res,qry,'')

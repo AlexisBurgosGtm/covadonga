@@ -3,6 +3,9 @@ function getView(){
     let view = {
         body:()=>{
             return `
+                
+                ${view.frag_parametros()}
+
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
@@ -35,9 +38,9 @@ function getView(){
                
             `
         },
-        vista_listado:()=>{
+        frag_parametros:()=>{
             return `
-            <div class="card card-rounded shadow col-12">
+             <div class="card card-rounded shadow col-12">
                 <div class="card-body p-4">
 
                     <div class="row">
@@ -53,7 +56,11 @@ function getView(){
 
                 </div>
             </div>
-
+            `
+        },
+        vista_listado:()=>{
+            return `
+           
             <br>
             <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-5 col-xl-4">
