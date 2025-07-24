@@ -563,11 +563,28 @@ router.post("/listado_productos", async(req,res)=>{
 
 router.post("/select_empresas", async(req,res)=>{
 
-        //const {sucursal} = req.body;
+        const {tipo} = req.body;
 
-        let qry = `
-        SELECT  EMPNIT, EMPRESA, HABILITADO FROM EMPRESAS WHERE HABILITADO='SI';
+
+        let qry = '';
+
+        if(tipo=='EMPLEADOS'){
+                qry = `
+                SELECT  EMPNIT, EMPRESA, HABILITADO,TIPO 
+                        FROM EMPRESAS 
+                        WHERE 
+                                HABILITADO='SI' AND TIPO='BODEGAS';
         `
+        }else{
+                qry = `
+                SELECT  EMPNIT, EMPRESA, HABILITADO 
+                        FROM EMPRESAS 
+                        WHERE 
+                                HABILITADO='SI' AND TIPO='EMPLEADOS';
+                `
+        }
+
+        
     
         execute.QueryToken(res,qry,'')
 
@@ -578,7 +595,7 @@ router.post("/select_empresas_listado", async(req,res)=>{
         //const {sucursal} = req.body;
 
         let qry = `
-        SELECT  EMPNIT, EMPRESA, HABILITADO FROM EMPRESAS;
+        SELECT  EMPNIT, EMPRESA, HABILITADO, TIPO FROM EMPRESAS;
         `
     
         execute.QueryToken(res,qry,'')
@@ -611,11 +628,12 @@ router.post("/update_status_empresa", async(req,res)=>{
 
 router.post("/insert_empresa", async(req,res)=>{
 
-        const {sucursal,empresa} = req.body;
+        const {sucursal,empresa, tipo} = req.body;
 
         let qry = `
-        INSERT INTO EMPRESAS (EMPNIT,EMPRESA,HABILITADO)
-        SELECT '${sucursal}' AS EMPNIT, '${empresa}' AS EMPRESA, 'SI' AS HABILITADO;
+        INSERT INTO EMPRESAS (EMPNIT,EMPRESA,HABILITADO,TIPO)
+        SELECT '${sucursal}' AS EMPNIT, '${empresa}' AS EMPRESA, 
+        'SI' AS HABILITADO, '${tipo}' AS TIPO;
         `
     
         execute.QueryToken(res,qry,'')
@@ -624,10 +642,11 @@ router.post("/insert_empresa", async(req,res)=>{
 
 router.post("/edit_empresa", async(req,res)=>{
 
-        const {sucursal,empresa} = req.body;
+        const {sucursal,empresa,tipo} = req.body;
 
         let qry = `
-        UPDATE EMPRESAS SET EMPRESA='${empresa}' WHERE EMPNIT='${sucursal}';
+        UPDATE EMPRESAS SET EMPRESA='${empresa}', TIPO='${tipo}' 
+        WHERE EMPNIT='${sucursal}';
         `
     
         execute.QueryToken(res,qry,'')

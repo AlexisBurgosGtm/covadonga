@@ -164,6 +164,35 @@ router.post("/select_productos", async(req,res)=>{
         execute.QueryToken(res,qry,'')
 
 });
+router.post("/select_productos_filtro", async(req,res)=>{
+
+        const {token, habilitado,filtro} = req.body;
+
+        let qry = `
+        SELECT PRODUCTOS.CODPROD, PRODUCTOS.CODPROD2, 
+                PRODUCTOS.DESPROD, PRODUCTOS.DESPROD2, 
+                PRODUCTOS.UXC, PRODUCTOS.CODMEDIDA, 
+                PRODUCTOS.COSTO, PRODUCTOS.PRECIO, 
+                PRODUCTOS.CODMARCA, CLASIFICACIONES_1.DESCRIPCION AS MARCA, 
+                PRODUCTOS.CODRUBRO, CLASIFICACIONES_2.DESCRIPCION AS RUBRO, 
+                PRODUCTOS.CODRUBRO2, CLASIFICACIONES.DESCRIPCION AS RUBRO2,
+                PRODUCTOS.TIPO, 
+                PRODUCTOS.HABILITADO
+        FROM CLASIFICACIONES AS CLASIFICACIONES_1 RIGHT OUTER JOIN
+                PRODUCTOS LEFT OUTER JOIN
+                CLASIFICACIONES ON PRODUCTOS.CODRUBRO2 = CLASIFICACIONES.CODIGO LEFT OUTER JOIN
+                CLASIFICACIONES AS CLASIFICACIONES_2 ON PRODUCTOS.CODRUBRO = CLASIFICACIONES_2.CODIGO 
+                ON CLASIFICACIONES_1.CODIGO = PRODUCTOS.CODMARCA
+        WHERE PRODUCTOS.HABILITADO='${habilitado}'
+                AND PRODUCTOS.DESPROD LIKE '%${filtro}%'
+        OR      PRODUCTOS.HABILITADO='${habilitado}' AND
+                PRODUCTOS.CODPROD='${filtro}';
+
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
 
 
 router.post("/insert_producto", async(req,res)=>{

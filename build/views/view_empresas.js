@@ -40,14 +40,15 @@ function getView(){
             <div class="card card-rounded shadow">
                 <div class="card-body p-4">
 
-                    <h3 class="negrita text-danger">Listado de Empresas / Bodegas</h3>
+                    <h3 class="negrita text-danger">Listado de Bodegas</h3>
 
                     <div class="table-responsive col-12">
                         <table class="table table-responsive table-hover col-12">
                             <thead class="bg-base text-white">
                                 <tr>
                                     <td>CODIGO</td>
-                                    <td>EMPRESA / BODEGA</td>
+                                    <td>BODEGA</td>
+                                    <td>TIPO</td>
                                     <td>EDITAR</td>
                                     <td>ACTIVA</td>
                                     <td>ELIMINAR</td>
@@ -73,7 +74,7 @@ function getView(){
                     <div class="modal-content">
                         <div class="dropdown-header bg-secondary d-flex justify-content-center align-items-center w-100">
                             <h4 class="m-0 text-center color-white" id="">
-                                Detalles de la Empresa / Bodega
+                                Detalles de la Bodega
                             </h4>
                         </div>
                         <div class="modal-body p-4">
@@ -87,8 +88,16 @@ function getView(){
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="negrita text-secondary">Empresa / Bodega</label>
+                                        <label class="negrita text-secondary">Bodega</label>
                                         <input type="text" class="negrita text-danger form-control" id="txtEmpnombre">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="negrita text-secondary">Tipo</label>
+                                        <select class="negrita text-danger form-control" id="cmbTipo">
+                                            <option value='BODEGAS'>BODEGAS</option>
+                                            <option value='EMPLEADOS'>EMPLEADOS</option>
+                                        </select>
                                     </div>
 
                                     <br>
@@ -144,6 +153,7 @@ function addListeners(){
 
         let empnit = document.getElementById('txtEmpnit').value || '';
         let empresa = document.getElementById('txtEmpnombre').value || '';
+        let tipo = document.getElementById('cmbTipo').value;
        
 
         if(empnit==''){F.AvisoError('Indique un codigo de Empresa/Bodega');return;}
@@ -160,7 +170,7 @@ function addListeners(){
 
                     if(document.getElementById('txtEmpnit').disabled==true){
                        //edita
-                        GF.edit_empresa(empnit,empresa)
+                        GF.edit_empresa(empnit,empresa,tipo)
                         .then(()=>{
                             $("#modal_datos").modal('hide');
                             tbl_empresas();
@@ -179,7 +189,7 @@ function addListeners(){
 
                     }else{
                          //guarda
-                        GF.insert_empresa(empnit,empresa)
+                        GF.insert_empresa(empnit,empresa,tipo)
                         .then(()=>{
                             $("#modal_datos").modal('hide');
                             tbl_empresas();
@@ -244,9 +254,10 @@ function tbl_empresas(){
             <tr>
                 <td>${r.EMPNIT}</td>
                 <td>${r.EMPRESA}</td>
+                <td>${r.TIPO}</td>
                 <td>
                     <button class="btn btn-circle btn-info btn-md hand shadow"
-                     onclick="editar_empresa('${r.EMPNIT}','${r.EMPRESA}')">
+                     onclick="editar_empresa('${r.EMPNIT}','${r.EMPRESA}','${r.TIPO}')">
                         <i class="fal fa-edit"></i>
                     </button>
                 </td>
@@ -346,13 +357,14 @@ function deshabilitar_empresa(empnit,st,idbtn){
 
 };
 
-function editar_empresa(empnit,empresa){
+function editar_empresa(empnit,empresa,tipo){
 
     $("#modal_datos").modal('show');
 
     document.getElementById('txtEmpnit').disabled = true;
     document.getElementById('txtEmpnit').value = empnit;
     document.getElementById('txtEmpnombre').value = empresa;
+    document.getElementById('cmbTipo').value = tipo;
 
 
 };

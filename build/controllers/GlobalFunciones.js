@@ -876,11 +876,15 @@ let GF = {
     
 
         },
-        insert_empresa:(sucursal,nombre)=>{
+        insert_empresa:(sucursal,nombre,tipo)=>{
 
             return new Promise((resolve,reject)=>{
 
-                axios.post(GlobalUrlCalls + '/general/insert_empresa', {sucursal:sucursal,empresa:nombre})
+                axios.post(GlobalUrlCalls + '/general/insert_empresa', {
+                    sucursal:sucursal,
+                    empresa:nombre,
+                    tipo:tipo
+                })
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
@@ -903,11 +907,15 @@ let GF = {
     
 
         },
-        edit_empresa:(sucursal,nombre)=>{
+        edit_empresa:(sucursal,nombre,tipo)=>{
 
             return new Promise((resolve,reject)=>{
 
-                axios.post(GlobalUrlCalls + '/general/edit_empresa', {sucursal:sucursal,empresa:nombre})
+                axios.post(GlobalUrlCalls + '/general/edit_empresa', {
+                    sucursal:sucursal,
+                    empresa:nombre,
+                    tipo:tipo
+                })
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
@@ -1447,6 +1455,33 @@ let GF = {
             return new Promise((resolve,reject)=>{
 
                 axios.post(GlobalUrlCalls + '/config/select_config')
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        data_bi_resumen_inventarios:()=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/bi/resumen_inventarios')
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
