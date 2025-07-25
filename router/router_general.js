@@ -573,14 +573,14 @@ router.post("/select_empresas", async(req,res)=>{
                 SELECT  EMPNIT, EMPRESA, HABILITADO,TIPO 
                         FROM EMPRESAS 
                         WHERE 
-                                HABILITADO='SI' AND TIPO='BODEGAS';
+                                HABILITADO='SI' AND TIPO='EMPLEADOS';
         `
         }else{
                 qry = `
                 SELECT  EMPNIT, EMPRESA, HABILITADO 
                         FROM EMPRESAS 
                         WHERE 
-                                HABILITADO='SI' AND TIPO='EMPLEADOS';
+                                HABILITADO='SI' AND TIPO='BODEGAS';
                 `
         }
 

@@ -101,7 +101,7 @@ function getView(){
 
                             <tr>
                                 <td>
-                                    <label class="negrita text-base">¿Permite ver el costo en documentos (Nivel >3)?</label>
+                                    <label class="negrita text-base">¿Permite ver el costo en documentos (Solo aplica a Nivel 3)?</label>
                                 </td>
                                 <td>
                                     <select class="form-control negrita text-danger" id="cmbCosto">

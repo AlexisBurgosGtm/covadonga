@@ -767,11 +767,11 @@ let GF = {
     
 
         },
-        data_listado_empresas:()=>{
+        data_listado_empresas:(tipo)=>{
 
             return new Promise((resolve,reject)=>{
 
-                axios.post(GlobalUrlCalls + '/general/select_empresas')
+                axios.post(GlobalUrlCalls + '/general/select_empresas',{tipo:tipo})
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
