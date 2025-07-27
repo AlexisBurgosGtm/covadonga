@@ -1506,3 +1506,137 @@ let GF = {
         },
 };
 
+
+let PERMISOS = {
+    data:()=>{
+
+        let data_permisos = [
+            {nivel:1,vista:'TRASLADOS_ENTRADA',autorizado:true},
+            {nivel:1,vista:'TRASLADOS_SALIDA',autorizado:true},
+            {nivel:1,vista:'ENTRADA_BODEGA',autorizado:true},
+            {nivel:1,vista:'SALIDA_CONSUMO',autorizado:true},
+            {nivel:1,vista:'HERRAMIENTAS',autorizado:true},
+            {nivel:1,vista:'COMPRAS',autorizado:true},
+            {nivel:1,vista:'INVENTARIOS',autorizado:true},
+            {nivel:1,vista:'DOCUMENTOS',autorizado:true},
+            {nivel:1,vista:'PRODUCTOS',autorizado:true},
+            {nivel:1,vista:'EMPLEADOS',autorizado:true},
+            {nivel:1,vista:'BODEGAS',autorizado:true},
+            {nivel:1,vista:'PROYECTOS',autorizado:true},
+            {nivel:1,vista:'CONFIGURACIONES',autorizado:true},
+            {nivel:2,vista:'TRASLADOS_ENTRADA',autorizado:true},
+            {nivel:2,vista:'TRASLADOS_SALIDA',autorizado:true},
+            {nivel:2,vista:'ENTRADA_BODEGA',autorizado:true},
+            {nivel:2,vista:'SALIDA_CONSUMO',autorizado:true},
+            {nivel:2,vista:'HERRAMIENTAS',autorizado:true},
+            {nivel:2,vista:'COMPRAS',autorizado:true},
+            {nivel:2,vista:'INVENTARIOS',autorizado:true},
+            {nivel:2,vista:'DOCUMENTOS',autorizado:true},
+            {nivel:2,vista:'PRODUCTOS',autorizado:true},
+            {nivel:2,vista:'EMPLEADOS',autorizado:true},
+            {nivel:2,vista:'BODEGAS',autorizado:true},
+            {nivel:2,vista:'PROYECTOS',autorizado:true},
+            {nivel:2,vista:'CONFIGURACIONES',autorizado:false},
+            {nivel:3,vista:'TRASLADOS_ENTRADA',autorizado:true},
+            {nivel:3,vista:'TRASLADOS_SALIDA',autorizado:true},
+            {nivel:3,vista:'ENTRADA_BODEGA',autorizado:true},
+            {nivel:3,vista:'SALIDA_CONSUMO',autorizado:true},
+            {nivel:3,vista:'HERRAMIENTAS',autorizado:true},
+            {nivel:3,vista:'COMPRAS',autorizado:false},
+            {nivel:3,vista:'INVENTARIOS',autorizado:true},
+            {nivel:3,vista:'DOCUMENTOS',autorizado:false},
+            {nivel:3,vista:'PRODUCTOS',autorizado:false},
+            {nivel:3,vista:'EMPLEADOS',autorizado:false},
+            {nivel:3,vista:'BODEGAS',autorizado:false},
+            {nivel:3,vista:'PROYECTOS',autorizado:false},
+            {nivel:3,vista:'CONFIGURACIONES',autorizado:false},
+            {nivel:4,vista:'TRASLADOS_ENTRADA',autorizado:false},
+            {nivel:4,vista:'TRASLADOS_SALIDA',autorizado:false},
+            {nivel:4,vista:'ENTRADA_BODEGA',autorizado:false},
+            {nivel:4,vista:'SALIDA_CONSUMO',autorizado:false},
+            {nivel:4,vista:'HERRAMIENTAS',autorizado:false},
+            {nivel:4,vista:'COMPRAS',autorizado:true},
+            {nivel:4,vista:'INVENTARIOS',autorizado:true},
+            {nivel:4,vista:'DOCUMENTOS',autorizado:true},
+            {nivel:4,vista:'PRODUCTOS',autorizado:false},
+            {nivel:4,vista:'EMPLEADOS',autorizado:false},
+            {nivel:4,vista:'BODEGAS',autorizado:false},
+            {nivel:4,vista:'PROYECTOS',autorizado:false},
+            {nivel:4,vista:'CONFIGURACIONES',autorizado:false}
+        ]
+
+        return data_permisos;
+
+    },
+    get_permiso:(vista,nivel)=>{
+
+        let autorizado = false;
+
+         let data_permisos = [
+            {nivel:1,vista:'TRASLADOS_ENTRADA',autorizado:true},
+            {nivel:1,vista:'TRASLADOS_SALIDA',autorizado:true},
+            {nivel:1,vista:'ENTRADA_BODEGA',autorizado:true},
+            {nivel:1,vista:'SALIDA_CONSUMO',autorizado:true},
+            {nivel:1,vista:'HERRAMIENTAS',autorizado:true},
+            {nivel:1,vista:'COMPRAS',autorizado:true},
+            {nivel:1,vista:'INVENTARIOS',autorizado:true},
+            {nivel:1,vista:'DOCUMENTOS',autorizado:true},
+            {nivel:1,vista:'PRODUCTOS',autorizado:true},
+            {nivel:1,vista:'EMPLEADOS',autorizado:true},
+            {nivel:1,vista:'BODEGAS',autorizado:true},
+            {nivel:1,vista:'PROYECTOS',autorizado:true},
+            {nivel:1,vista:'CONFIGURACIONES',autorizado:true},
+            {nivel:2,vista:'TRASLADOS_ENTRADA',autorizado:true},
+            {nivel:2,vista:'TRASLADOS_SALIDA',autorizado:true},
+            {nivel:2,vista:'ENTRADA_BODEGA',autorizado:true},
+            {nivel:2,vista:'SALIDA_CONSUMO',autorizado:true},
+            {nivel:2,vista:'HERRAMIENTAS',autorizado:true},
+            {nivel:2,vista:'COMPRAS',autorizado:true},
+            {nivel:2,vista:'INVENTARIOS',autorizado:true},
+            {nivel:2,vista:'DOCUMENTOS',autorizado:true},
+            {nivel:2,vista:'PRODUCTOS',autorizado:true},
+            {nivel:2,vista:'EMPLEADOS',autorizado:true},
+            {nivel:2,vista:'BODEGAS',autorizado:true},
+            {nivel:2,vista:'PROYECTOS',autorizado:true},
+            {nivel:2,vista:'CONFIGURACIONES',autorizado:false},
+            {nivel:3,vista:'TRASLADOS_ENTRADA',autorizado:true},
+            {nivel:3,vista:'TRASLADOS_SALIDA',autorizado:true},
+            {nivel:3,vista:'ENTRADA_BODEGA',autorizado:true},
+            {nivel:3,vista:'SALIDA_CONSUMO',autorizado:true},
+            {nivel:3,vista:'HERRAMIENTAS',autorizado:true},
+            {nivel:3,vista:'COMPRAS',autorizado:false},
+            {nivel:3,vista:'INVENTARIOS',autorizado:true},
+            {nivel:3,vista:'DOCUMENTOS',autorizado:false},
+            {nivel:3,vista:'PRODUCTOS',autorizado:false},
+            {nivel:3,vista:'EMPLEADOS',autorizado:false},
+            {nivel:3,vista:'BODEGAS',autorizado:false},
+            {nivel:3,vista:'PROYECTOS',autorizado:false},
+            {nivel:3,vista:'CONFIGURACIONES',autorizado:false},
+            {nivel:4,vista:'TRASLADOS_ENTRADA',autorizado:false},
+            {nivel:4,vista:'TRASLADOS_SALIDA',autorizado:false},
+            {nivel:4,vista:'ENTRADA_BODEGA',autorizado:false},
+            {nivel:4,vista:'SALIDA_CONSUMO',autorizado:false},
+            {nivel:4,vista:'HERRAMIENTAS',autorizado:false},
+            {nivel:4,vista:'COMPRAS',autorizado:true},
+            {nivel:4,vista:'INVENTARIOS',autorizado:true},
+            {nivel:4,vista:'DOCUMENTOS',autorizado:true},
+            {nivel:4,vista:'PRODUCTOS',autorizado:false},
+            {nivel:4,vista:'EMPLEADOS',autorizado:false},
+            {nivel:4,vista:'BODEGAS',autorizado:false},
+            {nivel:4,vista:'PROYECTOS',autorizado:false},
+            {nivel:4,vista:'CONFIGURACIONES',autorizado:false}
+        ]
+
+        data_permisos.map((r)=>{
+            if(Number(nivel)==Number(r.nivel)){
+                if(vista.toString()==r.vista.toString()){
+                    autorizado = r.autorizado;
+                }
+            }
+        });
+
+        return autorizado;
+
+    }
+}
+

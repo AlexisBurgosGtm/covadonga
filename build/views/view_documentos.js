@@ -51,6 +51,7 @@ function getView(){
                                 <select class="negrita text-danger form-control" id="cmbTipo">
                                     <option value="ENT">ENTRADA DE INVENTARIO</option>
                                     <option value="SAL">SALIDA DE INVENTARIO</option>
+                                    <option value="CON">SALIDA POR CONSUMO</option>
                                     <option value="COM">COMPRAS</option>
                                     <option value="PRS">PRESTAMO DE HERRAMIENTA</option>
                                 </select>

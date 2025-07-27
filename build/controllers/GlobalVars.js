@@ -1,8 +1,98 @@
-let versionapp = "M.24.07.2025:0"
+let versionapp = "M.26.07.2025:0"
 // &nbsp
 
 let map; //mapa de leaflet
 
+// kardex de productos
+function historial_producto(codprod,desprod){
+
+    $("#modal_historial").modal('show');
+ 
+    document.getElementById('lbKardexDesprod').innerText = desprod;
+    
+    tbl_kardex_producto(codprod);
+
+};
+
+function tbl_kardex_producto(codprod){
+
+    let contenedor = document.getElementById('tblDataHistorial');
+
+    contenedor.innerHTML = GlobalLoader;
+
+    console.log('por aqui 1')
+
+
+    let varConteo = 0; let varEntradas = 0; let varSalidas = 0;
+
+    GF.data_producto_kardex(codprod,'%')
+    .then((data)=>{
+
+        let str = '';
+        data.recordset.map((r)=>{
+
+            let entrada = 0; let salida = 0; let prestamo=0;
+            switch (r.INV.toString()) {
+                case '0':
+                    prestamo = Number(r.CANTIDAD);
+                    entrada = 0;
+                    salida = 0;
+                    break;
+            case '1':
+                    prestamo = 0;
+                    entrada = Number(r.CANTIDAD);
+                    salida = 0;
+                    break;
+            case '-1':
+                    prestamo = 0;
+                    entrada = 0;
+                    salida = Number(r.CANTIDAD);
+                    break;
+            }
+            varConteo += 1; varEntradas += Number(entrada); varSalidas += Number(salida);
+            str +=  `
+                <tr>
+                    <td>${F.convertDateNormal(r.FECHA)}
+                        <br>
+                        <small class="negrita text-danger">Hora: ${r.HORA}</small>
+                    </td>
+                    <td>${r.EMPRESA}
+                        <br>
+                        <small class="negrita text-danger">${r.CODDOC}-${r.CORRELATIVO}</small>
+                    </td>
+                    <td>${entrada}</td>
+                    <td>${salida}</td>
+                    <td></td>
+                </tr>
+                `
+        })
+        contenedor.innerHTML = str;  
+
+        console.log(varEntradas)
+        console.log(1)
+        
+        document.getElementById('lbKardexConteo').innerText = `${varConteo}`;
+        document.getElementById('lbKardexEntradas').innerText = `${varEntradas}`;
+        document.getElementById('lbKardexSalidas').innerText = `${varSalidas}`;
+
+        console.log(2)
+
+    })
+    .catch((error)=>{
+
+        console.log(error);
+
+        contenedor.innerHTML = 'No se cargaron datos...';
+
+         document.getElementById('lbKardexConteo').innerText = '';
+        document.getElementById('lbKardexEntradas').innerText = '';
+        document.getElementById('lbKardexSalidas').innerText = '';
+    })
+
+
+
+};
+// kardex de productos
 
 let GlobalUrlCalls = '';
 let GlobalUrlServicioLocal = 'http://192.168.1.16:8080'
@@ -56,15 +146,13 @@ let navmenu = document.getElementById('js-nav-menu');
 
 let GlobalLoader = `
                 <div>
-                    <div  class="spinner-border" role="status">
-                        <img src="./favicon.png" width="40" height="40">
-                    </div>
-                    <div  class="spinner-border" role="status">
-                        <img src="./favicon.png" width="40" height="40">
-                    </div>
                     <div class="spinner-border text-base" role="status"><span class="sr-only">Loading...</span></div>
                     <div class="spinner-border text-base" role="status"><span class="sr-only">Loading...</span></div>
                     <div class="spinner-border text-base" role="status"><span class="sr-only">Loading...</span></div>
+                    <div class="spinner-border text-secondary" role="status"><span class="sr-only">Loading...</span></div>
+                    <div class="spinner-border text-secondary" role="status"><span class="sr-only">Loading...</span></div>
+                    <div class="spinner-border text-secondary" role="status"><span class="sr-only">Loading...</span></div>
+                    <div class="spinner-border text-danger" role="status"><span class="sr-only">Loading...</span></div>
                 </div>
                 `
                
