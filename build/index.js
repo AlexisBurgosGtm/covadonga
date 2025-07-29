@@ -48,3 +48,15 @@ Menu.login();
 
 
 
+
+function load_configuraciones(){
+
+    GF.data_configuraciones()
+    .then((data)=>{                
+      data_config_general = data.recordset;   
+    })
+    .catch(()=>{
+        data_config_general = [];
+    })
+
+};

@@ -344,7 +344,7 @@ function getView(){
 
 function addListeners(){
 
-        document.title = 'ENTRADA DE INVENTARIO';
+    document.title = 'ENTRADA DE INVENTARIO';
 
 
     F.slideAnimationTabs();
@@ -352,15 +352,15 @@ function addListeners(){
 
     document.getElementById('txtFecha').value = F.getFecha();
 
-   setInterval(() => {
-    
-        try {
-            document.getElementById('txtHora').value = F.getHora();
-        } catch (error) {
-            
-        }
-    
-   }, 1000);
+    setInterval(() => {
+        
+            try {
+                document.getElementById('txtHora').value = F.getHora();
+            } catch (error) {
+                
+            }
+        
+    }, 1000);
 
 
     //cargando empresas
@@ -376,6 +376,14 @@ function addListeners(){
         })
       
         document.getElementById('cmbEmpresa').innerHTML = str;
+        document.getElementById('cmbEmpresa').value = GlobalEmpnit;
+
+        cargar_proyectos();
+        
+        if(Number(GlobalNivelUsuario)==3){
+            document.getElementById('cmbEmpresa').disabled = true;
+        };
+
 
     })
     .catch(()=>{
@@ -383,6 +391,13 @@ function addListeners(){
 
     });
     //cargando empresas
+
+    
+    document.getElementById('cmbEmpresa').addEventListener('change',()=>{
+        cargar_proyectos();
+    });
+
+
 
 
     //carga de empleados
@@ -404,25 +419,9 @@ function addListeners(){
     //carga de empleados
 
 
-     //cargando proyectos
-    GF.data_listado_proyectos('%')
-    .then((data)=>{
-        
-        let str = '';
-
-        data.recordset.map((r)=>{
-            str += `
-            <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO} (${r.EMPRESA})</option>
-            `
-        })
-         document.getElementById('cmbProyectos').innerHTML = str;
-
-    })
-    .catch(()=>{
-        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron las empresas</option>";
-
-    });
-    //cargando empresas
+  
+   
+  
 
 
 
@@ -479,10 +478,6 @@ function addListeners(){
         document.getElementById('txtDesprod').value = '';
 
     });
-
-
-  
-  
 
     document.getElementById('txtCantidad').addEventListener('input',()=>{
 
@@ -579,6 +574,35 @@ function addListeners(){
 
 
 };
+
+
+function cargar_proyectos(){
+    
+    
+    let sucursal = document.getElementById('cmbEmpresa').value;
+
+    //cargando proyectos
+    GF.data_listado_proyectos(sucursal)
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO}</option>
+            `
+        })
+         document.getElementById('cmbProyectos').innerHTML = str;
+
+    })
+    .catch(()=>{
+        document.getElementById('cmbProyectos').innerHTML = "<option value='0'>Sin areas/proyectos cargados</option>";
+
+    });
+
+};
+
+
 
 function get_total_costo(){
      try {

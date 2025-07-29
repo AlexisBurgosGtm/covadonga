@@ -6,7 +6,7 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                            ${view.vista_listado()}
+                            ${view.vista_listado() + view.modal_kardex()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
                           
@@ -121,6 +121,69 @@ function getView(){
         
             `
         },
+        modal_kardex:()=>{
+            return `
+              <div id="modal_historial_producto" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-right modal-xl">
+                    <div class="modal-content">
+                        <div class="dropdown-header bg-primary d-flex justify-content-center align-items-center w-100">
+                            <h4 class="m-0 text-center color-white" id="">
+                                Historial de Movimientos del Producto
+                            </h4>
+                        </div>
+                        <div class="modal-body p-4">
+                            
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+
+                                    <h4 class="negrita text-danger" id="lbKardexDesprod"></h4>
+
+                                    <div class="form-group">
+                                        <label>Escriba para buscar...</label>
+                                        <input type="text"
+                                        placeholder='Escriba para filtrar...'
+                                        class="form-control negrita text-danger"
+                                        id="txtBuscarHistorial"
+                                        oninput="F.FiltrarTabla('tblHistorial','txtBuscarHistorial')">
+                                    </div>
+
+                                    <table class="table h-full col-12 table-bordered" id="tblHistorial">
+                                        <thead class="bg-primary text-white">
+                                            <tr>
+                                                <td>FECHA</td>
+                                                <td>DOCUMENTO</td>
+                                                <td>ENTRADA</td>
+                                                <td>SALIDA</td>
+                                                <td>PRESTAMO</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tblDataHistorial">
+                                        </tbody>
+                                        <tfoot class="bg-primary text-white negrita">
+                                            <tr>
+                                                <td></td>
+                                                <td><b id="lbKardexConteo"></b></td>
+                                                <td><b id="lbKardexEntradas"></b></td>
+                                                <td><b id="lbKardexSalidas"></b></td>
+                                                <td id=""></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+
+                                    
+                                </div>
+                            </div>
+
+                                
+                            
+
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            `
+        }
     }
 
     root.innerHTML = view.body();
@@ -234,6 +297,10 @@ function get_tbl_productos(){
             let btnE = `btnE${r.CODPROD}`;
             let btnST = `btnST${r.CODPROD}`;
             let classBtnSt = ''; if(r.HABILITADO=='SI'){classBtnSt='btn-outline-success'}else{classBtnSt='btn-outline-danger'};
+
+            let strPermisoCostos = '';
+            if(Number(GlobalNivelUsuario)==3){if(data_config_general[1].VALOR.toString()=='NO'){strPermisoCostos='hidden'};}
+            
             
             str += `
             <tr>
@@ -246,8 +313,8 @@ function get_tbl_productos(){
                 </td>
                 <td>${r.CODMEDIDA}</td>
                 <td>${r.EXISTENCIA}</td>
-                <td>${F.setMoneda(r.COSTO,'Q')}</td>
-                <td>${F.setMoneda((Number(r.COSTO)*Number(r.EXISTENCIA)),'Q')}</td>
+                <td class="${strPermisoCostos}">${F.setMoneda(r.COSTO,'Q')}</td>
+                <td class="${strPermisoCostos}">${F.setMoneda((Number(r.COSTO)*Number(r.EXISTENCIA)),'Q')}</td>
                 <td>
                     <button class="btn btn-md btn-circle btn-warning hand shadow"
                     onclick="historial_producto('${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.DESPROD)}')"
@@ -269,6 +336,98 @@ function get_tbl_productos(){
 
 };
 
+
+// kardex de productos
+function historial_producto(codprod,desprod){
+
+   
+ 
+    document.getElementById('lbKardexDesprod').innerText = desprod;
+    
+    tbl_kardex_producto(codprod);
+
+};
+
+function tbl_kardex_producto(codprod){
+
+   
+
+
+    $("#modal_historial_producto").modal('show');
+
+    let contenedor = document.getElementById('tblDataHistorial');
+
+
+    contenedor.innerHTML = GlobalLoader;
+
+
+
+    let varConteo = 0; let varEntradas = 0; let varSalidas = 0;
+
+    GF.data_producto_kardex(codprod,'%')
+    .then((data)=>{
+
+        let str = '';
+        data.recordset.map((r)=>{
+
+            let entrada = 0; let salida = 0; let prestamo=0;
+            switch (r.INV.toString()) {
+                case '0':
+                    prestamo = Number(r.CANTIDAD);
+                    entrada = 0;
+                    salida = 0;
+                    break;
+            case '1':
+                    prestamo = 0;
+                    entrada = Number(r.CANTIDAD);
+                    salida = 0;
+                    break;
+            case '-1':
+                    prestamo = 0;
+                    entrada = 0;
+                    salida = Number(r.CANTIDAD);
+                    break;
+            }
+            varConteo += 1; varEntradas += Number(entrada); varSalidas += Number(salida);
+            str +=  `
+                <tr>
+                    <td>${F.convertDateNormal(r.FECHA)}
+                        <br>
+                        <small class="negrita text-danger">Hora: ${r.HORA}</small>
+                    </td>
+                    <td>${r.EMPRESA}
+                        <br>
+                        <small class="negrita text-danger">${r.CODDOC}-${r.CORRELATIVO}</small>
+                    </td>
+                    <td>${entrada}</td>
+                    <td>${salida}</td>
+                    <td></td>
+                </tr>
+                `
+        })
+        contenedor.innerHTML = str;  
+
+        
+        document.getElementById('lbKardexConteo').innerText = `${varConteo}`;
+        document.getElementById('lbKardexEntradas').innerText = `${varEntradas}`;
+        document.getElementById('lbKardexSalidas').innerText = `${varSalidas}`;
+
+
+    })
+    .catch((error)=>{
+
+
+        contenedor.innerHTML = 'No se cargaron datos...';
+
+         document.getElementById('lbKardexConteo').innerText = '';
+        document.getElementById('lbKardexEntradas').innerText = '';
+        document.getElementById('lbKardexSalidas').innerText = '';
+    })
+
+
+
+};
+// kardex de productos
 
 
 

@@ -269,6 +269,11 @@ function addListeners(){
       
         document.getElementById('cmbEmpresa').innerHTML = str;
         document.getElementById('cmbEmpresaLista').innerHTML = str;
+
+        document.getElementById('cmbEmpresaLista').value = GlobalEmpnit;
+
+        cargar_proyectos();
+        
         get_listado();
     })
     .catch(()=>{
@@ -281,7 +286,14 @@ function addListeners(){
 
     document.getElementById('cmbEmpresaLista').addEventListener('change',()=>{
         get_listado();
-    })
+        cargar_proyectos();
+    });
+
+
+
+    if(Number(GlobalNivelUsuario)==3){
+        document.getElementById('cmbEmpresaLista').disabled = true;
+    };
 
 
 
@@ -331,27 +343,8 @@ function listeners_finalizar(){
       })
     //carga de empleados
 
-
-     //cargando proyectos
-    GF.data_listado_proyectos('%')
-    .then((data)=>{
-        
-        let str = '';
-
-        data.recordset.map((r)=>{
-            str += `
-            <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO} (${r.EMPRESA})</option>
-            `
-        })
-         document.getElementById('cmbProyectos').innerHTML = str;
-
-    })
-    .catch(()=>{
-        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron las empresas</option>";
-
-    });
-    //cargando empresas
-
+   
+  
 
 
    
@@ -459,6 +452,27 @@ function listeners_finalizar(){
 
 };
 
+function cargar_proyectos(){
+     let sucursal = document.getElementById('cmbEmpresa').value;
+    GF.data_listado_proyectos(sucursal)
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO}</option>
+            `
+        })
+         document.getElementById('cmbProyectos').innerHTML = str;
+
+    })
+    .catch(()=>{
+        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+
+    });
+};
+
 function cargar_correlativo_entrada(){
 
     return new Promise((resolve,reject)=>{
@@ -554,6 +568,10 @@ function get_detalle_documento(sucursal,coddoc,correlativo){
         let container = document.getElementById('tblDataDetalle');
         container.innerHTML = GlobalLoader;
 
+        let strPermisoCostos = '';
+        if(Number(GlobalNivelUsuario)==3){if(data_config_general[1].VALOR.toString()=='NO'){strPermisoCostos='hidden'};}
+            
+
         GF.data_detalle_documento(sucursal,coddoc,correlativo)
         .then((data)=>{
                 let str = '';
@@ -563,8 +581,8 @@ function get_detalle_documento(sucursal,coddoc,correlativo){
                         <td>${r.CODPROD}</td>
                         <td>${r.DESPROD}</td>
                         <td>${r.CANTIDAD}</td>
-                        <td>${F.setMoneda(r.COSTO,'Q')}</td>
-                        <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                        <td class="${strPermisoCostos}">${F.setMoneda(r.COSTO,'Q')}</td>
+                        <td class="${strPermisoCostos}">${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
                     </tr>
                     `
                 })

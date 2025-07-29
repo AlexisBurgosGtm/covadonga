@@ -367,6 +367,8 @@ function addListeners(){
             .then(()=>{
                 F.showToast('Valor actualizado exitosamente!!');
                 document.getElementById('cmbExistencia').disabled = false;
+
+                load_configuraciones();
             })
             .catch(()=>{
                 F.AvisoError('No se pudo actualizar');
@@ -386,6 +388,7 @@ function addListeners(){
             .then(()=>{
                 F.showToast('Valor actualizado exitosamente!!');
                 document.getElementById('cmbCosto').disabled = false;
+                load_configuraciones();
             })
             .catch(()=>{
                 F.AvisoError('No se pudo actualizar');
