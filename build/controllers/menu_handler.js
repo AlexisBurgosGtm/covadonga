@@ -175,7 +175,7 @@ let Menu = {
         
 
         if(Menu.verify('HERRAMIENTAS')==true){
-            F.loadScript('../views/view_inventario_prestamo_herramienta.js','root')
+            F.loadScript('../views/view_inventario_prestamo.js','root')
             .then(async()=>{
                 initView();
             })

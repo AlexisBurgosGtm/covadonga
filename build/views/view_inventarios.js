@@ -154,7 +154,7 @@ function getView(){
                                                 <td>DOCUMENTO</td>
                                                 <td>ENTRADA</td>
                                                 <td>SALIDA</td>
-                                                <td>PRESTAMO</td>
+                                                <td></td>
                                             </tr>
                                         </thead>
                                         <tbody id="tblDataHistorial">

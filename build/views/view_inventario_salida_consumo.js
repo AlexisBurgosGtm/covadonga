@@ -821,6 +821,13 @@ function tbl_temp_salida(){
     db_movinv.select_temp_movinv_salida()
     .then((data)=>{
         
+        if(Number(data.length)==0){
+            document.getElementById('cmbEmpresa').disabled=false;
+        }else{
+            document.getElementById('cmbEmpresa').disabled=true;
+        };
+
+
         data.map((r)=>{
             
             varTotal += Number(r.TOTALCOSTO);

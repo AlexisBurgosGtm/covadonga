@@ -349,6 +349,12 @@ function addListeners(){
 
     F.slideAnimationTabs();
 
+    //permisos
+
+    
+    
+
+    //permisos
 
     document.getElementById('txtFecha').value = F.getFecha();
 
@@ -809,6 +815,13 @@ function tbl_temp_entrada(){
 
     db_movinv.select_temp_movinv_entrada()
     .then((data)=>{
+
+        if(Number(data.length)==0){
+            document.getElementById('cmbEmpresa').disabled=false;
+        }else{
+            document.getElementById('cmbEmpresa').disabled=true;
+        };
+
         
         data.map((r)=>{
             

@@ -205,7 +205,8 @@ function getView(){
                                                     <option value='CON'>SALIDA POR CONSUMO</option>
                                                     <option value='SAL'>TRASLADOS A OTRA BODEGA</option>
                                                     <option value='COM'>COMPRAS</option>
-                                                    <option value='PRS'>PRESTAMO DE HERRAMIENTA</option>
+                                                    <option value='PRS'>PRESTAMO HERRAMIENTA SALIDA</option>
+                                                    <option value='PRE'>PRESTAMO HERRAMIENTA ENTRADA</option>
                                                 </select>
                                             </div>
                                         </div>

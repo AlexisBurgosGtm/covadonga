@@ -42,20 +42,21 @@ function getView(){
                 <div class="card-body p-4">
 
                     <div class="row">
-                        <div class="col-6">
-                            
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <h2 class="text-left negrita text-base">Prestamo de Herramienta</h2>
+                            <h5 class="negrita text-danger" id="lbItems"></h5>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <div class="form-group">
-                                <label class="negrita text-secondary">Bodega de Salida</label>
+                                <label class="negrita text-secondary">Empresa / Bodega (Salida)</label>
                                 <select class="form-control negrita" id="cmbEmpresa">
                                 </select>                              
                             </div>
-
                         </div>
-                        <div class="col-6">
-                            <h2 class="text-left negrita text-base">Nueva Traslado a otra Bodega</h2>
-                            <h5 class="negrita text-danger" id="lbItems"></h5>
-                        </div>
+                        
                     </div>
+
                     <br>
 
                     <div class="row">
@@ -135,14 +136,16 @@ function getView(){
             <div class="card card-rounded col-12">
                 <div class="card-body p-4" style="font-size:90%">
 
+                   
                     <h4 class="negrita text-info text-center">Datos finales</h4>
                     <br>
                     
                     <div class="row">
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
+
                             <div class="form-group">
-                                <label class="negrita text-secondary">Bodega de Entrada</label>
+                                <label class="negrita text-secondary">Bodega (Entrada)</label>
                                 <select class="form-control negrita" id="cmbEmpresaEntrada">
                                 </select>                              
                             </div>
@@ -154,8 +157,10 @@ function getView(){
                                 </select>
                             </div>
 
+                            
+
                             <div class="form-group">
-                                <label class="negrita text-secondary">Documento sistema</label>
+                                <label class="negrita text-secondary">Documento de Salida</label>
                                 <div class="input-group">
                                     <select class="form-control negrita" id="cmbCoddoc">
                                     <input type="text" class="form-control negrita" id="txtCorrelativo" disabled="true">
@@ -173,15 +178,29 @@ function getView(){
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         
                             <div class="form-group">
+
                                 <label class="negrita text-secondary">Persona que Recibe</label>
                                 <select class="form-control negrita"  id="cmbRecibe">
                                 </select>
+
                             </div>
 
-                             <div class="form-group">
-                                <label class="negrita text-secondary">Entregado a:</label>
-                                <input type="text" class="form-control negrita"  id="txtEntregado">               
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Entregado a</label>
+                                <input type="text" class="form-control negrita"  id="txtEntregado">
                             </div>
+
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Documento de Entrada</label>
+                                <div class="input-group">
+                                    <select class="form-control negrita" id="cmbCoddocEnt">
+                                    <input type="text" class="form-control negrita" id="txtCorrelativoEnt" disabled="true">
+                                </div>                               
+                            </div>
+
+                         
+
 
                             <div class="form-group">
                                 <label class="negrita text-secondary">Fecha y Hora del Despacho</label>
@@ -189,11 +208,15 @@ function getView(){
                                     <input type="date" class="form-control negrita" id="txtFecha">
                                     <input type="text" class="form-control negrita" id="txtHora" disabled="true">
                                 </div>
+                                
                             </div>
 
                             <div class="form-group">
+
                                 <label class="negrita text-secondary">Total Costo</label>
                                 <h1 class="negrita text-danger" id="lbTotalCosto"></h1>
+                                
+                                
                             </div>
 
                         
@@ -299,7 +322,7 @@ function getView(){
 
                                     <div class="form-group">
                                         <label class="negrita text-secondary">Costo Unitario</label>
-                                        <input type="number" class="negrita text-danger form-control h5" id="txtCosto">
+                                        <input type="number" class="negrita text-danger form-control h5" id="txtCosto" disabled="true">
                                     </div>
 
                                     <div class="form-group">
@@ -341,11 +364,11 @@ function getView(){
 
 };
 
-
 function addListeners(){
 
 
-    document.title = 'TRASLADOS A OTRAS BODEGAS';
+    document.title = 'PRESTAMOS DE HERRAMIENTA';
+
 
     F.slideAnimationTabs();
 
@@ -363,14 +386,14 @@ function addListeners(){
 
 
     //cargando empresas
-    GF.data_listado_empresas()
+    GF.data_listado_empresas_todas()
     .then((data)=>{
         
         let str = '';
 
         data.recordset.map((r)=>{
             str += `
-            <option value='${r.EMPNIT}'>${r.EMPRESA}</option>
+            <option value='${r.EMPNIT}'>(${r.TIPO}) ${r.EMPRESA}</option>
             `
         })
       
@@ -378,20 +401,20 @@ function addListeners(){
         document.getElementById('cmbEmpresaEntrada').innerHTML = str;
 
         cargar_proyectos();
-
     })
     .catch(()=>{
        document.getElementById('cmbEmpresa').innerHTML = "<option value=''>No se cargaron las empresas</option>";
        document.getElementById('cmbEmpresaEntrada').innerHTML = "<option value=''>No se cargaron las empresas</option>";
     });
+
+    
     //cargando empresas
 
 
+
     document.getElementById('cmbEmpresaEntrada').addEventListener('change',()=>{
-         cargar_proyectos();
-
-    })
-
+        cargar_proyectos();
+    });
 
     //carga de empleados
     GF.data_listado_empleados('%')
@@ -415,10 +438,11 @@ function addListeners(){
    
 
 
+
    
 
-     //cargando coddoc entradas
-    GF.data_coddoc('%','SAL')
+     //cargando coddoc salidas
+    GF.data_coddoc('%','PRS')
     .then((data)=>{
         
         let str = '';
@@ -439,7 +463,33 @@ function addListeners(){
         document.getElementById('cmbCoddoc').innerHTML = "<option value=''></option>";
         document.getElementById('txtCorrelativo').value = '0';
     });
+    //cargando coddoc salidas
+
+
+     //cargando coddoc entradas
+    GF.data_coddoc('%','PRE')
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODDOC}'>${r.CODDOC}</option>
+            `
+        })
+        document.getElementById('cmbCoddocEnt').innerHTML = str;
+        GF.data_correlativo('%',document.getElementById('cmbCoddocEnt').value)
+        .then((data)=>{document.getElementById('txtCorrelativoEnt').value=data})
+        .catch((data)=>{document.getElementById('txtCorrelativoEnt').value=data})
+      
+    })
+    .catch(()=>{
+        document.getElementById('cmbCoddocEnt').innerHTML = "<option value=''></option>";
+        document.getElementById('txtCorrelativoEnt').value = '0';
+    });
     //cargando coddoc entradas
+
+
 
 
 
@@ -468,9 +518,6 @@ function addListeners(){
 
     });
 
-
-  
-  
 
     document.getElementById('txtCantidad').addEventListener('input',()=>{
 
@@ -508,7 +555,7 @@ function addListeners(){
 
             $("#modal_cantidad").modal('hide');
        
-                db_movinv.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
+                db_prestamo.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
                 .then(()=>{
                     tbl_temp_salida();
                 })
@@ -526,20 +573,10 @@ function addListeners(){
     let btnGuardar = document.getElementById('btnGuardar');
     btnGuardar.addEventListener('click',()=>{
 
-
-        let sucursal_origen = document.getElementById('cmbEmpresa').value;
-        let sucursal_recibe = document.getElementById('cmbEmpresaEntrada').value;
-
-        if(sucursal_origen.toString()==sucursal_recibe.toString()){ 
-                F.AvisoError('No puede trasladar a la misma bodega');return;   
-        };
-
-
         F.Confirmacion('¿Está seguro que desea Guardar este movimiento?')
         .then((value)=>{
             if(value==true){
 
-              
               
                 btnGuardar.disabled = true;
                 btnGuardar.innerHTML = `<i class="fal fa-spin fa-save"></i>`;
@@ -548,32 +585,15 @@ function addListeners(){
                 .then(()=>{
                     
                     F.Aviso('Documento guardado exitosamente!!');
-
-                   
+                    
                     btnGuardar.disabled = false;
                     btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
                     
-                    
-                    if(sucursal_origen.toString()==sucursal_recibe.toString()){    
-                      
-                    }else{
-                        F.notificacion_socket('TRASLADO',`Se creado un nuevo traslado`);
-                        
-                        //let coddoc = document.getElementById('cmbCoddoc').value;
-                        //let correlativo = document.getElementById('txtCorrelativo').value;
-                        //F.enviar_documento_whatsapp(sucursal_origen,coddoc,correlativo);
-                    }
-
-                    
                     clean_data();
-
-                    
                     
                 })
-                .catch((err)=>{
+                .catch(()=>{
                     
-                    console.log(err)
-
                     F.AvisoError('No se pudo guardar');
 
                     btnGuardar.disabled = false;
@@ -608,14 +628,6 @@ function get_total_costo(){
             }
 };
 
-function initView(){
-
-    getView();
-    addListeners();
-
-};
-
-
 function cargar_proyectos(){
 
     let sucursal = document.getElementById('cmbEmpresaEntrada').value;
@@ -634,11 +646,17 @@ function cargar_proyectos(){
 
     })
     .catch(()=>{
-        document.getElementById('cmbProyectos').innerHTML = "<option value='0'>No se cargaron los proyectos/areas</option>";
+        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron los proyectos/areas</option>";
 
     });
 };
 
+function initView(){
+
+    getView();
+    addListeners();
+
+};
 
 function insert_movimiento(entsal){
 
@@ -660,14 +678,18 @@ function insert_movimiento(entsal){
         //let codsolicita = document.getElementById('cmbSolicita').value;
         let codsolicita = 0;
         let codrecibe = document.getElementById('cmbRecibe').value;
-        let entregado = F.limpiarTexto(document.getElementById('txtEntregado').value) || '';
         let noorden = '';
         let obs = F.limpiarTexto(document.getElementById('txtObs').value);
+
+        let txtEntregado = document.getElementById('txtEntregado').value || '';
+        let coddocEnt = document.getElementById('cmbCoddocEnt').value;
+        let correlativoEnt = document.getElementById('txtCorrelativoEnt').value;
+        
 
         let items = 0; let varTotalCosto = 0;
 
  
-        db_movinv.select_temp_movinv_salida()
+        db_prestamo.select_temp_movinv_salida()
         .then((data)=>{
 
             data.map((r)=>{
@@ -687,6 +709,9 @@ function insert_movimiento(entsal){
                     sucursal_recibe: sucursal_recibe,
                     coddoc:coddoc,
                     correlativo:correlativo,
+                    coddoc_ent:coddocEnt,
+                    correlativo_ent:correlativoEnt,
+                    entregado:txtEntregado,
                     mes:mes,
                     anio:anio,
                     fecha:fecha,
@@ -698,11 +723,10 @@ function insert_movimiento(entsal){
                     obs:obs,
                     items:items,
                     totalcosto:varTotalCosto,
-                    entregado:entregado,
                     json_details: JSON.stringify(json_details)
                 }
 
-                axios.post(GlobalUrlCalls + '/general/insert_documento',datos)
+                axios.post(GlobalUrlCalls + '/general/insert_documento_prestamo',datos)
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
@@ -728,7 +752,7 @@ function insert_movimiento(entsal){
         });
        
 
-        //if(entsal=='S'){db_movinv.select_temp_movinv_salida().then((data)=>{json_details = data}); codrecibe = document.getElementById('cmbRecibe'+ entsal).value;};
+        //if(entsal=='S'){db_prestamo.select_temp_movinv_salida().then((data)=>{json_details = data}); codrecibe = document.getElementById('cmbRecibe'+ entsal).value;};
     })
 
 };
@@ -736,11 +760,8 @@ function insert_movimiento(entsal){
 function clean_data(){
 
 
-    document.getElementById('txtEntregado').value = '';
-    document.getElementById('txtObs').value = '';
 
-
-    db_movinv.delete_temp_movinv_salida_all()
+    db_prestamo.delete_temp_movinv_salida_all()
     .then(()=>{
         tbl_temp_salida();
     })
@@ -762,10 +783,11 @@ function clean_data(){
 
 function tbl_lista_productos(sucursal,filtro,entsal){
 
+
     let container = document.getElementById('tblDataProductos');
     container.innerHTML = GlobalLoader;
  
-    GF.data_lista_productos(sucursal,filtro,'INSUMO')
+    GF.data_lista_productos(sucursal,filtro,'HERRAMIENTA')
     .then((data)=>{
         let str = '';
         data.recordset.map((r)=>{
@@ -829,16 +851,16 @@ function tbl_temp_salida(){
     let varTotal = 0;
     let varItem = 0;
 
-    db_movinv.select_temp_movinv_salida()
+    db_prestamo.select_temp_movinv_salida()
     .then((data)=>{
-        
+
         if(Number(data.length)==0){
             document.getElementById('cmbEmpresa').disabled=false;
         }else{
             document.getElementById('cmbEmpresa').disabled=true;
         };
 
-
+        
         data.map((r)=>{
             
             varTotal += Number(r.TOTALCOSTO);
@@ -877,7 +899,7 @@ function delete_temp_salida(idrow,idbtn){
       F.Confirmacion('¿Está seguro que desea ELIMINAR esta linea?')
         .then((value)=>{
             if(value==true){
-                    db_movinv.delete_temp_movinv_salida_id(idrow)
+                    db_prestamo.delete_temp_movinv_salida_id(idrow)
                     .then(()=>{
                         tbl_temp_salida();
                     })
