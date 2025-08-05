@@ -63,10 +63,10 @@ function getView(){
            
             <br>
             <div class="row">
-                <div class="col-sm-12 col-md-6 col-lg-5 col-xl-4">
+                <div class="col-sm-12 col-md-6 col-lg-5 col-xl-5">
                     ${view.frag_generales()}
                 </div>
-                <div class="col-sm-12 col-md-6 col-lg-7 col-xl-8">
+                <div class="col-sm-12 col-md-6 col-lg-7 col-xl-7">
                     ${view.frag_tipodocumentos()}
                 </div>
             </div>
@@ -139,8 +139,8 @@ function getView(){
                             <thead class="bg-base text-white">
                                 <tr>
                                     <td>TIPO</td>
-                                    <td>DESCRIPCION</td>
                                     <td>SERIE</td>
+                                    <td>DESCRIPCION</td>
                                     <td>CORRELATIVO</td>
                                     <td>INV</td>
                                     <td></td>
@@ -354,6 +354,15 @@ function addListeners(){
 
     F.slideAnimationTabs();
 
+
+    let strtipo = '';
+    data_tipodocumentos.map((r)=>{
+        strtipo += `<option value='${r.CODDOC}'>${r.DESDOC}</option>`;
+    })
+    document.getElementById('cmbTipodoc').innerHTML = strtipo;
+    
+
+
     document.getElementById('cmbExistencia').value = get_config(1);
 
     document.getElementById('cmbCosto').value = get_config(2);
@@ -544,8 +553,8 @@ function tbl_tipodocumentos(){
             str += `
                 <tr>
                     <td>${r.TIPODOC}</td>
-                    <td>${r.DESCRIPCION}</td>
                     <td>${r.CODDOC}</td>
+                    <td>${r.DESCRIPCION}</td>
                     <td>${r.CORRELATIVO}</td>
                     <td>${r.INV}</td>
                     <td>

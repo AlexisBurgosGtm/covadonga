@@ -491,6 +491,18 @@ function addListeners(){
 
 
 
+    document.getElementById('cmbCoddoc').addEventListener('change',()=>{
+          GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
+        .then((data)=>{document.getElementById('txtCorrelativo').value=data})
+        .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
+    });
+    document.getElementById('cmbCoddocEnt').addEventListener('change',()=>{
+          GF.data_correlativo('%',document.getElementById('cmbCoddocEnt').value)
+        .then((data)=>{document.getElementById('txtCorrelativoEnt').value=data})
+        .catch((data)=>{document.getElementById('txtCorrelativoEnt').value=data})
+    });
+
+
 
 
     document.getElementById('txtDesprod').addEventListener('keyup',(e)=>{
@@ -581,25 +593,54 @@ function addListeners(){
                 btnGuardar.disabled = true;
                 btnGuardar.innerHTML = `<i class="fal fa-spin fa-save"></i>`;
                 
-                insert_movimiento('')
+                F.showToast('Cargando correlativo de documento salida...');
+                
+                get_correlativo_salida()
                 .then(()=>{
-                    
-                    F.Aviso('Documento guardado exitosamente!!');
-                    
-                    btnGuardar.disabled = false;
-                    btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-                    
-                    clean_data();
-                    
+
+
+                    get_correlativo_entrada()
+                    .then(()=>{
+
+                            insert_movimiento('')
+                            .then(()=>{
+                                
+                                F.Aviso('Documento guardado exitosamente!!');
+                                
+                                btnGuardar.disabled = false;
+                                btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                                
+                                clean_data();
+                                
+                            })
+                            .catch(()=>{
+                                
+                                F.AvisoError('No se pudo guardar');
+
+                                btnGuardar.disabled = false;
+                                btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+
+                            })
+                    })
+                    .catch(()=>{
+                            F.AvisoError('No se pudo obtener el correlativo de la Entrada');
+
+                             btnGuardar.disabled = false;
+                            btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                    })
+
+                           
+
                 })
                 .catch(()=>{
                     
-                    F.AvisoError('No se pudo guardar');
+                    F.AvisoError('No se pudo obtener el correlativo de la Salida');
 
                     btnGuardar.disabled = false;
                     btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-
                 })
+
+             
 
             }
         })
@@ -612,6 +653,29 @@ function addListeners(){
   
 
 
+};
+
+function get_correlativo_salida(){
+
+        return new Promise((resolve,reject)=>{
+
+            GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
+            .then((data)=>{document.getElementById('txtCorrelativo').value=data;resolve();})
+            .catch((data)=>{document.getElementById('txtCorrelativo').value=data;reject();})
+
+        })
+    
+};
+function get_correlativo_entrada(){
+
+        return new Promise((resolve,reject)=>{
+
+            GF.data_correlativo('%',document.getElementById('cmbCoddocEnt').value)
+            .then((data)=>{document.getElementById('txtCorrelativoEnt').value=data;resolve();})
+            .catch((data)=>{document.getElementById('txtCorrelativoEnt').value=data;reject();})
+
+        })
+    
 };
 
 function get_total_costo(){

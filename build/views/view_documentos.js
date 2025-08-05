@@ -196,6 +196,14 @@ function addListeners(){
 
     F.slideAnimationTabs();
 
+    
+    //carga los tipos
+    let strtipo = '';
+    data_tipodocumentos.map((r)=>{
+        strtipo += `<option value='${r.CODDOC}'>${r.DESDOC}</option>`;
+    })
+    document.getElementById('cmbTipo').innerHTML = strtipo;
+
 
     F.get_combo_meses('cmbMes');
     F.get_combo_anios('cmbAnio');

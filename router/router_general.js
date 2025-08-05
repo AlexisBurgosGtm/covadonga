@@ -473,18 +473,19 @@ router.post("/insert_documento_prestamo", async(req,res)=>{
         } = req.body;
 
 
+        // DOCUMENTO DE SALIDA
         let qry_documentos = `
                 INSERT INTO ORDERS 
                 (EMPNIT,CODDOC,CORRELATIVO,MES,ANIO,FECHA,HORA,CODPROYECTO,
                         CODEMP_SOLICITA,CODEMP_RECIBE,NO_ORDEN,OBS,STATUS,
-                        ITEMS,TOTALCOSTO,JSON_DETAILS,EMPNIT_RECIBE)
+                        ITEMS,TOTALCOSTO,JSON_DETAILS,EMPNIT_RECIBE,ENTREGADO)
                 SELECT '${sucursal}' AS EMPNIT,'${coddoc}' AS CODDOC,${correlativo} AS CORRELATIVO,
                 MONTH('${fecha}') AS MES, YEAR('${fecha}') AS ANIO,'${fecha}' AS FECHA,
                 '${hora}' AS HORA,${codproyecto} AS CODPROYECTO,
                 ${codsolicita} AS CODEMP_SOLICITA,${codrecibe} AS CODEMP_RECIBE,
                 '${noorden}' AS NO_ORDEN,'${obs}' AS OBS,'O' AS STATUS,
                 ${items} AS ITEMS, ${totalcosto} AS TOTALCOSTO,
-                '${json_details}' AS JSON_DETAILS, '${sucursal_recibe}' AS EMPNIT_RECIBE;
+                '${json_details}' AS JSON_DETAILS, '${sucursal_recibe}' AS EMPNIT_RECIBE,'${entregado}' AS ENTREGADO;
         `
 
         let qry_docproductos = qry_docproductos_sql_prestamo(sucursal,coddoc,correlativo,fecha,codrecibe,json_details);
@@ -495,9 +496,32 @@ router.post("/insert_documento_prestamo", async(req,res)=>{
         
         let qry = qry_documentos + qry_docproductos + qry_tipodocumentos;
     
+        //DOCUMENTO DE ENTRADA
+        let qry_documentos_entrada = `
+                INSERT INTO ORDERS 
+                (EMPNIT,CODDOC,CORRELATIVO,MES,ANIO,FECHA,HORA,CODPROYECTO,
+                        CODEMP_SOLICITA,CODEMP_RECIBE,NO_ORDEN,OBS,STATUS,
+                        ITEMS,TOTALCOSTO,JSON_DETAILS,EMPNIT_RECIBE,ENTREGADO)
+                SELECT '${sucursal_recibe}' AS EMPNIT,'${coddoc_ent}' AS CODDOC,${correlativo_ent} AS CORRELATIVO,
+                MONTH('${fecha}') AS MES, YEAR('${fecha}') AS ANIO,'${fecha}' AS FECHA,
+                '${hora}' AS HORA,${codproyecto} AS CODPROYECTO,
+                ${codsolicita} AS CODEMP_SOLICITA,${codrecibe} AS CODEMP_RECIBE,
+                '${noorden}' AS NO_ORDEN,'${obs}' AS OBS,'O' AS STATUS,
+                ${items} AS ITEMS, ${totalcosto} AS TOTALCOSTO,
+                '${json_details}' AS JSON_DETAILS, '${sucursal}' AS EMPNIT_RECIBE,'${entregado}' AS ENTREGADO;
+        `
+
+        let qry_docproductos_entrada = qry_docproductos_sql_prestamo(sucursal_recibe,coddoc_ent,correlativo_ent,fecha,codrecibe,json_details);
+
+        let nuevo_correlativo_entrada = Number(correlativo_ent)+1;
+        let qry_tipodocumentos_entrada = `UPDATE TIPODOCUMENTOS SET CORRELATIVO=${nuevo_correlativo_entrada} WHERE CODDOC='${coddoc_ent}';`
+       
+        
+        let qry_entrada = qry_documentos_entrada + qry_docproductos_entrada + qry_tipodocumentos_entrada;
+
  
 
-        execute.QueryToken(res,qry,'')
+        execute.QueryToken(res,qry+qry_entrada,'')
 
 
 });
