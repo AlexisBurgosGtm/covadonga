@@ -545,6 +545,33 @@ let GF = {
     
 
         },
+        data_producto_kardex_herramienta:(codprod,sucursal)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/productos/kardex_producto_herramienta',{codprod:codprod,sucursal:sucursal})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
         data_coddoc:(sucursal,tipodoc)=>{
 
             return new Promise((resolve,reject)=>{

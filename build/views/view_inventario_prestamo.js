@@ -5,7 +5,10 @@ function getView(){
             return `
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
-                        <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
+                        <div class="tab-pane fade show active" id="cero" role="tabpanel" aria-labelledby="receta-tab">
+                             ${view.inicio()}
+                        </div>
+                        <div class="tab-pane fade" id="uno" role="tabpanel" aria-labelledby="receta-tab">
                              ${view.movimiento_salida_productos()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
@@ -18,7 +21,11 @@ function getView(){
 
                     <ul class="nav nav-tabs hidden" id="myTabHome" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active negrita text-success" id="tab-uno" data-toggle="tab" href="#uno" role="tab" aria-controls="profile" aria-selected="false">
+                            <a class="nav-link active negrita text-success" id="tab-cero" data-toggle="tab" href="#cero" role="tab" aria-controls="profile" aria-selected="false">
+                                <i class="fal fa-list"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link negrita text-success" id="tab-uno" data-toggle="tab" href="#uno" role="tab" aria-controls="profile" aria-selected="false">
                                 <i class="fal fa-list"></i></a>
                         </li>
                         <li class="nav-item">
@@ -36,6 +43,116 @@ function getView(){
                
             `
         },
+        inicio:()=>{
+            return `
+            <div class="card card-rounded col-12 card-bordered shadow">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-4">
+                            <img src="./favicon.png" width="100px" height="100px">
+                        </div>
+                        <div class="col-8">
+                            <h4 class="negrita text-base">GESTION DE HERRAMIENTAS</h4>
+
+                          
+
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    ${view.frag_tabla_herramientas()}
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    ${view.frag_tabla_movimientos_herramienta()}
+                </div>
+            </div>
+
+
+            <button class="btn btn-circle btn-success btn-bottom-r btn-xl hand shadow"
+            onclick="document.getElementById('tab-uno').click()">
+                <i class="fal fa-plus"></i>
+            </button>
+            `
+        },
+        frag_tabla_herramientas:()=>{
+            return `
+            <div class="card card-rounded col-12 card-bordered shadow">
+                <div class="card-body p-4">
+                    <label class="h5 negrita text-danger">Herramientas en Inventario</label>
+                    <div class="table-responsive">
+                        
+                        <div class="form-group">
+                            <label>Escriba para buscar</label>
+                            <input type="text" class="form-control" 
+                            placeholder="Escriba para buscar..."
+                            id="txtBuscarHerr" oninput="F.FiltrarTabla('tbl_herramientas','txtBuscarHerr')">
+                        </div>
+
+                        <table class="table h-full col-12 table-bordered" id="tbl_herramientas">
+                            <thead class="bg-base text-white">
+                                <tr>
+                                    <td>CODIGO</td>
+                                    <td>HERRAMIENTA</td>
+                                    <td>MARCA</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_data_herramientas"></tbody>
+                        </table>
+                    </div>
+                
+                </div>
+            </div>
+            `
+        },
+        frag_tabla_movimientos_herramienta:()=>{
+            return `
+                            <div class="card card-rounded col-12 shadow ">
+                                <div class="card-body p-4">
+
+                                    <h4 class="negrita text-danger" id="lbKardexDesprod"></h4>
+
+                                    <div class="form-group">
+                                        <label>Escriba para buscar...</label>
+                                        <input type="text"
+                                        placeholder='Escriba para filtrar...'
+                                        class="form-control negrita text-danger"
+                                        id="txtBuscarHistorial"
+                                        oninput="F.FiltrarTabla('tblHistorial','txtBuscarHistorial')">
+                                    </div>
+
+                                    <table class="table h-full col-12 table-bordered border-info" id="tblHistorial">
+                                        <thead class="bg-secondary text-white">
+                                            <tr>
+                                                <td>FECHA</td>
+                                                <td>DOCUMENTO</td>
+                                                <td>ENTRADA</td>
+                                                <td>SALIDA</td>
+                                                <td>ENTREGADO A</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tblDataHistorial">
+                                        </tbody>
+                                        <tfoot class="bg-secondary text-white negrita">
+                                            <tr>
+                                                <td></td>
+                                                <td><b id="lbKardexConteo"></b></td>
+                                                <td><b id="lbKardexEntradas"></b></td>
+                                                <td><b id="lbKardexSalidas"></b></td>
+                                                <td id=""></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+
+                                    
+                                </div>
+                            </div>
+            `
+        },
         movimiento_salida_productos: ()=>{
             return `
             <div class="card card-rounded col-12">
@@ -49,7 +166,7 @@ function getView(){
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <div class="form-group">
-                                <label class="negrita text-secondary">Empresa / Bodega (Salida)</label>
+                                <label class="negrita text-secondary">Bodega (Salida)</label>
                                 <select class="form-control negrita" id="cmbEmpresa">
                                 </select>                              
                             </div>
@@ -120,7 +237,12 @@ function getView(){
 
             <input type="text" id="txtCodprod" disabled="true" class="hidden">
             
-            
+
+            <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow"
+            onclick="document.getElementById('tab-cero').click()">
+                <i class="fal fa-arrow-left"></i>
+            </button>
+
         
             <button class="btn btn-success btn-xl btn-circle btn-bottom-r hand shadow"
             onclick="document.getElementById('tab-dos').click()">
@@ -400,6 +522,8 @@ function addListeners(){
         document.getElementById('cmbEmpresa').innerHTML = str;
         document.getElementById('cmbEmpresaEntrada').innerHTML = str;
 
+        tbl_lista_herramientas();
+
         cargar_proyectos();
     })
     .catch(()=>{
@@ -409,6 +533,7 @@ function addListeners(){
 
     
     //cargando empresas
+
 
 
 
@@ -842,8 +967,126 @@ function clean_data(){
 
 
 
+function tbl_lista_herramientas(){
+
+    let sucursal = document.getElementById('cmbEmpresa').value;
+    
+    let container = document.getElementById('tbl_data_herramientas');
+    container.innerHTML = GlobalLoader;
+ 
+    GF.data_lista_productos(sucursal,'','HERRAMIENTA')
+    .then((data)=>{
+        let str = '';
+        data.recordset.map((r)=>{
+            str += `
+            <tr class="hand"
+                onclick="">
+                <td>${F.limpiarTexto(r.CODPROD)}</td>
+                <td>${F.limpiarTexto(r.DESPROD)}</td>
+                <td>${F.limpiarTexto(r.DESMARCA)}</td>
+            
+                <td>
+                       <button class="btn btn-md btn-circle btn-warning hand shadow"
+                        onclick="tbl_kardex_producto('${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.DESPROD)}')"
+                        >
+                            <i class="fal fa-list"></i>
+                        </button>
+                </td>
+            </tr>
+            `
+        })
+        container.innerHTML = str;
 
 
+    })
+    .catch(()=>{
+
+        container.innerHTML = 'No se cargaron datos...';
+
+    })
+
+
+};
+
+function tbl_kardex_producto(codprod,desprod){
+
+   
+
+
+    document.getElementById('lbKardexDesprod').innerText = desprod;
+
+    let contenedor = document.getElementById('tblDataHistorial');
+    contenedor.innerHTML = GlobalLoader;
+
+
+
+    let varConteo = 0; let varEntradas = 0; let varSalidas = 0;
+
+    GF.data_producto_kardex_herramienta(codprod,'%')
+    .then((data)=>{
+
+        let str = '';
+        data.recordset.map((r)=>{
+
+            let entrada = 0; let salida = 0; let prestamo=0;
+            switch (r.INV.toString()) {
+                case '0':
+                    prestamo = Number(r.CANTIDAD);
+                    entrada = 0;
+                    salida = 0;
+                    break;
+            case '1':
+                    prestamo = 0;
+                    entrada = Number(r.CANTIDAD);
+                    salida = 0;
+                    break;
+            case '-1':
+                    prestamo = 0;
+                    entrada = 0;
+                    salida = Number(r.CANTIDAD);
+                    break;
+            }
+            varConteo += 1; varEntradas += Number(entrada); varSalidas += Number(salida);
+            str +=  `
+                <tr>
+                    <td>${F.convertDateNormal(r.FECHA)}
+                        <br>
+                        <small class="negrita text-danger">Hora: ${r.HORA}</small>
+                    </td>
+                    <td>${r.EMPRESA}
+                        <br>
+                        <small class="negrita text-danger">${r.CODDOC}-${r.CORRELATIVO}</small>
+                        <br>
+                        <small>${F.limpiarTexto(r.OBS)}</small>
+                    </td>
+                    <td>${entrada}</td>
+                    <td>${salida}</td>
+                    <td>${r.ENTREGADO}</td>
+                </tr>
+                `
+        })
+        contenedor.innerHTML = str;  
+
+        
+        document.getElementById('lbKardexConteo').innerText = `Movimientos: ${varConteo}`;
+        document.getElementById('lbKardexEntradas').innerText = `${varEntradas}`;
+        document.getElementById('lbKardexSalidas').innerText = `${varSalidas}`;
+
+
+    })
+    .catch((error)=>{
+
+
+        contenedor.innerHTML = 'No se cargaron datos...';
+
+         document.getElementById('lbKardexConteo').innerText = '';
+        document.getElementById('lbKardexEntradas').innerText = '';
+        document.getElementById('lbKardexSalidas').innerText = '';
+    })
+
+
+
+};
 
 function tbl_lista_productos(sucursal,filtro,entsal){
 
