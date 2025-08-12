@@ -819,5 +819,21 @@ router.post("/select_correlativo", async(req,res)=>{
 
 
 
+router.post("/verify_serie_compra", async(req,res)=>{
+
+        const {sucursal,serie,numero} = req.body;
+
+        let qry = `
+        SELECT  FEL_SERIE, FEL_NUMERO
+                FROM ORDERS
+        WHERE FEL_SERIE='${serie}' AND FEL_NUMERO='${numero}';
+        `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+
+
 module.exports = router;
 

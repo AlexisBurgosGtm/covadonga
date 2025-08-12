@@ -59,6 +59,60 @@ let GF = {
         
 
         },
+        verify_serie_compra:(serie,numero)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/verify_serie_compra',{sucursal:GlobalEmpnit,serie:serie,numero:numero})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                reject();             
+                            }else{
+                                resolve();
+                            } 
+                        }       
+                    }else{
+                        resolve();
+                    }                   
+                }, (_error) => {
+                    resolve();
+                });
+            }) 
+    
+
+        },
+        corregir_correlativo:(coddoc)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/config/corregir_correlativo',{coddoc:coddoc})
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                reject();             
+                            }else{
+                                resolve();
+                            } 
+                        }       
+                    }else{
+                        resolve();
+                    }                   
+                }, (_error) => {
+                    resolve();
+                });
+            }) 
+    
+
+        },
         login_empleado:(sucursal,u,p)=>{
         
             return new Promise((resolve,reject)=>{

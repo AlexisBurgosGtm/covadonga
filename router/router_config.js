@@ -3,6 +3,25 @@ const express = require('express');
 const router = express.Router();
 
 
+router.post("/corregir_correlativo", async(req,res)=>{
+
+        const {coddoc} = req.body;
+
+
+        let qry = `
+                UPDATE TIPODOCUMENTOS
+                        SET TIPODOCUMENTOS.CORRELATIVO=(SELECT TOP 1 (CORRELATIVO+1) AS CORRELATIVO 
+                                FROM ORDERS 
+                                WHERE CODDOC='${coddoc}' ORDER BY ID DESC)
+			WHERE TIPODOCUMENTOS.CODDOC='${coddoc}'
+
+                `
+    
+        execute.QueryToken(res,qry,'')
+
+});
+
+
 router.post("/select_config", async(req,res)=>{
 
         //const {id,valor} = req.body;

@@ -667,26 +667,44 @@ function addListeners(){
               
                 btnGuardar.disabled = true;
                 btnGuardar.innerHTML = `<i class="fal fa-spin fa-save"></i>`;
-                
-                insert_movimiento('')
+
+                let serie = document.getElementById('txtFELSerie').value || document.getElementById('cmbCoddoc').value;
+                let numero = document.getElementById('txtFELNumero').value || document.getElementById('txtCorrelativo').value;
+
+                F.showToast('Verificando Serie FEL');
+
+                GF.verify_serie_compra(serie,numero)
                 .then(()=>{
-                    
-                    F.Aviso('Documento guardado exitosamente!!');
-                    
-                    btnGuardar.disabled = false;
-                    btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-                    
-                    clean_data();
-                    
+
+                        insert_movimiento('')
+                        .then(()=>{
+                            
+                            F.Aviso('Documento guardado exitosamente!!');
+                            
+                            btnGuardar.disabled = false;
+                            btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                            
+                            clean_data();
+                            
+                        })
+                        .catch(()=>{
+                            
+                            F.AvisoError('No se pudo guardar');
+
+                            btnGuardar.disabled = false;
+                            btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+
+                        })
+                        
                 })
                 .catch(()=>{
-                    
-                    F.AvisoError('No se pudo guardar');
-
+                    F.AvisoError('Este numero de factura FEL ya existe, por favor, verifique');
                     btnGuardar.disabled = false;
                     btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
 
                 })
+                
+                
 
             }
         })
