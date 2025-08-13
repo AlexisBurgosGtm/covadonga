@@ -429,9 +429,8 @@ function addListeners(){
             `
         })
         document.getElementById('cmbCoddoc').innerHTML = str;
-        GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
-        .then((data)=>{document.getElementById('txtCorrelativo').value=data})
-        .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
+       
+        cargar_correlativo();
   
       
     })
@@ -442,6 +441,9 @@ function addListeners(){
     //cargando coddoc entradas
 
 
+    document.getElementById('cmbCoddoc').addEventListener('change',()=>{
+        cargar_correlativo();
+    })
 
     document.getElementById('txtDesprod').addEventListener('keyup',(e)=>{
         if (e.code === 'Enter') { 
@@ -543,43 +545,67 @@ function addListeners(){
               
                 btnGuardar.disabled = true;
                 btnGuardar.innerHTML = `<i class="fal fa-spin fa-save"></i>`;
-                
-                insert_movimiento('')
+
+                F.showToast('Recargando el correlativo del documento');
+
+                cargar_correlativo()
                 .then(()=>{
-                    
-                    F.Aviso('Documento guardado exitosamente!!');
 
-                   
-                    btnGuardar.disabled = false;
-                    btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
                     
+                    insert_movimiento('')
+                    .then(()=>{
                     
-                    if(sucursal_origen.toString()==sucursal_recibe.toString()){    
-                      
-                    }else{
-                        F.notificacion_socket('TRASLADO',`Se creado un nuevo traslado`);
+                        F.Aviso('Documento guardado exitosamente!!');
+
+                    
+                        btnGuardar.disabled = false;
+                        btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                    
                         
-                        //let coddoc = document.getElementById('cmbCoddoc').value;
-                        //let correlativo = document.getElementById('txtCorrelativo').value;
-                        //F.enviar_documento_whatsapp(sucursal_origen,coddoc,correlativo);
-                    }
+                        if(sucursal_origen.toString()==sucursal_recibe.toString()){    
+                        
+                        }else{
+                            F.notificacion_socket('TRASLADO',`Se creado un nuevo traslado`);
+                        }
 
+                        clean_data();                    
                     
-                    clean_data();
+                    })
+                    .catch((err)=>{
+                    
+                        if(err.toString()=='duplicado'){
 
-                    
-                    
+                            F.AvisoError('Este correlativo interno ya existe, intente de nuevo, se aplicara una correccion automatica');
+                            let coddoc = document.getElementById('cmbCoddoc').value;
+
+                            GF.corregir_correlativo(coddoc)
+                            .then(()=>{
+                                //F.Aviso('Se corrigio el correlativo, guarde de nuevo');
+                                btnGuardar.disabled = false;
+                                btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                            })
+                            .catch(()=>{
+                                //F.AvisoError('No se pudo corregir el correlativo');
+                                btnGuardar.disabled = false;
+                                btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                            })
+
+                        }else{
+                            F.AvisoError('No se pudo guardar');
+                            btnGuardar.disabled = false;
+                            btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                        }
+
+                    })
+
                 })
-                .catch((err)=>{
-                    
-                    console.log(err)
-
-                    F.AvisoError('No se pudo guardar');
-
+                .catch(()=>{
+                    F.AvisoErro('No se logro recargar el correlativo del documento');
                     btnGuardar.disabled = false;
                     btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-
+                    
                 })
+                
 
             }
         })
@@ -592,6 +618,23 @@ function addListeners(){
   
 
 
+};
+
+function cargar_correlativo(){
+
+    return new Promise((resolve,reject)=>{
+        GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
+        .then((data)=>{
+            document.getElementById('txtCorrelativo').value=data;
+            resolve();
+        })
+        .catch((data)=>{
+            document.getElementById('txtCorrelativo').value=data;
+            reject();
+        })
+    })
+
+        
 };
 
 function get_total_costo(){
@@ -706,15 +749,28 @@ function insert_movimiento(entsal){
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
-                        if(data.toString()=="error"){
-                            reject();
-                        }else{
-                            if(Number(data.rowsAffected[0])>0){
-                                resolve(data);             
-                            }else{
-                                reject();
-                            } 
-                        }       
+
+
+                       switch (data.toString()) {
+                            case "error":
+                                reject('error');
+                                break;
+                            case "duplicado":
+                                reject('duplicado')
+                                break;
+                        
+                            default:
+                                if(Number(data.rowsAffected[0])>0){
+                                    resolve(data);             
+                                }else{
+                                    reject('error');
+                                } 
+                                break;
+                        }
+      
+                        
+                        
+
                     }else{
                         reject();
                     }                   

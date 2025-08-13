@@ -11,7 +11,7 @@ function getView(){
                             ${view.vista_inicio()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
-                           
+                           ${view.frag_productos() + view.modal_historial_productos()}
                         </div>
                         <div class="tab-pane fade" id="tres" role="tabpanel" aria-labelledby="home-tab">
                             
@@ -41,22 +41,47 @@ function getView(){
             return `
             <div class="card card-rounded shadow col-12">
                 <div class="card-body p-4">
-                    <h3 class="negrita text-base">INICIO GERENCIA</h3>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <img src="./favicon.png" width="70px" heigth="70px">
+                            <h3 class="negrita text-base">INICIO GERENCIA</h3>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <br>
+                            <div class="form-group">
+                                <label class="text-secondary">Seleccione Mes y Año</label>
+                                <div class="input-group">
+                                    
+                                    <select class="form-control" id="cmbMes">
+                                    </select>
+                                    <select class="form-control" id="cmbAnio">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
+
+            
             `
         },
         vista_inicio:()=>{
             return `
             <div class="row">
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    ${view.frag_productos()}
+                    ${view.frag_empresas_conta()}
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     ${view.frag_inventarios()}
                 </div>
             </div>
-            ${view.modal_historial_productos()}
+
+            <button class="btn btn-bottom-r btn-xl btn-circle btn-info hand shadow"
+            onclick="document.getElementById('tab-dos').click()">
+                <i class="fal fa-search"></i>
+            </button>
             `
         },
         frag_productos:()=>{
@@ -81,22 +106,32 @@ function getView(){
                             </div>
                         </div>
 
-                        <table class="table table-responsive table-hover col-12 h-full" id="tblProductos">
-                            <thead class="bg-base text-white">
-                                <tr>
-                                    <td>CODIGO</td>
-                                    <td>DESCRIPCIONES</td>
-                                    <td>COSTO</td>
-                                   
-                                </tr>
-                            </thead>
-                            <tbody id="tblDataProductos">
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+
+                            <table class="table table-hover col-12 h-full" id="tblProductos">
+                                <thead class="bg-base text-white">
+                                    <tr>
+                                        <td>TIPO</td>
+                                        <td>CODIGO</td>
+                                        <td>DESCRIPCIONES</td>
+                                        <td>RUBRO</td>
+                                        <td>MARCA</td>
+                                        <td>COSTO</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody id="tblDataProductos">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <button class="btn btn-bottom-l btn-xl btn-circle btn-secondary hand shadow"
+            onclick="document.getElementById('tab-uno').click()">
+                <i class="fal fa-arrow-left"></i>
+            </button>
 
             `
         },
@@ -177,6 +212,35 @@ function getView(){
             </div>
             `
         },
+        frag_empresas_conta:()=>{
+            return `
+            <div class="card card-rounded shadow col-12">
+                <div class="card-body p-4">
+
+                    <h3 class="negrita text-base">COMPRAS POR EMPRESA CONTABLE</h3>
+
+                    <div class="table-responsive col-12">
+                        <table class="table h-full table-striped">
+                            <thead class="bg-base text-white">
+                                <tr>
+                                    <td>EMPRESA / NIT</td>
+                                    <td>COMPRAS</td>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDataResumenCompras"></tbody>
+                            <tfoot class="bg-base text-white negrita">
+                                <tr>
+                                    <td></td>
+                                    <td id="lbTotalCompras"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            `
+        },
         frag_empleados:()=>{
             return `
             <div class="card card-rounded shadow col-12">
@@ -231,6 +295,9 @@ function addListeners(){
         F.slideAnimationTabs();    
 
 
+        F.get_combo_meses('cmbMes');
+        F.get_combo_anios('cmbAnio');
+
 
         document.getElementById('cmbStatus').addEventListener('change',()=>{
             get_tbl_productos();
@@ -252,6 +319,16 @@ function addListeners(){
         
 
         tbl_resumen_inventarios();
+
+        document.getElementById('cmbMes').addEventListener('change',()=>{
+            tbl_resumen_compras();
+        });
+        document.getElementById('cmbAnio').addEventListener('change',()=>{
+            tbl_resumen_compras();
+        });
+        
+
+        tbl_resumen_compras();
 
 
 };
@@ -320,28 +397,23 @@ function get_tbl_productos(){
             
             str += `
             <tr>
+                <td>${r.TIPO}</td>
                 <td><b class="text-danger">${r.CODPROD}</b>
+                </td>
+                <td>${r.DESPROD}
                     <br>
-                    ${r.TIPO}
-                    <br>
+                    <small>${r.CODMEDIDA}</small>
+                </td>
+                <td>${r.RUBRO}</td>
+                <td>${r.MARCA}</td>
+                <td>${F.setMoneda(r.COSTO,'Q')}</td>
+                <td>
                     <button class="btn btn-sm btn-warning hand shadow"
                     onclick="historial_producto('${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.DESPROD)}')"
                     >
                         <i class="fal fa-list"></i>Historial
                     </button>
                 </td>
-                <td>${r.DESPROD}
-                    <br>
-                    <small>${r.CODMEDIDA}</small>
-                     <br>
-                    <small class="text-info negrita">${r.MARCA}</small>
-                    <br>
-                    <small class="text-secondary negrita">${r.RUBRO}</small>
-                </td>
-                <td>${F.setMoneda(r.COSTO,'Q')}</td>
-               
-               
-                
             </tr>
             `
         })
@@ -442,6 +514,47 @@ function tbl_resumen_inventarios(){
     })
     .catch(()=>{
         container.innerHTML = 'No se cargaron datos...'
+    })
+
+
+
+};
+
+
+function tbl_resumen_compras(){
+
+    let mes = document.getElementById('cmbMes').value;
+    let anio = document.getElementById('cmbAnio').value;
+
+
+    let container = document.getElementById('tblDataResumenCompras');
+    container.innerHTML = GlobalLoader;
+
+    let varTotal = 0;
+
+    GF.data_bi_resumen_compras_conta(mes,anio)
+    .then((data)=>{
+        let str = '';
+        data.recordset.map((r)=>{
+            varTotal += Number(r.TOTALCOSTO);
+            str+=`
+            <tr>
+                <td>${r.RAZON_SOCIAL}
+                    <br>
+                    <small class="negrita text-danger">NIT: ${r.NIT}}</small>
+                </td>
+                <td class="negrita">
+                    ${F.setMoneda(r.TOTALCOSTO,'Q')}
+                </td>
+            </tr>
+            `
+        })
+        container.innerHTML = str;
+        document.getElementById('lbTotalCompras').innerText = F.setMoneda(varTotal,'Q');
+    })
+    .catch(()=>{
+        container.innerHTML = 'No se cargaron datos...';
+        document.getElementById('lbTotalCompras').innerText = '';
     })
 
 

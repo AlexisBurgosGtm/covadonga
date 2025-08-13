@@ -41,8 +41,17 @@ let execute = {
 			new sql.Request(pool1)
 			.query(sqlqry, (err, result) => {
 				if(err){
+					console.log('error 1:');
 					console.log(err.message);
-					res.send('error')
+					let strError = err.message.toString();
+					if(strError.includes("Cannot insert duplicate key row in object")==true){
+						res.send('duplicado')
+					}else{
+						res.send('error')
+					}
+
+
+					
 				}else{
 					res.send(result);
 				}					
@@ -50,11 +59,13 @@ let execute = {
 			sql.close();  
 		  })
 		  pool1.on('error', err => {
+				console.log('error 2:')
 			  console.log('error sql = ' + err);
 			  sql.close();
 			  res.send('error');
 		  })
 		} catch (error) {
+			console.log('error 3:')
 			console.log(error);
 		  res.send('error')   
 		  sql.close();

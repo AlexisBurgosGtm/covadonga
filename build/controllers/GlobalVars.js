@@ -1,4 +1,4 @@
-let versionapp = "M.05.08.2025:0"
+let versionapp = "M.13.08.2025:0"
 // &nbsp
 
 let map; //mapa de leaflet

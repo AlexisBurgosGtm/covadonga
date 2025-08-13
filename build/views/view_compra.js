@@ -564,11 +564,9 @@ function addListeners(){
             `
         })
         document.getElementById('cmbCoddoc').innerHTML = str;
-        GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
-        .then((data)=>{document.getElementById('txtCorrelativo').value=data})
-        .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
+       
+        cargar_correlativo();
   
-        
 
     })
     .catch(()=>{
@@ -668,29 +666,62 @@ function addListeners(){
                 btnGuardar.disabled = true;
                 btnGuardar.innerHTML = `<i class="fal fa-spin fa-save"></i>`;
 
-                let serie = document.getElementById('txtFELSerie').value || document.getElementById('cmbCoddoc').value;
-                let numero = document.getElementById('txtFELNumero').value || document.getElementById('txtCorrelativo').value;
+                F.showToast('Cargando el correlativo del documento');
 
-                F.showToast('Verificando Serie FEL');
-
-                GF.verify_serie_compra(serie,numero)
+                cargar_correlativo()
                 .then(()=>{
 
-                        insert_movimiento('')
+                        let serie = document.getElementById('txtFELSerie').value || document.getElementById('cmbCoddoc').value;
+                        let numero = document.getElementById('txtFELNumero').value || document.getElementById('txtCorrelativo').value;
+
+                        F.showToast('Verificando Serie FEL');
+
+                        GF.verify_serie_compra(serie,numero)
                         .then(()=>{
-                            
-                            F.Aviso('Documento guardado exitosamente!!');
-                            
-                            btnGuardar.disabled = false;
-                            btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-                            
-                            clean_data();
-                            
+
+                                insert_movimiento('')
+                                .then(()=>{
+                                    
+                                    F.Aviso('Documento guardado exitosamente!!');
+                                    
+                                    btnGuardar.disabled = false;
+                                    btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                                    
+                                    clean_data();
+                                    
+                                })
+                                .catch((err)=>{
+                                
+                                    if(err.toString()=='duplicado'){
+
+                                            F.AvisoError('Este correlativo interno ya existe, intente de nuevo, se aplicara una correccion automatica');
+
+                                            let coddoc = document.getElementById('cmbCoddoc').value;
+
+                                            GF.corregir_correlativo(coddoc)
+                                            .then(()=>{
+                                                //F.Aviso('Se corrigio el correlativo, guarde de nuevo');
+                                                btnGuardar.disabled = false;
+                                                btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                                            })
+                                            .catch(()=>{
+                                                //F.AvisoError('No se pudo corregir el correlativo');
+                                                btnGuardar.disabled = false;
+                                                btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                                            })
+
+                                    }else{
+                                            F.AvisoError('No se pudo guardar');
+                                            btnGuardar.disabled = false;
+                                            btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                                    }
+                                
+                                
+                                })
+                                
                         })
                         .catch(()=>{
-                            
-                            F.AvisoError('No se pudo guardar');
-
+                            F.AvisoError('Este numero de factura FEL ya existe, por favor, verifique');
                             btnGuardar.disabled = false;
                             btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
 
@@ -698,11 +729,12 @@ function addListeners(){
                         
                 })
                 .catch(()=>{
-                    F.AvisoError('Este numero de factura FEL ya existe, por favor, verifique');
+                    F.AvisoError('No se logro recargar el correlativo');
                     btnGuardar.disabled = false;
                     btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
-
                 })
+
+               
                 
                 
 
@@ -758,6 +790,22 @@ function addListeners(){
 
 };
 
+function cargar_correlativo(){
+
+    return new Promise((resolve,reject)=>{
+
+        GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
+        .then((data)=>{
+            document.getElementById('txtCorrelativo').value=data;
+            resolve();
+        })
+        .catch((data)=>{
+            document.getElementById('txtCorrelativo').value=data;
+            reject();
+        })
+    })
+        
+};
 
 
 function listeners_provedores(){
@@ -1016,20 +1064,29 @@ function insert_movimiento(entsal){
                 .then((response) => {
                     if(response.status.toString()=='200'){
                         let data = response.data;
-                        if(data.toString()=="error"){
-                            reject();
-                        }else{
-                            if(Number(data.rowsAffected[0])>0){
-                                resolve(data);             
-                            }else{
-                                reject();
-                            } 
-                        }       
+
+                        switch (data.toString()) {
+                            case "error":
+                                reject('error');
+                                break;
+                            case "duplicado":
+                                reject('duplicado')
+                                break;
+                        
+                            default:
+                                if(Number(data.rowsAffected[0])>0){
+                                    resolve(data);             
+                                }else{
+                                    reject('error');
+                                } 
+                                break;
+                        }
+      
                     }else{
-                        reject();
+                        reject('error');
                     }                   
                 }, (_error) => {
-                    reject();
+                    reject('error');
                 });
 
 
@@ -1058,9 +1115,7 @@ function clean_data(){
     })
 
 
-    GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
-    .then((data)=>{document.getElementById('txtCorrelativo').value=data})
-    .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
+    cargar_correlativo();
 
     document.getElementById('tab-uno').click();
 

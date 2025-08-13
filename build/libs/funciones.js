@@ -356,7 +356,7 @@ let F = {
       },
       AvisoError: function(msn){
           swal(msn, {
-              timer: 1500,
+              //timer: 1500,
               icon: "error",
               buttons: false
               });

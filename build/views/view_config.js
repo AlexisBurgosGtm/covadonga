@@ -292,7 +292,7 @@ function getView(){
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label class="negrita text-base">Tipo Documento</label>
-                                                <select class="form-control" id="cmbTipodocE">
+                                                <select class="form-control" id="cmbTipodocE" disabled="true">
                                                     <option value='ENT'>ENTRADA</option>
                                                     <option value='SAL'>SALIDA</option>
                                                     <option value='COM'>COMPRA</option>
@@ -303,7 +303,7 @@ function getView(){
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label class="negrita text-base">Tipo inventario</label>
-                                                <select class="form-control" id="cmbInvE">
+                                                <select class="form-control" id="cmbInvE" disabled="true">
                                                     <option value='1'>ENTRADA</option>
                                                     <option value='-1'>SALIDA</option>
                                                     <option value='0'>NEUTRO</option>

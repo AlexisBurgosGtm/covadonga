@@ -22,6 +22,33 @@ router.post("/resumen_inventarios", async(req,res)=>{
 });
 
 
+router.post("/resumen_empresas_conta", async(req,res)=>{
+
+        const {mes,anio} = req.body;
+
+
+        let qry = `
+                SELECT ORDERS.CODEMP, 
+                    EMPRESAS_CONTA.NIT, 
+                    EMPRESAS_CONTA.RAZON_SOCIAL, 
+                    EMPRESAS_CONTA.NOMBRE_COMERCIAL, 
+                    SUM(ORDERS.TOTALCOSTO) AS TOTALCOSTO
+                FROM ORDERS LEFT OUTER JOIN
+                    TIPODOCUMENTOS ON ORDERS.CODDOC = TIPODOCUMENTOS.CODDOC LEFT OUTER JOIN
+                    EMPRESAS_CONTA ON ORDERS.CODEMP = EMPRESAS_CONTA.CODEMP
+                WHERE  (ORDERS.STATUS <> 'A') AND 
+                    (TIPODOCUMENTOS.TIPODOC IN ('COM')) AND 
+                    (ORDERS.MES = ${mes}) AND 
+                    (ORDERS.ANIO = ${anio})
+                GROUP BY ORDERS.CODEMP, EMPRESAS_CONTA.NIT, EMPRESAS_CONTA.RAZON_SOCIAL, EMPRESAS_CONTA.NOMBRE_COMERCIAL
+                HAVING (NOT (EMPRESAS_CONTA.NIT IS NULL))
+                `;
+    
+        execute.QueryToken(res,qry,'')
+        
+
+});
+
 
 
 
