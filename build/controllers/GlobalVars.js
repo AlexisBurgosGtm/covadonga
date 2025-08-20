@@ -1,4 +1,4 @@
-let versionapp = "M.13.08.2025:0"
+let versionapp = "M.20.08.2025:0"
 // &nbsp
 
 let map; //mapa de leaflet
@@ -130,3 +130,25 @@ function getRandomColor() {
     return color;
 };
 
+
+function descargar_documento(coddoc,correlativo,tipo, idbtn){
+
+        let btn = document.getElementById(idbtn);
+        btn.disabled =true;
+        btn.innerHTML = `<i class="fal fa-spin fa-download"></i>`;
+
+        //F.showToast('Generando PDF');
+
+        GF.generar_pdf_documento(coddoc,correlativo,tipo)
+        .then((filename)=>{
+            GF.descargar_pdf_documento(filename);
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fal fa-download"></i>`;
+        })
+        .catch(()=>{
+            F.AvisoError('No se pudo generar el documento pdf');
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fal fa-download"></i>`;
+        })
+
+};

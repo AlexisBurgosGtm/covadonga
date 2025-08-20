@@ -20,6 +20,7 @@ var router_empleados =require('./router/router_empleados.js');
 var router_general =require('./router/router_general.js');
 var router_config = require('./router/router_config.js');
 var router_bi = require('./router/router_bi.js');
+var PDF = require('./reports_pdf.js');
 
 
 var http = require('http').Server(app);
@@ -77,8 +78,44 @@ app.get("/login",function(req,res){
   res.redirect('/');
 }); 
 
-// DESPACHO //
+app.post("/crear_pdf",function(req,res){
+      
+      const {coddoc,correlativo,tipo} = req.body;
+     
+      //ENT=ENTRADA INVENTARIO, CON=SALIDA CONSUMO, SAL=TRASLADO SALIDA, COM=COMPRAS,PRS=PRESTAMO SALIDA H, PRE=PRESTAMO ENTRADA H
 
+      let fileName = `prestamo_herramienta_${coddoc}_${correlativo}.pdf`;
+
+  
+      switch (tipo) {
+        case 'PRE': //PRESTAMO ENTRADA HERRAMIENTA
+
+              PDF.prestamo_herramienta(coddoc,correlativo)
+              .then(()=>{
+                res.send(fileName);
+              })
+              .catch(()=>{
+                res.send('error');
+              });
+
+          break;
+          
+        default:  
+          res.send('error');
+          break;
+      };
+
+
+});
+app.get("/download_pdf",function(req,res){
+      
+      const {filename} = req.query;
+
+      
+      res.download(path + `PDF/${filename}`);
+      
+
+});
 
 
 

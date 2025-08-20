@@ -56,6 +56,7 @@ function getView(){
                     <div class="row">
                         <div class="col-6">
                             <small class="negrita">${versionapp}</small>
+                           
                         </div>
                         <div class="col-6 text-right">
                             <button class="btn btn-info btn-circle hand btn-xl shadow" id="btnLogin">
@@ -198,6 +199,18 @@ function addListeners(){
     });
 
 
+    document.getElementById('btnPdf').addEventListener('click',()=>{
+
+        getPDF('PRESENT',1)
+        .then(()=>{
+
+        })
+        .catch(()=>{
+
+        })
+
+    })
+
 
 };
 
@@ -242,3 +255,7 @@ function login(u,p){
 
 
 };
+
+
+
+

@@ -1,12 +1,7 @@
-﻿
-
-function get_conf_token(token){
+﻿function get_conf_token(token){
 
 		//token = empresa que manda la solicitud (puede cambiarse entre empresas)
 		//let config = [];
-
-
-
 		
 		let config = {
 			user: process.env.DB_USER,
@@ -18,13 +13,10 @@ function get_conf_token(token){
     			encrypt: false, // for azure
     			trustServerCertificate: true // change to true for local dev / self-signed certs
   			}
-		};
-
-	
+		};	
 
 		return config;
 		
-
 }
 
 
@@ -70,6 +62,39 @@ let execute = {
 		  res.send('error')   
 		  sql.close();
 		}
+	},
+	QueryData : (sqlqry,token)=>{	
+		
+		let config = get_conf_token(token);
+
+		return new Promise((resolve,reject)=>{
+
+			try {
+				const pool1 = new sql.ConnectionPool(config, err => {
+					new sql.Request(pool1)
+					.query(sqlqry, (err, result) => {
+						if(err){
+							reject('error')							
+						}else{
+							resolve(result);
+						}					
+					})
+					sql.close();  
+				})
+				pool1.on('error', err => {
+					console.log('error sql = ' + err);
+					sql.close();
+					reject('error')
+				})
+				} catch (error) {
+					console.log(error);
+					sql.close();
+					reject('error')
+				}
+				
+		})
+
+		
 	}
 }
 

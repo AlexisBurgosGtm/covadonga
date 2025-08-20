@@ -59,6 +59,51 @@ let GF = {
         
 
         },
+        generar_pdf_documento:(coddoc,correlativo,tipo)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                        axios.post(GlobalUrlCalls + '/crear_pdf',
+                            {
+                                token:TOKEN,
+                                coddoc:coddoc,
+                                correlativo:correlativo,
+                                tipo:tipo
+                            })
+                        .then((response) => {
+                            if(response.status.toString()=='200'){
+                                let data = response.data;
+                                if(data.toString()=="error"){
+                                    reject();
+                                }else{
+                                    console.log(data);
+                                    resolve(data);
+                                }       
+                            }else{
+                                reject();
+                            }                   
+                        }, (_error) => {
+                            reject();
+                        });
+
+            })
+
+
+        },
+        descargar_pdf_documento:(filename)=>{
+             var downloadLink = document.createElement('a')
+            downloadLink.target = '_blank'
+            downloadLink.download = filename
+
+            var URL = window.location.origin //window.URL || window.webkitURL
+            
+            var downloadUrl = URL + '/download_pdf?filename=' + filename;
+            downloadLink.href = downloadUrl
+            document.body.append(downloadLink) // THIS LINE ISN'T NECESSARY
+            downloadLink.click()
+            document.body.removeChild(downloadLink);  // THIS LINE ISN'T NECESSARY
+           
+        },
         verify_serie_compra:(serie,numero)=>{
 
             return new Promise((resolve,reject)=>{

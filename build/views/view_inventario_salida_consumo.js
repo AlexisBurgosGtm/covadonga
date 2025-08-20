@@ -382,9 +382,9 @@ function addListeners(){
     //cargando empresas
 
 
-    //document.getElementById('cmbEmpresaEntrada').addEventListener('change',()=>{
-      //   cargar_proyectos();
-    //})
+    document.getElementById('cmbEmpresa').addEventListener('change',()=>{
+         cargar_proyectos();
+    })
 
 
     //carga de empleados

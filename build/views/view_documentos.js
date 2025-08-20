@@ -96,6 +96,7 @@ function getView(){
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                 </tr>
                             </thead>
                             <tbody id="tblDataDocumentos">
@@ -249,6 +250,7 @@ function tbl_movimientos(){
         let str = '';
         data.recordset.map((r)=>{
             let idbtnEliminar = `btnEliminar${r.ID}`;
+            let btnDownload = `btnDownload${r.ID}`
             str += `
             <tr>
                 <td>${r.EMPRESA}</td>
@@ -266,6 +268,12 @@ function tbl_movimientos(){
                 <td>${F.convertDateNormal(r.FECHA_RECIBE)}
                     <br>
                     <small class="negrita">${r.EMPRESA_ORIGEN}</small>
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-md btn-circle hand shadow" id="${btnDownload}"
+                    onclick="descargar_documento('${r.CODDOC}','${r.CORRELATIVO}','${tipo}','${btnDownload}')">
+                        <i class="fal fa-download"></i>
+                    </button>
                 </td>
                 <td>
                     <button class="btn btn-success btn-md btn-circle hand shadow"
@@ -370,3 +378,6 @@ function eliminar_documento(sucursal,coddoc,correlativo,idbtn){
     })
 
 };
+
+
+
