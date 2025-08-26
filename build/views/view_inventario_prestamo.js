@@ -734,7 +734,17 @@ function addListeners(){
                                 
                                 btnGuardar.disabled = false;
                                 btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+
+
+                                let coddocEnt = document.getElementById('cmbCoddocEnt').value;
+                                let correlativoEnt = document.getElementById('txtCorrelativoEnt').value;
+      
+                                GF.generar_pdf_documento(coddocEnt,correlativoEnt,'PRE')
+                                .then((documento)=>{
+                                    GF.descargar_pdf_documento(documento);
+                                })
                                 
+
                                 clean_data();
                                 
                             })

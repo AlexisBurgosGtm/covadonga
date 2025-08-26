@@ -6,7 +6,7 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                            ${view.vista_listado() + view.modal_detalle_documento()}
+                            ${view.vista_listado() + view.modal_detalle_documento() + view.modal_editar_compras()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
                             
@@ -128,7 +128,7 @@ function getView(){
         },
         modal_detalle_documento:()=>{
             return `
-              <div id="modal_detalle_documento" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+            <div id="modal_detalle_documento" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-right modal-xl">
                     <div class="modal-content">
                         <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
@@ -159,6 +159,85 @@ function getView(){
                                         <div class="form-group">
                                             <label class="negrita text-base">Observaciones</label>
                                             <textarea class="form-control border-base" rows="4" id="txtObs"></textarea>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+
+                                
+                            <div class="row">
+                                <button class="btn btn-secondary btn-circle btn-xl hand shadow" data-dismiss="modal">
+                                    <i class="fal fa-arrow-left"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            `
+        },
+        modal_editar_compras:()=>{
+            return `
+              <div id="modal_editar_compra" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-right modal-xl">
+                    <div class="modal-content">
+                        <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
+                            <h4 class="m-0 text-center color-white" id="">
+                                EDITAR COMPRAS
+                            </h4>
+                        </div>
+                        <div class="modal-body p-4">
+                            
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label>Proveedor</label>
+                                                <select class="form-control negrita" id="cmb_edit_compra_proveedor"  disabled="true">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label>Documento</label>
+                                                <div class="input-group">
+                                                    <input type="date" class="negrita form-control" disabled="true" id="txt_edit_compra_fecha">
+                                                    <input type="text" class="negrita form-control" disabled="true" id="txt_edit_compra_coddoc">
+                                                    <input type="text" class="negrita form-control" disabled="true" id="txt_edit_compra_correlativo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="table-responsive col-12">
+                                        <table class="table table-bordered h-full col-12">
+                                            <thead class="bg-base text-white">
+                                                <tr>
+                                                    <td>CODIGO</td>
+                                                    <td>PRODUCTO</td>
+                                                    <td>CANTIDAD</td>
+                                                    <td>COSTO</td>
+                                                    <td>TOTALCOSTO</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl_data_edit_compra"></tbody>
+                                        </table>
+
+                                        <div class="form-group">
+                                            <label class="negrita text-base">Observaciones</label>
+                                            <textarea class="form-control border-base" rows="4" id="txt_edit_compra_obs" disabled="true"></textarea>
                                         </div>
 
                                     </div>
@@ -226,6 +305,10 @@ function addListeners(){
 
     tbl_movimientos();
 
+
+    listener_edicion_documentos();
+
+
 };
 
 function initView(){
@@ -288,7 +371,8 @@ function tbl_movimientos(){
                     </button>
                 </td>
                 <td>
-                    <button class="btn btn-info btn-md btn-circle hand shadow">
+                    <button class="btn btn-info btn-md btn-circle hand shadow"
+                    onclick="get_edicion_documento('${r.EMPNIT}','${r.CODDOC}','${r.CORRELATIVO}','${tipo}')">
                         <i class="fal fa-edit"></i>
                     </button>
                 </td>
@@ -381,3 +465,99 @@ function eliminar_documento(sucursal,coddoc,correlativo,idbtn){
 
 
 
+// -----------------------------
+// EDICION DE DOCUMENTOS
+// -----------------------------
+
+function listener_edicion_documentos(){
+
+
+
+
+};
+function get_edicion_documento(sucursal,coddoc,correlativo,tipo){
+
+    /*
+        "ENT">ENTRADA DE INVENTARIO
+        "SAL">SALIDA DE INVENTARIO
+        "CON">SALIDA POR CONSUMO
+        "COM">COMPRAS
+        "PRS">PRESTAMO DE HERRAMIENTA
+    */
+
+    switch (tipo) {
+        case 'COM':
+           
+            cargar_compra(sucursal,coddoc,correlativo);
+
+            break;
+    
+        default:
+            F.AvisoError('Opcion en construccion');
+            break;
+    }
+
+
+};
+function cargar_compra(sucursal,coddoc,correlativo){
+
+        $("#modal_editar_compra").modal('show');
+
+
+        
+        let container = document.getElementById('modal_editar_compra');
+        container.innerHTML = GlobalLoader;
+
+        GF.data_detalle_documento(sucursal,coddoc,correlativo)
+        .then((data)=>{
+                let str = '';
+                let _codprov = '';
+                let _fecha = '';
+                let _coddoc = '';
+                let _correlativo = '';
+                let _obs = '';
+                data.recordset.map((r)=>{
+                    str += `
+                    <tr>
+                        <td>${r.CODPROD}</td>
+                        <td>${r.DESPROD}</td>
+                        <td>${r.CANTIDAD}</td>
+                        <td>${F.setMoneda(r.COSTO,'Q')}</td>
+                        <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                    </tr>
+                    `
+                    _codprov = r.CODPROV;
+                    _fecha = r.FECHA;
+                    _coddoc = r.CODDOC;
+                    _correlativo = r.CORRELATIVO;
+                    _obs = r.OBS
+                })
+                container.innerHTML = str;
+                
+                document.getElementById('cmb_edit_compra_proveedor').value = _codprov;
+                document.getElementById('txt_edit_compra_fecha').value = F.convertDateNormal(_fecha);
+                document.getElementById('txt_edit_compra_coddoc').value = _coddoc;
+                document.getElementById('txt_edit_compra_correlativo').value = _correlativo;
+                document.getElementById('txt_edit_compra_obs').value = F.limpiarTexto(_obs);
+                
+        })
+        .catch((err)=>{
+            console.log(err);
+
+            container.innerHTML = 'No se cargaron datos...';
+            document.getElementById('cmb_edit_compra_proveedor').value = '';
+            document.getElementById('txt_edit_compra_fecha').value = F.getFecha();
+            document.getElementById('txt_edit_compra_coddoc').value = '';
+            document.getElementById('txt_edit_compra_correlativo').value = '';
+            document.getElementById('txt_edit_compra_obs').value = ''; 
+        })
+
+
+   
+};
+
+
+
+// -----------------------------
+// EDICION DE DOCUMENTOS
+// -----------------------------

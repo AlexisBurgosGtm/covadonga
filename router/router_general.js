@@ -272,6 +272,51 @@ router.post("/select_detalle_documento", async(req,res)=>{
         const {sucursal,coddoc,correlativo} = req.body;
 
         let qry = `
+        SELECT  ORDERS.FECHA, 
+                ORDERS.HORA, 
+                ORDERS.CODPROYECTO, 
+                PROYECTOS.NOMPROYECTO AS PROYECTO, 
+                ORDERS.CODEMP_SOLICITA, 
+                EMPLEADOS.NOMEMP AS SOLICITA, 
+                ORDERS.CODEMP_RECIBE, 
+                EMPLEADOS_1.NOMEMP AS RECIBE, 
+                ORDERS.NO_ORDEN, 
+                ORDERS.OBS, 
+                ORDERS_DETAILS.CODPROD, 
+                ORDERS_DETAILS.DESPROD, 
+                ORDERS_DETAILS.CODMEDIDA, 
+                ORDERS_DETAILS.CANTIDAD, 
+                ORDERS_DETAILS.COSTO, 
+                ORDERS_DETAILS.TOTALCOSTO, 
+                ORDERS.EMPNIT_RECIBE, 
+                ORDERS.FECHA_RECIBE, 
+                ORDERS.FEL_UUDI, 
+                ORDERS.FEL_SERIE, 
+                ORDERS.FEL_NUMERO, 
+                ORDERS.FEL_FECHA, 
+                ORDERS.CODPROV, 
+                PROVEEDORES.NIT, 
+                PROVEEDORES.PROVEEDOR
+        FROM  PROYECTOS RIGHT OUTER JOIN
+                EMPLEADOS RIGHT OUTER JOIN
+                ORDERS LEFT OUTER JOIN
+                PROVEEDORES ON ORDERS.CODPROV = PROVEEDORES.CODPROV LEFT OUTER JOIN
+                EMPLEADOS AS EMPLEADOS_1 ON ORDERS.CODEMP_RECIBE = EMPLEADOS_1.CODEMP ON EMPLEADOS.CODEMP = ORDERS.CODEMP_SOLICITA ON PROYECTOS.CODPROYECTO = ORDERS.CODPROYECTO LEFT OUTER JOIN
+                ORDERS_DETAILS ON ORDERS.CORRELATIVO = ORDERS_DETAILS.CORRELATIVO AND ORDERS.CODDOC = ORDERS_DETAILS.CODDOC AND ORDERS.EMPNIT = ORDERS_DETAILS.EMPNIT
+        WHERE (ORDERS.EMPNIT = '${sucursal}') AND 
+                (ORDERS.CODDOC = '${coddoc}') AND 
+                (ORDERS.CORRELATIVO = ${correlativo});
+                `
+    
+           
+        execute.QueryToken(res,qry,'')
+
+});
+router.post("/BACKUP_select_detalle_documento", async(req,res)=>{
+
+        const {sucursal,coddoc,correlativo} = req.body;
+
+        let qry = `
         SELECT ORDERS.FECHA, ORDERS.HORA, 
                 ORDERS.CODPROYECTO, 
                 PROYECTOS.NOMPROYECTO AS PROYECTO, 
