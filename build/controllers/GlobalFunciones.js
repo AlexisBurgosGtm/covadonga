@@ -1657,6 +1657,39 @@ let GF = {
     
 
         },
+        update_campo_compra:(sucursal,coddoc,correlativo,campo,valor)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/update_campo_compra', {
+                    sucursal:sucursal,
+                    coddoc:coddoc,
+                    correlativo:correlativo,
+                    campo:campo,
+                    valor:valor
+                })
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
 };
 
 

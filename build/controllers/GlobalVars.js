@@ -20,6 +20,15 @@ let GlobalCodUsuario = 0;
 let selected_clasificacion = '';
 
 
+
+let _selected_coddoc='';
+let _selected_correlativo='';
+let _selected_empnit='';
+let _selected_fecha='';
+let _selected_codprov='';
+
+
+
 let data_config_general = [];
 
 function get_config(id){

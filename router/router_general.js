@@ -291,9 +291,9 @@ router.post("/select_detalle_documento", async(req,res)=>{
                 ORDERS.EMPNIT_RECIBE, 
                 ORDERS.FECHA_RECIBE, 
                 ORDERS.FEL_UUDI, 
-                ORDERS.FEL_SERIE, 
-                ORDERS.FEL_NUMERO, 
-                ORDERS.FEL_FECHA, 
+                ISNULL(ORDERS.FEL_SERIE,'') AS FEL_SERIE, 
+                ISNULL(ORDERS.FEL_NUMERO,'') AS FEL_NUMERO, 
+                ISNULL(ORDERS.FEL_FECHA,'') AS FEL_FECHA, 
                 ORDERS.CODPROV, 
                 PROVEEDORES.NIT, 
                 PROVEEDORES.PROVEEDOR
@@ -840,6 +840,61 @@ router.post("/verify_serie_compra", async(req,res)=>{
         WHERE FEL_SERIE='${serie}' AND FEL_NUMERO='${numero}';
         `
     
+        execute.QueryToken(res,qry,'')
+
+});
+
+
+
+//EDICION DE COMPRAS
+router.post("/update_campo_compra", async(req,res)=>{
+
+        const {sucursal,coddoc,correlativo,campo,valor} = req.body;
+
+        let qry = '';
+
+        switch (campo) {
+                case 'PROVEEDOR':
+                        qry = `UPDATE ORDERS SET CODPROV=${valor}
+                                WHERE CODDOC='${coddoc}' AND 
+                                        CORRELATIVO=${correlativo} AND
+                                        EMPNIT='${sucursal}'; `
+                        break;
+                case 'FEL_SERIE':
+                        qry = `UPDATE ORDERS SET FEL_SERIE='${valor}'
+                                WHERE CODDOC='${coddoc}' AND 
+                                        CORRELATIVO=${correlativo} AND
+                                        EMPNIT='${sucursal}'; `
+                        break;
+                case 'FEL_NUMERO':
+                        qry = `UPDATE ORDERS SET FEL_NUMERO='${valor}'
+                                WHERE CODDOC='${coddoc}' AND 
+                                        CORRELATIVO=${correlativo} AND
+                                        EMPNIT='${sucursal}'; `
+                        break;
+                case 'FECHA':
+                        qry = `UPDATE ORDERS SET FECHA='${valor}',
+                                        MES=MONTH('${valor}'),
+                                        ANIO=YEAR('${valor}')
+                                WHERE CODDOC='${coddoc}' AND 
+                                        CORRELATIVO=${correlativo} AND
+                                        EMPNIT='${sucursal}';
+                                UPDATE ORDERS_DETAILS SET 
+                                        MES=MONTH('${valor}'),
+                                        ANIO=YEAR('${valor}')
+                                WHERE CODDOC='${coddoc}' AND 
+                                        CORRELATIVO=${correlativo} AND
+                                        EMPNIT='${sucursal}'; `
+                        break;
+                case 'OBS':
+                        qry = `UPDATE ORDERS SET OBS='${valor}'
+                                WHERE CODDOC='${coddoc}' AND 
+                                        CORRELATIVO=${correlativo} AND
+                                        EMPNIT='${sucursal}'; `
+                        break;
+        }
+
+
         execute.QueryToken(res,qry,'')
 
 });

@@ -203,8 +203,13 @@ function getView(){
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label>Proveedor</label>
-                                                <select class="form-control negrita" id="cmb_edit_compra_proveedor"  disabled="true">
-                                                </select>
+                                                <div class="input-group">
+                                                    <select class="form-control negrita" id="cmb_edit_compra_proveedor">
+                                                    </select>
+                                                    <button class="btn btn-info btn-md hand shadow" id="btn_editar_compra_guardar_proveedor">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -218,6 +223,34 @@ function getView(){
                                             </div>
                                         </div>
                                     </div>
+                                    <br>
+                                    
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label>SERIE FEL</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="negrita form-control" id="txt_edit_compra_FEL_SERIE">
+                                                    <button class="btn btn-info btn-md hand shadow" id="btn_editar_compra_guardar_fel_serie">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label>NUMERO FEL</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="negrita form-control" id="txt_edit_compra_FEL_NUMERO">
+                                                    <button class="btn btn-info btn-md hand shadow" id="btn_editar_compra_guardar_proveedor_fel_numero">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+
 
                                     <div class="table-responsive col-12">
                                         <table class="table table-bordered h-full col-12">
@@ -237,7 +270,7 @@ function getView(){
 
                                         <div class="form-group">
                                             <label class="negrita text-base">Observaciones</label>
-                                            <textarea class="form-control border-base" rows="4" id="txt_edit_compra_obs" disabled="true"></textarea>
+                                            <textarea class="form-control border-base" rows="2" id="txt_edit_compra_obs" disabled="true"></textarea>
                                         </div>
 
                                     </div>
@@ -306,7 +339,8 @@ function addListeners(){
     tbl_movimientos();
 
 
-    listener_edicion_documentos();
+    //listeners para editar compras
+    listener_edicion_documentos_compras();
 
 
 };
@@ -469,8 +503,90 @@ function eliminar_documento(sucursal,coddoc,correlativo,idbtn){
 // EDICION DE DOCUMENTOS
 // -----------------------------
 
-function listener_edicion_documentos(){
+function listener_edicion_documentos_compras(){
 
+    
+
+    //carga el combo proveedores para edicion
+    GF.data_select_proveedores()
+    .then((data)=>{
+        let str = '';
+        data.recordset.map((r)=>{
+            str += `<option value='${r.CODPROV}'>${r.NIT}-${r.PROVEEDOR}</option>`; 
+        })
+        document.getElementById('cmb_edit_compra_proveedor').innerHTML = str;
+    })
+    .catch(()=>{
+         document.getElementById('cmb_edit_compra_proveedor').innerHTML = "<option value='0'>SIN PROVEEDOR</option>";
+    });
+
+
+
+
+    document.getElementById('btn_editar_compra_guardar_proveedor').addEventListener('click',()=>{
+        
+        let btn = document.getElementById('btn_editar_compra_guardar_proveedor');
+        let codprov = document.getElementById('cmb_edit_compra_proveedor').value;
+
+        btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
+
+        GF.update_campo_compra(_selected_empnit,_selected_coddoc,_selected_correlativo,'PROVEEDOR',codprov)
+        .then(()=>{
+            F.showToast('Proveedor actualizado');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+        
+        })
+        .catch(()=>{
+            F.showToast('Proveedor NO ACTUALIZADO');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+     
+        })
+    
+    });
+
+    document.getElementById('btn_editar_compra_guardar_fel_serie').addEventListener('click',()=>{
+        //txt_edit_compra_FEL_SERIE
+
+        let btn = document.getElementById('btn_editar_compra_guardar_fel_serie');
+        let valor = document.getElementById('txt_edit_compra_FEL_SERIE').value || '';
+
+        btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
+
+        GF.update_campo_compra(_selected_empnit,_selected_coddoc,_selected_correlativo,'FEL_SERIE',valor)
+        .then(()=>{
+            F.showToast('Serie FEL actualizada');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+        
+        })
+        .catch(()=>{
+            F.showToast('Serie FEL NO ACTUALIZADA');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+     
+        })
+
+    });
+
+    document.getElementById('btn_editar_compra_guardar_proveedor_fel_numero').addEventListener('click',()=>{
+        //txt_edit_compra_FEL_NUMERO
+
+         let btn = document.getElementById('btn_editar_compra_guardar_proveedor_fel_numero');
+        let valor = document.getElementById('txt_edit_compra_FEL_NUMERO').value || '';
+
+        btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
+
+        GF.update_campo_compra(_selected_empnit,_selected_coddoc,_selected_correlativo,'FEL_NUMERO',valor)
+        .then(()=>{
+            F.showToast('Numero FEL actualizado');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+        
+        })
+        .catch(()=>{
+            F.showToast('Numero FEL NO ACTUALIZADO');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+     
+        })
+
+    });
 
 
 
@@ -484,6 +600,9 @@ function get_edicion_documento(sucursal,coddoc,correlativo,tipo){
         "COM">COMPRAS
         "PRS">PRESTAMO DE HERRAMIENTA
     */
+   _selected_empnit=sucursal;
+   _selected_coddoc=coddoc;
+   _selected_correlativo=correlativo;
 
     switch (tipo) {
         case 'COM':
@@ -504,18 +623,20 @@ function cargar_compra(sucursal,coddoc,correlativo){
         $("#modal_editar_compra").modal('show');
 
 
+      
         
-        let container = document.getElementById('modal_editar_compra');
+        let container = document.getElementById('tbl_data_edit_compra');
         container.innerHTML = GlobalLoader;
 
         GF.data_detalle_documento(sucursal,coddoc,correlativo)
         .then((data)=>{
+                
                 let str = '';
                 let _codprov = '';
                 let _fecha = '';
-                let _coddoc = '';
-                let _correlativo = '';
+                let _fel_serie=''; let _fel_numero='';
                 let _obs = '';
+
                 data.recordset.map((r)=>{
                     str += `
                     <tr>
@@ -528,28 +649,38 @@ function cargar_compra(sucursal,coddoc,correlativo){
                     `
                     _codprov = r.CODPROV;
                     _fecha = r.FECHA;
-                    _coddoc = r.CODDOC;
-                    _correlativo = r.CORRELATIVO;
-                    _obs = r.OBS
-                })
+                    _obs = r.OBS;
+                    _fel_serie = r.FEL_SERIE;
+                    _fel_numero = r.FEL_NUMERO;
+
+                });
+
                 container.innerHTML = str;
                 
                 document.getElementById('cmb_edit_compra_proveedor').value = _codprov;
-                document.getElementById('txt_edit_compra_fecha').value = F.convertDateNormal(_fecha);
-                document.getElementById('txt_edit_compra_coddoc').value = _coddoc;
-                document.getElementById('txt_edit_compra_correlativo').value = _correlativo;
+               
+                document.getElementById('txt_edit_compra_coddoc').value = coddoc;
+                document.getElementById('txt_edit_compra_correlativo').value = correlativo;
                 document.getElementById('txt_edit_compra_obs').value = F.limpiarTexto(_obs);
+                document.getElementById('txt_edit_compra_fecha').value = _fecha.replace('T00:00:00.000Z',''); //F.convertDateNormal(_fecha);
+                document.getElementById('txt_edit_compra_FEL_SERIE').value = _fel_serie;
+                document.getElementById('txt_edit_compra_FEL_NUMERO').value = _fel_numero;
                 
         })
         .catch((err)=>{
+
             console.log(err);
 
             container.innerHTML = 'No se cargaron datos...';
+
             document.getElementById('cmb_edit_compra_proveedor').value = '';
             document.getElementById('txt_edit_compra_fecha').value = F.getFecha();
             document.getElementById('txt_edit_compra_coddoc').value = '';
             document.getElementById('txt_edit_compra_correlativo').value = '';
             document.getElementById('txt_edit_compra_obs').value = ''; 
+            document.getElementById('txt_edit_compra_FEL_SERIE').value = '';
+            document.getElementById('txt_edit_compra_FEL_NUMERO').value = '';
+             
         })
 
 
