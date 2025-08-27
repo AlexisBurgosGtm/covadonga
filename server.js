@@ -84,21 +84,34 @@ app.post("/crear_pdf",function(req,res){
      
       //ENT=ENTRADA INVENTARIO, CON=SALIDA CONSUMO, SAL=TRASLADO SALIDA, COM=COMPRAS,PRS=PRESTAMO SALIDA H, PRE=PRESTAMO ENTRADA H
 
-      let fileName = `prestamo_herramienta_${coddoc}_${correlativo}.pdf`;
+      let fileName = ``;
 
   
       switch (tipo) {
-        case 'PRE': //PRESTAMO ENTRADA HERRAMIENTA
+          case 'PRE': //PRESTAMO ENTRADA HERRAMIENTA
 
-              PDF.prestamo_herramienta(coddoc,correlativo)
-              .then(()=>{
-                res.send(fileName);
-              })
-              .catch(()=>{
-                res.send('error');
-              });
+                fileName = `prestamo_herramienta_${coddoc}_${correlativo}.pdf`;
+                PDF.prestamo_herramienta(coddoc,correlativo)
+                .then(()=>{
+                  res.send(fileName);
+                })
+                .catch(()=>{
+                  res.send('error');
+                });
 
-          break;
+              break;
+          case 'COM': //COMPRAS
+
+                fileName = `compra_${coddoc}_${correlativo}.pdf`;
+                PDF.compra(coddoc,correlativo)
+                .then(()=>{
+                  res.send(fileName);
+                })
+                .catch(()=>{
+                  res.send('error');
+                });
+
+            break;
           
         default:  
           res.send('error');

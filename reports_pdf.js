@@ -146,6 +146,148 @@ let PDF = {
         })
             
 
+    },
+    compra:(coddoc,correlativo)=>{
+
+        return new Promise((resolve,reject)=>{
+
+        
+                const PDFDocument = require('pdfkit');
+                const fs = require('fs');
+
+                // Crea una nueva instancia de PDFDocument
+                const doc = new PDFDocument({size: 'LETTER'});
+
+                // Define la ruta del archivo PDF que quieres reemplazar
+                const filePath = `./PDF/compra_${coddoc}_${correlativo}.pdf`;
+
+                // Crea un flujo de escritura para el archivo
+                const writeStream = fs.createWriteStream(filePath);
+
+                // Canaliza la salida del documento PDF al flujo de escritura
+                doc.pipe(writeStream);
+
+                //------------------------------------------------
+                // Contenido al documento
+                //------------------------------------------------
+                let qry = `
+                SELECT CONVERT(VARCHAR(10), ORDERS.FECHA, 103) AS FECHA, 
+                    ORDERS.HORA, PROYECTOS.NOMPROYECTO AS PROYECTO, 
+                    CONCAT(ISNULL(ORDERS.FEL_SERIE,''),' - ',ISNULL(ORDERS.FEL_NUMERO,'')) AS FACTURA_FEL, 
+                    ORDERS_DETAILS.CODPROD, 
+                    ORDERS_DETAILS.DESPROD, 
+                    ORDERS_DETAILS.CANTIDAD, 
+                    ORDERS_DETAILS.COSTO,
+                    ORDERS_DETAILS.TOTALCOSTO, 
+                    EMPLEADOS.NOMEMP AS EMPLEADO_RECIBE, 
+                    PROVEEDORES.PROVEEDOR
+                FROM     ORDERS LEFT OUTER JOIN
+                    PROVEEDORES ON ORDERS.CODPROV = PROVEEDORES.CODPROV LEFT OUTER JOIN
+                    PROYECTOS ON ORDERS.CODPROYECTO = PROYECTOS.CODPROYECTO LEFT OUTER JOIN
+                    EMPLEADOS ON ORDERS.CODEMP_RECIBE = EMPLEADOS.CODEMP LEFT OUTER JOIN
+                    ORDERS_DETAILS ON ORDERS.CORRELATIVO = ORDERS_DETAILS.CORRELATIVO AND ORDERS.CODDOC = ORDERS_DETAILS.CODDOC AND ORDERS.EMPNIT = ORDERS_DETAILS.EMPNIT
+                WHERE  (ORDERS.CODDOC = '${coddoc}') AND 
+                                (ORDERS.CORRELATIVO = ${correlativo});`;
+
+                execute.QueryData(qry)
+                .then((datos)=>{
+
+            
+
+                    let tbl_data = [];
+                    let fecha = ''; let hora = '';
+                    let factura_fel = '';
+                    let persona_cargo = '';
+                    let proyecto = '';
+                    let varTotal = 0;
+
+                    tbl_data.push(['PRODUCTO','CANTIDAD','COSTO','IMPORTE']);
+
+                    datos.recordset.map((r)=>{
+                            tbl_data.push([r.DESPROD, r.CANTIDAD.toString(), setMoneda(r.COSTO,'Q'),setMoneda(r.TOTALCOSTO,'Q')]);
+                           
+                            fecha = r.FECHA.toString();
+                            hora = r.HORA.toString();
+                            factura_fel = r.FACTURA_FEL;
+                            persona_cargo = r.PROVEEDOR;
+                            proyecto = r.PROYECTO;
+                            varTotal+=Number(r.TOTALCOSTO)
+                    });
+                
+                    console.log(fecha);
+                
+                    doc
+                        .fontSize(13)
+                        .text('Oficina COVADONGA', 100,50, {align: 'center'})
+                        .image('./favicon.png', 500,30, {
+                            fit: [50, 50],
+                            align: 'right',
+                            valign: 'right'
+                        })
+                        .fontSize(10)
+                        .text('Finca Covandonga, Nuevo San Carlos, Retalhuleu', {align: 'center'})
+                        .text('REGISTRO DE COMPRA', {align: 'center'});
+                       
+                    doc
+                        .fontSize(9)
+                        .text(`Fecha:  ${fecha} (Hora: ${hora})`,70,130)
+                        .text(`Documento sistema:  ${coddoc}-${correlativo}`,350,130)
+                        .text(`Proveedor: \n${persona_cargo}`,70,150)
+                        .text(`Factura Proveedor: \n${factura_fel}`,350,150)
+                    
+                    doc.fontSize(10);    
+                    doc.text('',70,240);
+
+                    doc.table({
+                            data: tbl_data
+                        });
+                    doc
+                        .moveDown()
+                        .moveDown()
+                        .moveDown()
+                        .moveDown();
+                    doc
+                        .fontSize(11)
+                        .text(`Total Compra: ${setMoneda(varTotal,'Q')}`,{align:'right'});
+                       
+                    
+                    doc
+                        .fontSize(10)
+                        .text('__________________________________',70,685)
+                        .text('Nombre y Firma Autorizada',70,700)
+                        .text('__________________________________',350,685)
+                        .text('Nombre y Firma de quien Recibe',350,700,{align:'center'});
+                   
+                                            
+
+                    //------------------------------------------------
+                    // Contenido al documento
+                    //------------------------------------------------
+
+                    // Finaliza el documento y el flujo
+                    doc.end();
+
+                    // Maneja el evento 'finish' para confirmar que el archivo se ha guardado
+                    writeStream.on('finish', () => {
+                        console.log(`Archivo PDF reemplazado en: ${filePath}`);
+                        resolve();
+                    });
+
+                    // Maneja errores en la escritura del archivo
+                    writeStream.on('error', (err) => {
+                        console.error('Error al guardar el archivo:', err);
+                        reject();
+                    });
+
+                    
+                })
+                .catch(()=>{
+                    reject();
+                })     
+           
+        })
+            
+
     }
 };
 
