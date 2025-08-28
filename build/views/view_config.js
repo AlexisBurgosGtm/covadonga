@@ -110,6 +110,16 @@ function getView(){
                                     </select>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>
+                                    <label class="negrita text-base">Elimina los pdfs ya generados</label>
+                                </td>
+                                <td>
+                                    <button class="btn btn-md form-control btn-outline-danger hand shadow" id="btnEliminarCachePdf">
+                                        <i class="fal fa-trash"></i>&nbsp Eliminar PDFs
+                                    </button>
+                                </td>
+                            </tr>
 
                         </tbody>
                     </table>
@@ -510,6 +520,24 @@ function addListeners(){
 
     });
 
+
+    let btnEliminarCachePdf = document.getElementById('btnEliminarCachePdf');
+    btnEliminarCachePdf.addEventListener('click',()=>{
+
+            btnEliminarCachePdf.disabled = true;
+            
+            
+            GF.get_data_config()
+            .then(()=>{
+                
+                 btnEliminarCachePdf.disabled = false;
+
+                 F.showToast('Cache limpiado exitosamente!!');
+
+            })
+            
+
+    });
 
 
 

@@ -112,6 +112,18 @@ app.post("/crear_pdf",function(req,res){
                 });
 
             break;
+          case 'ENT': //ENTRADA A BODEGA
+
+                fileName = `entrada_bodega_${coddoc}_${correlativo}.pdf`;
+                PDF.entrada_bodega(coddoc,correlativo)
+                .then(()=>{
+                  res.send(fileName);
+                })
+                .catch(()=>{
+                  res.send('error');
+                });
+
+            break;
           
         default:  
           res.send('error');
@@ -124,12 +136,23 @@ app.get("/download_pdf",function(req,res){
       
       const {filename} = req.query;
 
-      
       res.download(path + `PDF/${filename}`);
       
-
 });
 
+app.get("/config_eliminar_cache_pdf",function(req,res){
+      
+      //const {filename} = req.query;
+
+      PDF.config_eliminar_archivos()
+      .then(()=>{
+        
+          res.send('ok');
+      
+      })
+
+      
+});
 
 
 

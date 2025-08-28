@@ -282,6 +282,7 @@ router.post("/select_detalle_documento", async(req,res)=>{
                 EMPLEADOS_1.NOMEMP AS RECIBE, 
                 ORDERS.NO_ORDEN, 
                 ORDERS.OBS, 
+                ORDERS_DETAILS.ID,
                 ORDERS_DETAILS.CODPROD, 
                 ORDERS_DETAILS.DESPROD, 
                 ORDERS_DETAILS.CODMEDIDA, 
@@ -845,15 +846,47 @@ router.post("/verify_serie_compra", async(req,res)=>{
 });
 
 
+//EDITAR DOCUMENTOS
+router.post("/delete_item_docproductos", async(req,res)=>{
+
+        const {sucursal,coddoc,correlativo,id} = req.body;
+
+        let qry_delete_item = `
+        DELETE 
+                FROM ORDERS_DETAILS
+                WHERE 
+                        CODDOC='${coddoc}' 
+                        AND CORRELATIVO=${correlativo}
+                        AND ID=${id};
+        `
+
+        let qry_update_documentos = `
+        UPDATE ORDERS SET 
+                TOTALCOSTO= (SELECT SUM(TOTALCOSTO) AS TOTALCOSTO FROM ORDERS_DETAILS 
+                        WHERE CODDOC='${coddoc}' AND CORRELATIVO=${correlativo})
+                WHERE ORDERS.CODDOC='${coddoc}' AND ORDERS.CORRELATIVO=${correlativo};
+        `
+    
+        let qry = qry_delete_item + qry_update_documentos;
+
+        execute.QueryToken(res,qry,'')
+
+});
+
 
 //EDICION DE COMPRAS
-router.post("/update_campo_compra", async(req,res)=>{
+router.post("/update_campo_documento", async(req,res)=>{
 
         const {sucursal,coddoc,correlativo,campo,valor} = req.body;
 
         let qry = '';
 
         switch (campo) {
+                case 'CODPROYECTO':
+                        qry = `UPDATE ORDERS SET CODPROYECTO=${valor}
+                                WHERE CODDOC='${coddoc}' AND 
+                                        CORRELATIVO=${correlativo} AND
+                                        EMPNIT='${sucursal}'; `
                 case 'PROVEEDOR':
                         qry = `UPDATE ORDERS SET CODPROV=${valor}
                                 WHERE CODDOC='${coddoc}' AND 
@@ -898,6 +931,8 @@ router.post("/update_campo_compra", async(req,res)=>{
         execute.QueryToken(res,qry,'')
 
 });
+
+
 
 
 

@@ -6,7 +6,7 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                            ${view.vista_listado() + view.modal_detalle_documento() + view.modal_editar_compras()}
+                            ${view.vista_listado() + view.modal_detalle_documento() + view.modal_editar_compras() + view.modal_editar_entrada_bodega()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
                             
@@ -48,13 +48,20 @@ function getView(){
                          
                             <div class="form-group">
                                 <label class="negrita text-secondary">Tipo Documento</label>
-                                <select class="negrita text-danger form-control" id="cmbTipo">
-                                    <option value="ENT">ENTRADA DE INVENTARIO</option>
-                                    <option value="SAL">SALIDA DE INVENTARIO</option>
-                                    <option value="CON">SALIDA POR CONSUMO</option>
-                                    <option value="COM">COMPRAS</option>
-                                    <option value="PRS">PRESTAMO DE HERRAMIENTA</option>
-                                </select>
+                                <div class="input-group">
+                                    <select class="negrita text-danger form-control" id="cmbTipo">
+                                        <option value="ENT">ENTRADA DE INVENTARIO</option>
+                                        <option value="SAL">SALIDA DE INVENTARIO</option>
+                                        <option value="CON">SALIDA POR CONSUMO</option>
+                                        <option value="COM">COMPRAS</option>
+                                        <option value="PRS">PRESTAMO DE HERRAMIENTA</option>
+                                    </select>
+                                    <button class="btn btn-md btn-success hand shadow"
+                                    onclick="tbl_movimientos()">
+                                        <i class="fal fa-sync"></i>
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -84,7 +91,7 @@ function getView(){
                             oninput="F.FiltrarTabla('tblDocumentos','txtBuscar')">
                         </div>
 
-                        <table class="table table-responsive table-hover col-12" id="tblDocumentos">
+                        <table class="table h-full table-hover col-12" id="tblDocumentos">
                             <thead class="bg-base text-white">
                                 <tr>
                                     <td>BODEGA</td>
@@ -200,7 +207,7 @@ function getView(){
                                 <div class="card-body p-4">
 
                                     <div class="row">
-                                        <div class="col-6">
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
                                             <div class="form-group">
                                                 <label>Proveedor</label>
                                                 <div class="input-group">
@@ -212,11 +219,11 @@ function getView(){
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
                                             <div class="form-group">
                                                 <label>Documento</label>
                                                 <div class="input-group">
-                                                    <input type="date" class="negrita form-control" disabled="true" id="txt_edit_compra_fecha">
+                                                    
                                                     <input type="text" class="negrita form-control" disabled="true" id="txt_edit_compra_coddoc">
                                                     <input type="text" class="negrita form-control" disabled="true" id="txt_edit_compra_correlativo">
                                                 </div>
@@ -226,7 +233,20 @@ function getView(){
                                     <br>
                                     
                                     <div class="row">
-                                        <div class="col-6">
+                                        
+                                        <div class="col-sm-12 col-lg-4 col-xl-4 col-md-4">
+                                            <div class="form-group">
+                                                <label>FECHA DOCUMENTO</label>
+                                                <div class="input-group">
+                                                    <input type="date" class="negrita form-control" id="txt_edit_compra_fecha">
+                                                    <button class="btn btn-info btn-md hand shadow" id="btn_editar_compra_guardar_fecha">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 col-lg-4 col-xl-4 col-md-4">
                                             <div class="form-group">
                                                 <label>SERIE FEL</label>
                                                 <div class="input-group">
@@ -237,7 +257,7 @@ function getView(){
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-sm-12 col-lg-4 col-xl-4 col-md-4">
                                             <div class="form-group">
                                                 <label>NUMERO FEL</label>
                                                 <div class="input-group">
@@ -271,6 +291,121 @@ function getView(){
                                         <div class="form-group">
                                             <label class="negrita text-base">Observaciones</label>
                                             <textarea class="form-control border-base" rows="2" id="txt_edit_compra_obs" disabled="true"></textarea>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+
+                                
+                            <div class="row">
+                                <button class="btn btn-secondary btn-circle btn-xl hand shadow" data-dismiss="modal">
+                                    <i class="fal fa-arrow-left"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            `
+        },
+        modal_editar_entrada_bodega:()=>{
+            return `
+              <div id="modal_editar_entrada_bodega" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-right modal-xl">
+                    <div class="modal-content">
+                        <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
+                            <h4 class="m-0 text-center color-white" id="">
+                                EDITAR ENTRADAS DE BODEGA
+                            </h4>
+                        </div>
+                        <div class="modal-body p-4">
+                            
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+
+                                    <div class="row">
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>Proyecto/Area</label>
+                                                <div class="input-group">
+                                                    <select class="form-control negrita" id="cmb_edit_entbod_proyecto">
+                                                    </select>
+                                                    <button class="btn btn-info btn-md hand shadow" id="btn_editar_entbod_guardar_proyecto">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>Documento</label>
+                                                <div class="input-group">
+                                                    
+                                                    <input type="text" class="negrita form-control" disabled="true" id="txt_edit_entbod_coddoc">
+                                                    <input type="text" class="negrita form-control" disabled="true" id="txt_edit_entbod_correlativo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    
+                                    <div class="row">
+                                        
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>FECHA DOCUMENTO</label>
+                                                <div class="input-group">
+                                                    <input type="date" class="negrita form-control" id="txt_edit_entbod_fecha">
+                                                    <button class="btn btn-info btn-md hand shadow" id="btn_editar_entbod_guardar_fecha">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>RECIBE</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="negrita form-control" disabled="true" id="txt_edit_entbod_recibe">
+                                                    <button class="btn btn-info btn-md hand shadow hidden" id="btn_editar_entbod_guardar_recibe">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <br>
+
+
+                                    <div class="table-responsive col-12">
+                                        <table class="table table-bordered h-full col-12">
+                                            <thead class="bg-base text-white">
+                                                <tr>
+                                                    <td>CODIGO</td>
+                                                    <td>PRODUCTO</td>
+                                                    <td>CANTIDAD</td>
+                                                    <td>COSTO</td>
+                                                    <td>TOTALCOSTO</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl_data_edit_entrada_bodega"></tbody>
+                                        </table>
+
+                                        <div class="form-group">
+                                            <label class="negrita text-base">Observaciones</label>
+                                            <textarea class="form-control border-base" rows="2" id="txt_edit_entbod_obs" disabled="true"></textarea>
                                         </div>
 
                                     </div>
@@ -341,7 +476,8 @@ function addListeners(){
 
     //listeners para editar compras
     listener_edicion_documentos_compras();
-
+    //edicion de entrada bodega
+    listeners_edicion_entrada_bodega();
 
 };
 
@@ -530,7 +666,7 @@ function listener_edicion_documentos_compras(){
 
         btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
 
-        GF.update_campo_compra(_selected_empnit,_selected_coddoc,_selected_correlativo,'PROVEEDOR',codprov)
+        GF.update_campo_documento(_selected_empnit,_selected_coddoc,_selected_correlativo,'PROVEEDOR',codprov)
         .then(()=>{
             F.showToast('Proveedor actualizado');
             btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
@@ -552,7 +688,7 @@ function listener_edicion_documentos_compras(){
 
         btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
 
-        GF.update_campo_compra(_selected_empnit,_selected_coddoc,_selected_correlativo,'FEL_SERIE',valor)
+        GF.update_campo_documento(_selected_empnit,_selected_coddoc,_selected_correlativo,'FEL_SERIE',valor)
         .then(()=>{
             F.showToast('Serie FEL actualizada');
             btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
@@ -574,7 +710,7 @@ function listener_edicion_documentos_compras(){
 
         btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
 
-        GF.update_campo_compra(_selected_empnit,_selected_coddoc,_selected_correlativo,'FEL_NUMERO',valor)
+        GF.update_campo_documento(_selected_empnit,_selected_coddoc,_selected_correlativo,'FEL_NUMERO',valor)
         .then(()=>{
             F.showToast('Numero FEL actualizado');
             btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
@@ -588,16 +724,132 @@ function listener_edicion_documentos_compras(){
 
     });
 
+    document.getElementById('btn_editar_compra_guardar_fecha').addEventListener('click',()=>{
+       
+        let btn = document.getElementById('btn_editar_compra_guardar_fecha');
+        let valor = F.devuelveFecha('txt_edit_compra_fecha');
+
+        btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
+
+        GF.update_campo_documento(_selected_empnit,_selected_coddoc,_selected_correlativo,'FECHA',valor)
+        .then(()=>{
+            F.showToast('Fecha actualizada');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+        
+        })
+        .catch(()=>{
+            F.showToast('Fecha NO ACTUALIZADA');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+     
+        })
+
+    });
+
 
 
 };
+function listeners_edicion_entrada_bodega(){
+
+
+    
+    document.getElementById('btn_editar_entbod_guardar_proyecto').addEventListener('click',()=>{
+        
+        let btn = document.getElementById('btn_editar_entbod_guardar_proyecto');
+        let codprov = document.getElementById('cmb_edit_entbod_proyecto').value;
+
+        btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
+
+        GF.update_campo_documento(_selected_empnit,_selected_coddoc,_selected_correlativo,'PROYECTO',codprov)
+        .then(()=>{
+            F.showToast('Proyecto/Area actualizado');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+        
+        })
+        .catch(()=>{
+            F.showToast('Proyecto/Area NO ACTUALIZADO');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+     
+        })
+    
+    });
+
+    document.getElementById('btn_editar_entbod_guardar_fecha').addEventListener('click',()=>{
+       
+        let btn = document.getElementById('btn_editar_entbod_guardar_fecha');
+        let valor = F.devuelveFecha('txt_edit_entbod_fecha');
+
+        btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
+
+        GF.update_campo_documento(_selected_empnit,_selected_coddoc,_selected_correlativo,'FECHA',valor)
+        .then(()=>{
+            F.showToast('Fecha actualizada');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+        
+        })
+        .catch(()=>{
+            F.showToast('Fecha NO ACTUALIZADA');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+     
+        })
+
+    });
+
+
+
+};
+function cargar_proyectos(sucursal){
+    
+    return new Promise((resolve,reject)=>{
+
+            let tipo = document.getElementById('cmbTipo').value;
+            let idcontainer ='';
+
+            switch (tipo) {
+                case 'ENT': //ENTRADA A BODEGA
+                    idcontainer = 'cmb_edit_entbod_proyecto';
+                    break;
+                case 'CON': //SALIDA POR CONSUMO
+                    idcontainer = '';
+                    break;
+                case 'SAL': //TRASLADO SALIDA A OTRA BODEGA
+                    idcontainer = '';
+                    break;
+            }
+
+            //cargando proyectos
+            GF.data_listado_proyectos(sucursal)
+            .then((data)=>{
+                
+                let str = '';
+
+                data.recordset.map((r)=>{
+                    str += `
+                    <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO}</option>
+                    `
+                })
+                document.getElementById(idcontainer).innerHTML = str;
+                resolve();
+
+            })
+            .catch(()=>{
+                document.getElementById(idcontainer).innerHTML = "<option value='0'>Sin areas/proyectos cargados</option>";
+                reject();
+            });
+
+    });
+
+    
+
+};
+
+
 function get_edicion_documento(sucursal,coddoc,correlativo,tipo){
 
     /*
         "ENT">ENTRADA DE INVENTARIO
         "SAL">SALIDA DE INVENTARIO
         "CON">SALIDA POR CONSUMO
-        "COM">COMPRAS
+        x "COM">COMPRAS
         "PRS">PRESTAMO DE HERRAMIENTA
     */
    _selected_empnit=sucursal;
@@ -605,11 +857,17 @@ function get_edicion_documento(sucursal,coddoc,correlativo,tipo){
    _selected_correlativo=correlativo;
 
     switch (tipo) {
+        case 'ENT':
+           
+            cargar_entrada_bodega(sucursal,coddoc,correlativo);
+
+            break;
         case 'COM':
            
             cargar_compra(sucursal,coddoc,correlativo);
 
             break;
+        
     
         default:
             F.AvisoError('Opcion en construccion');
@@ -618,11 +876,45 @@ function get_edicion_documento(sucursal,coddoc,correlativo,tipo){
 
 
 };
+function eliminar_item_documento(coddoc,correlativo,iditem,idbtn,idrowtabla){
+
+
+    let btn = document.getElementById(idbtn);
+
+  
+    
+    F.Confirmacion('¿Está seguro que desea ELIMINAR este item?')
+    .then((value)=>{
+        if(value==true){
+
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fal fa-trash fa-spin"></i>`;
+
+                GF.delete_item_documento(_selected_empnit,coddoc,correlativo,iditem)
+                .then(()=>{
+                    F.showToast('Item eliminado exitosamente!!');
+                    document.getElementById(idrowtabla).remove();
+                })
+                .catch(()=>{
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fal fa-trash"></i>`;
+    
+                })
+
+
+        }
+    })
+
+    
+
+
+};
+
+
 function cargar_compra(sucursal,coddoc,correlativo){
 
+  
         $("#modal_editar_compra").modal('show');
-
-
       
         
         let container = document.getElementById('tbl_data_edit_compra');
@@ -638,13 +930,25 @@ function cargar_compra(sucursal,coddoc,correlativo){
                 let _obs = '';
 
                 data.recordset.map((r)=>{
+                    let idBtnEliminar = `idBtnEliminarItem${r.ID}`;
+                    let idrowtabla = `row_compras_${r.ID}`;
                     str += `
-                    <tr>
+                    <tr id="${idrowtabla}">
                         <td>${r.CODPROD}</td>
                         <td>${r.DESPROD}</td>
                         <td>${r.CANTIDAD}</td>
                         <td>${F.setMoneda(r.COSTO,'Q')}</td>
                         <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-md btn-circle hand shadow"
+                            onclick="eliminar_item_documento('${coddoc}','${correlativo}','${r.ID}','${idBtnEliminar}','${idrowtabla}')"
+                            id="${idBtnEliminar}">
+                                <i class="fal fa-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                     `
                     _codprov = r.CODPROV;
@@ -680,6 +984,87 @@ function cargar_compra(sucursal,coddoc,correlativo){
             document.getElementById('txt_edit_compra_obs').value = ''; 
             document.getElementById('txt_edit_compra_FEL_SERIE').value = '';
             document.getElementById('txt_edit_compra_FEL_NUMERO').value = '';
+             
+        })
+
+
+   
+};
+
+function cargar_entrada_bodega(sucursal,coddoc,correlativo){
+
+  
+        $("#modal_editar_entrada_bodega").modal('show');
+      
+        
+        let container = document.getElementById('tbl_data_edit_entrada_bodega');
+        container.innerHTML = GlobalLoader;
+
+        
+
+        GF.data_detalle_documento(sucursal,coddoc,correlativo)
+        .then((data)=>{
+                
+                let str = '';
+                let _codprov = '';
+                let _fecha = '';
+                let _recibe=''; 
+                let _obs = '';
+
+                data.recordset.map((r)=>{
+                    let idBtnEliminar = `idBtnEliminarItemEntBod${r.ID}`;
+                    let idrowtabla = `row_entbod_${r.ID}`;
+                    str += `
+                    <tr id="${idrowtabla}">
+                        <td>${r.CODPROD}</td>
+                        <td>${r.DESPROD}</td>
+                        <td>${r.CANTIDAD}</td>
+                        <td>${F.setMoneda(r.COSTO,'Q')}</td>
+                        <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-md btn-circle hand shadow"
+                            onclick="eliminar_item_documento('${coddoc}','${correlativo}','${r.ID}','${idBtnEliminar}','${idrowtabla}')"
+                            id="${idBtnEliminar}">
+                                <i class="fal fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    `
+                    _codprov = r.CODPROYECTO;
+                    _fecha = r.FECHA;
+                    _obs = r.OBS;
+                    _recibe = r.RECIBE;
+                   
+                });
+
+                container.innerHTML = str;
+                
+                cargar_proyectos(sucursal)
+                .then(()=>{
+                    document.getElementById('cmb_edit_entbod_proyecto').value = _codprov;
+                });
+                
+                document.getElementById('txt_edit_entbod_coddoc').value = coddoc;
+                document.getElementById('txt_edit_entbod_correlativo').value = correlativo;
+                document.getElementById('txt_edit_entbod_obs').value = F.limpiarTexto(_obs);
+                document.getElementById('txt_edit_entbod_fecha').value = _fecha.replace('T00:00:00.000Z',''); 
+                document.getElementById('txt_edit_entbod_recibe').value = _recibe;
+        })
+        .catch((err)=>{
+
+            console.log(err);
+
+            container.innerHTML = 'No se cargaron datos...';
+
+            document.getElementById('cmb_edit_entbod_proyecto').value = '';
+            document.getElementById('txt_edit_entbod_coddoc').value = '';
+            document.getElementById('txt_edit_entbod_correlativo').value = '';
+            document.getElementById('txt_edit_entbod_obs').value ='';
+            document.getElementById('txt_edit_entbod_fecha').value = ''; 
+            document.getElementById('txt_edit_entbod_recibe').value = '';
              
         })
 

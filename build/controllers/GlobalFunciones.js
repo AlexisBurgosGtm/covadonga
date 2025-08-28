@@ -59,6 +59,31 @@ let GF = {
         
 
         },
+        get_data_config:()=>{
+
+                return new Promise((resolve,reject)=>{
+
+                    axios.get(GlobalUrlCalls + '/config_eliminar_cache_pdf')
+                    .then((response) => {
+
+                        if(response.status.toString()=='200'){
+                            let data = response.data;
+                            if(data.toString()=="error"){
+                                reject();
+                            }else{
+                               resolve();
+                            }       
+                        }else{
+                            reject();
+                        }
+
+                    }, (_error) => {
+                        reject();
+                    });
+                }) 
+        
+
+        },
         generar_pdf_documento:(coddoc,correlativo,tipo)=>{
 
             return new Promise((resolve,reject)=>{
@@ -1657,16 +1682,48 @@ let GF = {
     
 
         },
-        update_campo_compra:(sucursal,coddoc,correlativo,campo,valor)=>{
+        update_campo_documento:(sucursal,coddoc,correlativo,campo,valor)=>{
 
             return new Promise((resolve,reject)=>{
 
-                axios.post(GlobalUrlCalls + '/general/update_campo_compra', {
+                axios.post(GlobalUrlCalls + '/general/update_campo_documento', {
                     sucursal:sucursal,
                     coddoc:coddoc,
                     correlativo:correlativo,
                     campo:campo,
                     valor:valor
+                })
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+                        if(data.toString()=="error"){
+                            reject();
+                        }else{
+                            if(Number(data.rowsAffected[0])>0){
+                                resolve(data);             
+                            }else{
+                                reject();
+                            } 
+                        }       
+                    }else{
+                        reject();
+                    }                   
+                }, (_error) => {
+                    reject();
+                });
+            }) 
+    
+
+        },
+        delete_item_documento:(sucursal,coddoc,correlativo,id)=>{
+
+            return new Promise((resolve,reject)=>{
+
+                axios.post(GlobalUrlCalls + '/general/delete_item_docproductos', {
+                    sucursal:sucursal,
+                    coddoc:coddoc,
+                    correlativo:correlativo,
+                    id:id
                 })
                 .then((response) => {
                     if(response.status.toString()=='200'){
