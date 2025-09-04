@@ -81,13 +81,24 @@ app.get("/login",function(req,res){
 app.post("/crear_pdf",function(req,res){
       
       const {coddoc,correlativo,tipo} = req.body;
-     
-      //ENT=ENTRADA INVENTARIO, CON=SALIDA CONSUMO, SAL=TRASLADO SALIDA, COM=COMPRAS,PRS=PRESTAMO SALIDA H, PRE=PRESTAMO ENTRADA H
+
 
       let fileName = ``;
 
   
       switch (tipo) {
+          case 'PRS': //PRESTAMO SALIDA HERRAMIENTA
+
+                fileName = `prestamo_herramienta_salida_${coddoc}_${correlativo}.pdf`;
+                PDF.prestamo_herramienta_salida(coddoc,correlativo)
+                .then(()=>{
+                  res.send(fileName);
+                })
+                .catch(()=>{
+                  res.send('error');
+                });
+
+              break;
           case 'PRE': //PRESTAMO ENTRADA HERRAMIENTA
 
                 fileName = `prestamo_herramienta_${coddoc}_${correlativo}.pdf`;
@@ -116,6 +127,30 @@ app.post("/crear_pdf",function(req,res){
 
                 fileName = `entrada_bodega_${coddoc}_${correlativo}.pdf`;
                 PDF.entrada_bodega(coddoc,correlativo)
+                .then(()=>{
+                  res.send(fileName);
+                })
+                .catch(()=>{
+                  res.send('error');
+                });
+
+            break;
+          case 'CON': //SALIDA POR CONSUMO
+
+                fileName = `salida_consumo_${coddoc}_${correlativo}.pdf`;
+                PDF.salida_consumo(coddoc,correlativo)
+                .then(()=>{
+                  res.send(fileName);
+                })
+                .catch(()=>{
+                  res.send('error');
+                });
+
+            break;
+          case 'SAL': //SALIDA POR TRASLADO
+
+                fileName = `salida_traslado_${coddoc}_${correlativo}.pdf`;
+                PDF.salida_traslado(coddoc,correlativo)
                 .then(()=>{
                   res.send(fileName);
                 })

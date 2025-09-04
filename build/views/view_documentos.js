@@ -6,7 +6,7 @@ function getView(){
                 <div class="col-12 p-0 bg-white">
                     <div class="tab-content" id="myTabHomeContent">
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="receta-tab">
-                            ${view.vista_listado() + view.modal_detalle_documento() + view.modal_editar_compras() + view.modal_editar_entrada_bodega()}
+                            ${view.vista_listado() + view.modal_detalle_documento() + view.modal_editar_compras() + view.modal_editar_entrada_bodega() + view.modal_editar_salida_consumo() + view.modal_editar_salida_traslado()}
                         </div>
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
                             
@@ -431,6 +431,236 @@ function getView(){
             </div>
             `
         },
+        modal_editar_salida_consumo:()=>{
+            return `
+              <div id="modal_editar_salida_consumo" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-right modal-xl">
+                    <div class="modal-content">
+                        <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
+                            <h4 class="m-0 text-center color-white" id="">
+                                EDITAR SALIDA POR CONSUMO
+                            </h4>
+                        </div>
+                        <div class="modal-body p-4">
+                            
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+
+                                    <div class="row">
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>Proyecto/Area</label>
+                                                <div class="input-group">
+                                                    <select class="form-control negrita" id="cmb_edit_salcons_proyecto">
+                                                    </select>
+                                                    <button class="btn btn-info btn-md hand shadow" id="btn_editar_salcons_guardar_proyecto">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>Documento</label>
+                                                <div class="input-group">
+                                                    
+                                                    <input type="text" class="negrita form-control" disabled="true" id="txt_edit_salcons_coddoc">
+                                                    <input type="text" class="negrita form-control" disabled="true" id="txt_edit_salcons_correlativo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    
+                                    <div class="row">
+                                        
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>FECHA DOCUMENTO</label>
+                                                <div class="input-group">
+                                                    <input type="date" class="negrita form-control" id="txt_edit_salcons_fecha">
+                                                    <button class="btn btn-info btn-md hand shadow" id="btn_editar_salcons_guardar_fecha">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>RECIBE</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="negrita form-control" disabled="true" id="txt_edit_salcons_recibe">
+                                                    <button class="btn btn-info btn-md hand shadow hidden" id="btn_editar_salcons_guardar_recibe">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <br>
+
+
+                                    <div class="table-responsive col-12">
+                                        <table class="table table-bordered h-full col-12">
+                                            <thead class="bg-base text-white">
+                                                <tr>
+                                                    <td>CODIGO</td>
+                                                    <td>PRODUCTO</td>
+                                                    <td>CANTIDAD</td>
+                                                    <td>COSTO</td>
+                                                    <td>TOTALCOSTO</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl_data_edit_salcons"></tbody>
+                                        </table>
+
+                                        <div class="form-group">
+                                            <label class="negrita text-base">Observaciones</label>
+                                            <textarea class="form-control border-base" rows="2" id="txt_edit_salcons_obs" disabled="true"></textarea>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+
+                                
+                            <div class="row">
+                                <button class="btn btn-secondary btn-circle btn-xl hand shadow" data-dismiss="modal">
+                                    <i class="fal fa-arrow-left"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            `
+        },
+        modal_editar_salida_traslado:()=>{
+            return `
+              <div id="modal_editar_salida_traslado" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-right modal-xl">
+                    <div class="modal-content">
+                        <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
+                            <h4 class="m-0 text-center color-white" id="">
+                                EDITAR SALIDA POR TRASLADO
+                            </h4>
+                        </div>
+                        <div class="modal-body p-4">
+                            
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+
+                                    <div class="row">
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>Proyecto/Area</label>
+                                                <div class="input-group">
+                                                    <select class="form-control negrita" id="cmb_edit_saltras_proyecto">
+                                                    </select>
+                                                    <button class="btn btn-info btn-md hand shadow" id="btn_editar_saltras_guardar_proyecto">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>Documento</label>
+                                                <div class="input-group">
+                                                    
+                                                    <input type="text" class="negrita form-control" disabled="true" id="txt_edit_saltras_coddoc">
+                                                    <input type="text" class="negrita form-control" disabled="true" id="txt_edit_saltras_correlativo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    
+                                    <div class="row">
+                                        
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>FECHA DOCUMENTO</label>
+                                                <div class="input-group">
+                                                    <input type="date" class="negrita form-control" id="txt_edit_saltras_fecha">
+                                                    <button class="btn btn-info btn-md hand shadow" id="btn_editar_saltras_guardar_fecha">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 col-lg-6 col-xl-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>RECIBE</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="negrita form-control" disabled="true" id="txt_edit_saltras_recibe">
+                                                    <button class="btn btn-info btn-md hand shadow hidden" id="btn_editar_saltras_guardar_recibe">
+                                                        <i class="fal fa-save"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <br>
+
+
+                                    <div class="table-responsive col-12">
+                                        <table class="table table-bordered h-full col-12">
+                                            <thead class="bg-base text-white">
+                                                <tr>
+                                                    <td>CODIGO</td>
+                                                    <td>PRODUCTO</td>
+                                                    <td>CANTIDAD</td>
+                                                    <td>COSTO</td>
+                                                    <td>TOTALCOSTO</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl_data_edit_saltras"></tbody>
+                                        </table>
+
+                                        <div class="form-group">
+                                            <label class="negrita text-base">Observaciones</label>
+                                            <textarea class="form-control border-base" rows="2" id="txt_edit_saltras_obs" disabled="true"></textarea>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+
+                                
+                            <div class="row">
+                                <button class="btn btn-secondary btn-circle btn-xl hand shadow" data-dismiss="modal">
+                                    <i class="fal fa-arrow-left"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            `
+        },
     }
 
     root.innerHTML = view.body();
@@ -478,6 +708,11 @@ function addListeners(){
     listener_edicion_documentos_compras();
     //edicion de entrada bodega
     listeners_edicion_entrada_bodega();
+    //edicion de salidas por consumo
+    listeners_salida_consumo_bodega();
+    //edicion de salidas por traslado
+    listeners_salida_traslado_bodega();
+
 
 };
 
@@ -639,6 +874,39 @@ function eliminar_documento(sucursal,coddoc,correlativo,idbtn){
 // EDICION DE DOCUMENTOS
 // -----------------------------
 
+function get_edicion_documento(sucursal,coddoc,correlativo,tipo){
+
+    /*
+        "SAL">SALIDA DE INVENTARIO TRASLADO
+        "PRS">PRESTAMO DE HERRAMIENTA
+    */
+   _selected_empnit=sucursal;
+   _selected_coddoc=coddoc;
+   _selected_correlativo=correlativo;
+
+    switch (tipo) {
+        case 'ENT': //ENTRADA DE INVENTARIO
+            cargar_entrada_bodega(sucursal,coddoc,correlativo);
+            break;
+        case 'CON': //SALIDA POR CONSUMO
+            cargar_salida_consumo(sucursal,coddoc,correlativo);
+            break;
+        case 'SAL': //SALIDA POR TRASLADO
+            cargar_salida_traslado(sucursal,coddoc,correlativo);
+            break;
+        case 'COM': //COMPRA
+            cargar_compra(sucursal,coddoc,correlativo);
+            break;
+        
+        default:
+            F.AvisoError('Opcion en construccion');
+            break;
+    }
+
+
+};
+
+
 function listener_edicion_documentos_compras(){
 
     
@@ -797,6 +1065,104 @@ function listeners_edicion_entrada_bodega(){
 
 
 };
+function listeners_salida_consumo_bodega(){
+
+
+    
+    document.getElementById('btn_editar_salcons_guardar_proyecto').addEventListener('click',()=>{
+        
+        let btn = document.getElementById('btn_editar_salcons_guardar_proyecto');
+        let codprov = document.getElementById('cmb_edit_salcons_proyecto').value;
+
+        btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
+
+        GF.update_campo_documento(_selected_empnit,_selected_coddoc,_selected_correlativo,'PROYECTO',codprov)
+        .then(()=>{
+            F.showToast('Proyecto/Area actualizado');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+        
+        })
+        .catch(()=>{
+            F.showToast('Proyecto/Area NO ACTUALIZADO');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+     
+        })
+    
+    });
+
+    document.getElementById('btn_editar_salcons_guardar_fecha').addEventListener('click',()=>{
+       
+        let btn = document.getElementById('btn_editar_salcons_guardar_fecha');
+        let valor = F.devuelveFecha('txt_edit_salcons_fecha');
+
+        btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
+
+        GF.update_campo_documento(_selected_empnit,_selected_coddoc,_selected_correlativo,'FECHA',valor)
+        .then(()=>{
+            F.showToast('Fecha actualizada');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+        
+        })
+        .catch(()=>{
+            F.showToast('Fecha NO ACTUALIZADA');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+     
+        })
+
+    });
+
+
+
+};
+function listeners_salida_traslado_bodega(){
+
+
+    
+    document.getElementById('btn_editar_saltras_guardar_proyecto').addEventListener('click',()=>{
+        
+        let btn = document.getElementById('btn_editar_saltras_guardar_proyecto');
+        let codprov = document.getElementById('cmb_edit_saltras_proyecto').value;
+
+        btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
+
+        GF.update_campo_documento(_selected_empnit,_selected_coddoc,_selected_correlativo,'PROYECTO',codprov)
+        .then(()=>{
+            F.showToast('Proyecto/Area actualizado');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+        
+        })
+        .catch(()=>{
+            F.showToast('Proyecto/Area NO ACTUALIZADO');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+     
+        })
+    
+    });
+
+    document.getElementById('btn_editar_saltras_guardar_fecha').addEventListener('click',()=>{
+       
+        let btn = document.getElementById('btn_editar_saltras_guardar_fecha');
+        let valor = F.devuelveFecha('txt_edit_saltras_fecha');
+
+        btn.disabled=true;btn.innerHTML=`<i class="fal fa-spin fa-save"></i>`;
+
+        GF.update_campo_documento(_selected_empnit,_selected_coddoc,_selected_correlativo,'FECHA',valor)
+        .then(()=>{
+            F.showToast('Fecha actualizada');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+        
+        })
+        .catch(()=>{
+            F.showToast('Fecha NO ACTUALIZADA');
+            btn.disabled=false;btn.innerHTML=`<i class="fal fa-save"></i>`;
+     
+        })
+
+    });
+
+
+
+};
 function cargar_proyectos(sucursal){
     
     return new Promise((resolve,reject)=>{
@@ -843,39 +1209,7 @@ function cargar_proyectos(sucursal){
 };
 
 
-function get_edicion_documento(sucursal,coddoc,correlativo,tipo){
 
-    /*
-        "ENT">ENTRADA DE INVENTARIO
-        "SAL">SALIDA DE INVENTARIO
-        "CON">SALIDA POR CONSUMO
-        x "COM">COMPRAS
-        "PRS">PRESTAMO DE HERRAMIENTA
-    */
-   _selected_empnit=sucursal;
-   _selected_coddoc=coddoc;
-   _selected_correlativo=correlativo;
-
-    switch (tipo) {
-        case 'ENT':
-           
-            cargar_entrada_bodega(sucursal,coddoc,correlativo);
-
-            break;
-        case 'COM':
-           
-            cargar_compra(sucursal,coddoc,correlativo);
-
-            break;
-        
-    
-        default:
-            F.AvisoError('Opcion en construccion');
-            break;
-    }
-
-
-};
 function eliminar_item_documento(coddoc,correlativo,iditem,idbtn,idrowtabla){
 
 
@@ -990,7 +1324,6 @@ function cargar_compra(sucursal,coddoc,correlativo){
 
    
 };
-
 function cargar_entrada_bodega(sucursal,coddoc,correlativo){
 
   
@@ -1065,6 +1398,166 @@ function cargar_entrada_bodega(sucursal,coddoc,correlativo){
             document.getElementById('txt_edit_entbod_obs').value ='';
             document.getElementById('txt_edit_entbod_fecha').value = ''; 
             document.getElementById('txt_edit_entbod_recibe').value = '';
+             
+        })
+
+
+   
+};
+function cargar_salida_consumo(sucursal,coddoc,correlativo){
+
+  
+        $("#modal_editar_salida_consumo").modal('show');
+      
+        
+        let container = document.getElementById('tbl_data_edit_salcons');
+        container.innerHTML = GlobalLoader;
+
+        
+
+        GF.data_detalle_documento(sucursal,coddoc,correlativo)
+        .then((data)=>{
+                
+                let str = '';
+                let _codprov = '';
+                let _fecha = '';
+                let _recibe=''; 
+                let _obs = '';
+
+                data.recordset.map((r)=>{
+                    let idBtnEliminar = `idBtnEliminarItemSalCon${r.ID}`;
+                    let idrowtabla = `row_salcons_${r.ID}`;
+                    str += `
+                    <tr id="${idrowtabla}">
+                        <td>${r.CODPROD}</td>
+                        <td>${r.DESPROD}</td>
+                        <td>${r.CANTIDAD}</td>
+                        <td>${F.setMoneda(r.COSTO,'Q')}</td>
+                        <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-md btn-circle hand shadow"
+                            onclick="eliminar_item_documento('${coddoc}','${correlativo}','${r.ID}','${idBtnEliminar}','${idrowtabla}')"
+                            id="${idBtnEliminar}">
+                                <i class="fal fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    `
+                    _codprov = r.CODPROYECTO;
+                    _fecha = r.FECHA;
+                    _obs = r.OBS;
+                    _recibe = r.RECIBE;
+                   
+                });
+
+                container.innerHTML = str;
+                
+                cargar_proyectos(sucursal)
+                .then(()=>{
+                    document.getElementById('cmb_edit_salcons_proyecto').value = _codprov;
+                });
+                
+                document.getElementById('txt_edit_salcons_coddoc').value = coddoc;
+                document.getElementById('txt_edit_salcons_correlativo').value = correlativo;
+                document.getElementById('txt_edit_salcons_obs').value = F.limpiarTexto(_obs);
+                document.getElementById('txt_edit_salcons_fecha').value = _fecha.replace('T00:00:00.000Z',''); 
+                document.getElementById('txt_edit_salcons_recibe').value = _recibe;
+        })
+        .catch((err)=>{
+
+            console.log(err);
+
+            container.innerHTML = 'No se cargaron datos...';
+
+            document.getElementById('cmb_edit_salcons_proyecto').value = '';
+            document.getElementById('txt_edit_salcons_coddoc').value = '';
+            document.getElementById('txt_edit_salcons_correlativo').value = '';
+            document.getElementById('txt_edit_salcons_obs').value ='';
+            document.getElementById('txt_edit_salcons_fecha').value = ''; 
+            document.getElementById('txt_edit_salcons_recibe').value = '';
+             
+        })
+
+
+   
+};
+function cargar_salida_traslado(sucursal,coddoc,correlativo){
+
+  
+        $("#modal_editar_salida_traslado").modal('show');
+      
+        
+        let container = document.getElementById('tbl_data_edit_saltras');
+        container.innerHTML = GlobalLoader;
+
+        
+
+        GF.data_detalle_documento(sucursal,coddoc,correlativo)
+        .then((data)=>{
+                
+                let str = '';
+                let _codprov = '';
+                let _fecha = '';
+                let _recibe=''; 
+                let _obs = '';
+
+                data.recordset.map((r)=>{
+                    let idBtnEliminar = `idBtnEliminarItemSalTras${r.ID}`;
+                    let idrowtabla = `row_saltras_${r.ID}`;
+                    str += `
+                    <tr id="${idrowtabla}">
+                        <td>${r.CODPROD}</td>
+                        <td>${r.DESPROD}</td>
+                        <td>${r.CANTIDAD}</td>
+                        <td>${F.setMoneda(r.COSTO,'Q')}</td>
+                        <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-md btn-circle hand shadow"
+                            onclick="eliminar_item_documento('${coddoc}','${correlativo}','${r.ID}','${idBtnEliminar}','${idrowtabla}')"
+                            id="${idBtnEliminar}">
+                                <i class="fal fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    `
+                    _codprov = r.CODPROYECTO;
+                    _fecha = r.FECHA;
+                    _obs = r.OBS;
+                    _recibe = r.RECIBE;
+                   
+                });
+
+                container.innerHTML = str;
+                
+                cargar_proyectos(sucursal)
+                .then(()=>{
+                    document.getElementById('cmb_edit_saltras_proyecto').value = _codprov;
+                });
+                
+                document.getElementById('txt_edit_saltras_coddoc').value = coddoc;
+                document.getElementById('txt_edit_saltras_correlativo').value = correlativo;
+                document.getElementById('txt_edit_saltras_obs').value = F.limpiarTexto(_obs);
+                document.getElementById('txt_edit_saltras_fecha').value = _fecha.replace('T00:00:00.000Z',''); 
+                document.getElementById('txt_edit_saltras_recibe').value = _recibe;
+        })
+        .catch((err)=>{
+
+            console.log(err);
+
+            container.innerHTML = 'No se cargaron datos...';
+
+            document.getElementById('cmb_edit_saltras_proyecto').value = '';
+            document.getElementById('txt_edit_saltras_coddoc').value = '';
+            document.getElementById('txt_edit_saltras_correlativo').value = '';
+            document.getElementById('txt_edit_saltras_obs').value ='';
+            document.getElementById('txt_edit_saltras_fecha').value = ''; 
+            document.getElementById('txt_edit_saltras_recibe').value = '';
              
         })
 

@@ -577,6 +577,18 @@ function tbl_tipodocumentos(){
             let idbtnEliminar = `idbtnEliminar${r.ID}`;
             let strClassHabilitado = '';
             if(r.HABILITADO=='SI'){strClassHabilitado='btn-success'}else{strClassHabilitado='btn-danger'};
+            let strInv = '';
+            switch (Number(r.INV)) {
+                case 0:
+                    strInv = 'NEUTRO';
+                    break;
+                case 1:
+                    strInv = 'ENTRADA';
+                    break;
+                default:
+                    strInv = 'SALIDA';
+                    break;
+            };
 
             str += `
                 <tr>
@@ -584,7 +596,7 @@ function tbl_tipodocumentos(){
                     <td>${r.CODDOC}</td>
                     <td>${r.DESCRIPCION}</td>
                     <td>${r.CORRELATIVO}</td>
-                    <td>${r.INV}</td>
+                    <td>${strInv}</td>
                     <td>
                         <button class="btn btn-md ${strClassHabilitado} btn-circle hand shadow" 
                         id="${idbtnHabilitado}"
