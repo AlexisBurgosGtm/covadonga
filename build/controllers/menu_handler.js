@@ -18,11 +18,12 @@ let Menu = {
         
         
         switch (Number(GlobalNivelUsuario)) {
+            
             case 1: //gerente
                 Menu.inicio_gerencia();
                 break;
             case 2: //bodeguero general
-                Menu.traslados();
+                Menu.inventarios();
                 break;
 
             case 3: //bodeguero
@@ -31,6 +32,10 @@ let Menu = {
 
             case 4: //contabilidad
                 Menu.inicio_contabilidad();
+                break;
+            case 5: //
+                F.AvisoError('Este usuario no tiene acceso a la plataforma');
+                Menu.login();
                 break;
 
         }

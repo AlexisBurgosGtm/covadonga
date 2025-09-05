@@ -956,7 +956,7 @@ let F = {
           resultado = texto.replace(regex,reemplazarCon);
           resultado = resultado.replace('´','');
           resultado = resultado.replace("'","");
-          resultado = resultado.replace("#","");
+          resultado = resultado.replace("#","No.");
           resultado = resultado.replace("&","");
           resultado = resultado.replace("%","");
           resultado = resultado.replace(/(\r\n|\n|\r)/gm, ""); //quita el enter o salto de linea
@@ -1229,7 +1229,7 @@ let F = {
 
 
          swal({
-            text: 'Escriba el número a donde se enviará el link de la aplicación:',
+            text: 'Escriba el número a donde se enviará el detalle del documento:',
             content: "input",
             button: {
               text: "Enviar Whatsapp",
@@ -1256,7 +1256,7 @@ let F = {
                   })
 
 
-                    msg = `Nuevo traslado \n COVANDONGA \n --------------------------- \n ${strData} \n --------------------------- \n`
+                    msg = `Documento ${coddoc}-${correlativo} \n COVANDONGA \n --------------------------- \n ${strData} \n --------------------------- \n`
                     
                     msg = encodeURIComponent(msg);
 

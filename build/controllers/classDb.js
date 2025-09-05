@@ -1,4 +1,4 @@
-const DbName = "covadonga_v4";
+const DbName = "covadonga_v5";
 
 
 
@@ -43,7 +43,8 @@ var tbl_temp_prestamo = {
         CODMEDIDA:{dataType: "string"},
         CANTIDAD:{dataType: "number"},
         COSTO:{dataType: "number"},
-        TOTALCOSTO:{dataType: "number"}
+        TOTALCOSTO:{dataType: "number"},
+        ESTADO:{dataType: "string"},
     }
 };
 

@@ -172,7 +172,7 @@ function getView(){
                         
                             <div class="form-group">
 
-                                <label class="negrita text-secondary">Persona que Recibe</label>
+                                <label class="negrita text-secondary">Persona Encargada</label>
                                 <select class="form-control negrita"  id="cmbRecibe">
                                 </select>
 
@@ -482,7 +482,7 @@ function addListeners(){
 
         tbl_lista_productos(sucursal,filtro,'E');
 
-        document.getElementById('txtDesprod').value = '';
+        //document.getElementById('txtDesprod').value = '';
 
     });
 

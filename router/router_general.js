@@ -288,7 +288,8 @@ router.post("/select_detalle_documento", async(req,res)=>{
                 ORDERS_DETAILS.CODMEDIDA, 
                 ORDERS_DETAILS.CANTIDAD, 
                 ORDERS_DETAILS.COSTO, 
-                ORDERS_DETAILS.TOTALCOSTO, 
+                ORDERS_DETAILS.TOTALCOSTO,
+                ISNULL(ORDERS_DETAILS.ESTADO,'') AS ESTADO, 
                 ORDERS.EMPNIT_RECIBE, 
                 ORDERS.FECHA_RECIBE, 
                 ORDERS.FEL_UUDI, 
@@ -313,41 +314,7 @@ router.post("/select_detalle_documento", async(req,res)=>{
         execute.QueryToken(res,qry,'')
 
 });
-router.post("/BACKUP_select_detalle_documento", async(req,res)=>{
 
-        const {sucursal,coddoc,correlativo} = req.body;
-
-        let qry = `
-        SELECT ORDERS.FECHA, ORDERS.HORA, 
-                ORDERS.CODPROYECTO, 
-                PROYECTOS.NOMPROYECTO AS PROYECTO, 
-                ORDERS.CODEMP_SOLICITA, 
-                EMPLEADOS.NOMEMP AS SOLICITA, 
-                ORDERS.CODEMP_RECIBE, 
-                EMPLEADOS_1.NOMEMP AS RECIBE, 
-                ORDERS.NO_ORDEN, 
-                ORDERS.OBS, 
-                ORDERS_DETAILS.CODPROD, 
-                ORDERS_DETAILS.DESPROD, 
-                ORDERS_DETAILS.CODMEDIDA, 
-                ORDERS_DETAILS.CANTIDAD, 
-                ORDERS_DETAILS.COSTO, 
-                ORDERS_DETAILS.TOTALCOSTO
-        FROM ORDERS_DETAILS RIGHT OUTER JOIN
-                PROYECTOS RIGHT OUTER JOIN
-                ORDERS LEFT OUTER JOIN
-                EMPLEADOS AS EMPLEADOS_1 ON ORDERS.CODEMP_RECIBE = EMPLEADOS_1.CODEMP LEFT OUTER JOIN
-                EMPLEADOS ON ORDERS.CODEMP_SOLICITA = EMPLEADOS.CODEMP ON PROYECTOS.CODPROYECTO = ORDERS.CODPROYECTO ON ORDERS_DETAILS.CORRELATIVO = ORDERS.CORRELATIVO AND 
-                ORDERS_DETAILS.CODDOC = ORDERS.CODDOC AND ORDERS_DETAILS.EMPNIT = ORDERS.EMPNIT
-        WHERE (ORDERS.EMPNIT = '${sucursal}') AND 
-                (ORDERS.CODDOC = '${coddoc}') AND 
-                (ORDERS.CORRELATIVO = ${correlativo})
-                `
-    
-           
-        execute.QueryToken(res,qry,'')
-
-});
 
 router.post("/delete_documento", async(req,res)=>{
 
@@ -559,7 +526,8 @@ function qry_docproductos_sql_prestamo(sucursal,coddoc,correlativo,fecha,codemp,
                         ${r.CANTIDAD} CANTIDAD,
                         ${r.COSTO} COSTO,
                         ${r.TOTALCOSTO} TOTALCOSTO,
-                        0 AS CODPROYECTO;
+                        0 AS CODPROYECTO,
+                        '${r.ESTADO}' AS ESTADO;
                 `
         })
 

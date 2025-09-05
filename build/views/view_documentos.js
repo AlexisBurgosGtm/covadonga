@@ -816,7 +816,7 @@ function get_detalle_documento(sucursal,coddoc,correlativo,obs){
                     str += `
                     <tr>
                         <td>${r.CODPROD}</td>
-                        <td>${r.DESPROD}</td>
+                        <td>${r.DESPROD} (${r.ESTADO})</td>
                         <td>${r.CANTIDAD}</td>
                         <td>${F.setMoneda(r.COSTO,'Q')}</td>
                         <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
@@ -867,6 +867,7 @@ function eliminar_documento(sucursal,coddoc,correlativo,idbtn){
     })
 
 };
+
 
 
 
@@ -1243,6 +1244,7 @@ function eliminar_item_documento(coddoc,correlativo,iditem,idbtn,idrowtabla){
 
 
 };
+
 
 
 function cargar_compra(sucursal,coddoc,correlativo){

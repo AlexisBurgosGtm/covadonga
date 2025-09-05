@@ -64,6 +64,7 @@ function getView(){
                                 </div>
                             </div>
                         </div>
+                       
                     </div>
 
 
@@ -75,7 +76,7 @@ function getView(){
                     <div class="table-responsive col-12">
 
                         <div class="row">
-                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                                 
                                 <div class="form-group">
                                     <label class="text-secondary negrita">Escriba para buscar...</label>
@@ -86,10 +87,16 @@ function getView(){
                                 </div>
 
                             </div>
-                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                                 <h5 class="negrita text-danger" id="lbTotalImporte"></h5>
                                 <h5 class="negrita text-info" id="lbTotalIva"></h5>
                                 <h5 class="negrita text-secondary" id="lbTotalBase"></h5>
+                            </div>
+                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                <button class="btn btn-md btn-success hand shadow"
+                                    onclick="F.exportTableToExcel('tblDocumentos','Compras_del_mes')">
+                                        <i class="fal fa-share"></i> Exportar Excel
+                                    </button>
                             </div>
                         </div>
                         

@@ -140,7 +140,7 @@ let db_prestamo = {
             resolve(data);
         });
     },
-    insert_temp_movinv_salida:(coddoc,codprod, desprod,codmedida,cantidad,costo,totalcosto)=>{
+    insert_temp_movinv_salida:(coddoc,codprod, desprod,codmedida,cantidad,costo,totalcosto,estado)=>{
 
         let datos = {
                         CODDOC:coddoc,
@@ -149,7 +149,8 @@ let db_prestamo = {
                         CODMEDIDA:codmedida,
                         CANTIDAD:Number(cantidad),
                         COSTO:Number(costo),
-                        TOTALCOSTO:Number(totalcosto)
+                        TOTALCOSTO:Number(totalcosto),
+                        ESTADO:estado
                     }
 
 

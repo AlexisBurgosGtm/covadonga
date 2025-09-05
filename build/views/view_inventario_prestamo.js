@@ -224,6 +224,7 @@ function getView(){
                                     <td>CANTIDAD</td>
                                     <td>COSTO</td>
                                     <td>SUBTOTAL</td>
+                                    <td>ESTADO</td>
                                     <td></td>
                                 </tr>
                             </thead>
@@ -301,7 +302,7 @@ function getView(){
                         
                             <div class="form-group">
 
-                                <label class="negrita text-secondary">Persona que Recibe</label>
+                                <label class="negrita text-secondary">Persona Encargada</label>
                                 <select class="form-control negrita"  id="cmbRecibe">
                                 </select>
 
@@ -450,6 +451,17 @@ function getView(){
                                     <div class="form-group">
                                         <label class="negrita text-secondary">Costo Total</label>
                                         <input type="number" class="negrita text-danger form-control h5" id="txtCostoTotal" disabled="true">
+                                    </div>
+
+                                     <div class="form-group">
+                                        <label class="negrita text-secondary">Estado de la Herramienta</label>
+                                        <select class="negrita text-danger form-control h5" id="cmbEstado">
+                                            <option value='NUEVO'>NUEVO</option>
+                                            <option value='BUEN ESTADO'>BUEN ESTADO</option>
+                                            <option value='ESTADO REGULAR'>ESTADO REGULAR</option>
+                                            <option value='MAL ESTADO'>MAL ESTADO</option>
+                                            <option value='PERDIDA TOTAL'>PERDIDA TOTAL</option>
+                                        </select>
                                     </div>
 
                                     <br>
@@ -651,7 +663,7 @@ function addListeners(){
 
         tbl_lista_productos(sucursal,filtro,'S');
 
-        document.getElementById('txtDesprod').value = '';
+        //document.getElementById('txtDesprod').value = '';
 
     });
 
@@ -689,10 +701,11 @@ function addListeners(){
         let codprod = document.getElementById('txtCodprod').value;
         let desprod = document.getElementById('txtDesprod').value;
         let totalcosto = (Number(costo)*Number(cantidad));
+        let estado = document.getElementById('cmbEstado').value;
 
             $("#modal_cantidad").modal('hide');
        
-                db_prestamo.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto)
+                db_prestamo.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto,estado)
                 .then(()=>{
                     tbl_temp_salida();
                 })
@@ -1225,6 +1238,7 @@ function tbl_temp_salida(){
                 <td>${r.CANTIDAD}</td>
                 <td>${F.setMoneda(r.COSTO,'Q')}</td>
                 <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                <td>${r.ESTADO}</td>
                 <td>
                     <button class="btn btn-danger btn-circle btn-md hand shadow" id="${idbtn}"
                      onclick="delete_temp_salida('${r.ID}','${idbtn}')">

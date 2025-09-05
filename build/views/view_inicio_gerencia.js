@@ -541,7 +541,7 @@ function tbl_resumen_compras(){
             <tr>
                 <td>${r.RAZON_SOCIAL}
                     <br>
-                    <small class="negrita text-danger">NIT: ${r.NIT}}</small>
+                    <small class="negrita text-danger">NIT: ${r.NIT}</small>
                 </td>
                 <td class="negrita">
                     ${F.setMoneda(r.TOTALCOSTO,'Q')}

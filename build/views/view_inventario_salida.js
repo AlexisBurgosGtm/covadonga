@@ -173,7 +173,7 @@ function getView(){
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         
                             <div class="form-group">
-                                <label class="negrita text-secondary">Persona que Recibe</label>
+                                <label class="negrita text-secondary">Persona Encargada</label>
                                 <select class="form-control negrita"  id="cmbRecibe">
                                 </select>
                             </div>
@@ -299,7 +299,7 @@ function getView(){
 
                                     <div class="form-group">
                                         <label class="negrita text-secondary">Costo Unitario</label>
-                                        <input type="number" class="negrita text-danger form-control h5" id="txtCosto">
+                                        <input type="number" class="negrita text-danger form-control h5" id="txtCosto" disabled="true">
                                     </div>
 
                                     <div class="form-group">
@@ -376,8 +376,16 @@ function addListeners(){
       
         document.getElementById('cmbEmpresa').innerHTML = str;
         document.getElementById('cmbEmpresaEntrada').innerHTML = str;
+        
+        document.getElementById('cmbEmpresa').value = GlobalEmpnit;
+
 
         cargar_proyectos();
+
+        
+        if(Number(GlobalNivelUsuario)==3){
+            document.getElementById('cmbEmpresa').disabled = true;
+        };
 
     })
     .catch(()=>{
@@ -466,7 +474,7 @@ function addListeners(){
 
         tbl_lista_productos(sucursal,filtro,'S');
 
-        document.getElementById('txtDesprod').value = '';
+        //document.getElementById('txtDesprod').value = '';
 
     });
 

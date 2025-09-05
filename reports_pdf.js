@@ -58,7 +58,8 @@ let PDF = {
                                 ORDERS_DETAILS.CANTIDAD, 
                                 ORDERS_DETAILS.COSTO, 
                                 ISNULL(EMPLEADOS.NOMEMP,'') AS EMPLEADO_RECIBE,
-                                ISNULL(ORDERS.OBS,'') AS OBS
+                                ISNULL(ORDERS.OBS,'') AS OBS,
+                                ISNULL(ORDERS_DETAILS.ESTADO,'') AS ESTADO
                             FROM  ORDERS LEFT OUTER JOIN
                             PROYECTOS ON ORDERS.CODPROYECTO = PROYECTOS.CODPROYECTO LEFT OUTER JOIN
                             EMPLEADOS ON ORDERS.CODEMP_RECIBE = EMPLEADOS.CODEMP LEFT OUTER JOIN
@@ -82,7 +83,7 @@ let PDF = {
 
 
                     datos.recordset.map((r)=>{
-                            tbl_data.push([r.DESPROD, r.CANTIDAD.toString(), setMoneda(r.COSTO,'Q'),'']);
+                            tbl_data.push([r.DESPROD, r.CANTIDAD.toString(), setMoneda(r.COSTO,'Q'),r.ESTADO]);
                             fecha = r.FECHA.toString();
                             hora = r.HORA.toString();
                             persona_recibe = r.ENTREGADO;
@@ -200,7 +201,8 @@ let PDF = {
                                 ORDERS_DETAILS.CANTIDAD, 
                                 ORDERS_DETAILS.COSTO, 
                                 ISNULL(EMPLEADOS.NOMEMP,'') AS EMPLEADO_RECIBE,
-                                ISNULL(ORDERS.OBS,'') AS OBS
+                                ISNULL(ORDERS.OBS,'') AS OBS,
+                                ISNULL(ORDERS_DETAILS.ESTADO,'') AS ESTADO
                             FROM  ORDERS LEFT OUTER JOIN
                             PROYECTOS ON ORDERS.CODPROYECTO = PROYECTOS.CODPROYECTO LEFT OUTER JOIN
                             EMPLEADOS ON ORDERS.CODEMP_RECIBE = EMPLEADOS.CODEMP LEFT OUTER JOIN
@@ -225,7 +227,7 @@ let PDF = {
                     tbl_data.push(['EQUIPO PRESTADO','CANTIDAD','VALOR UN.','ESTADO RECIBE']);
 
                     datos.recordset.map((r)=>{
-                            tbl_data.push([r.DESPROD, r.CANTIDAD.toString(), setMoneda(r.COSTO,'Q'),'']);
+                            tbl_data.push([r.DESPROD, r.CANTIDAD.toString(), setMoneda(r.COSTO,'Q'),r.ESTADO]);
                             fecha = r.FECHA.toString();
                             hora = r.HORA.toString();
                             persona_recibe = r.ENTREGADO;

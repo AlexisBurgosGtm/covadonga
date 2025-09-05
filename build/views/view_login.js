@@ -144,72 +144,59 @@ function addListeners(){
     btnLogin.addEventListener('click',()=>{
         
 
-        let u = document.getElementById('txtU').value || '';
-        let p = document.getElementById('txtP').value || '';
+            let u = document.getElementById('txtU').value || '';
+            let p = document.getElementById('txtP').value || '';
 
 
-        btnLogin.disabled = true;
-        btnLogin.innerHTML = `<i class="fal fa-spin fa-unlock"></i>`;
+            btnLogin.disabled = true;
+            btnLogin.innerHTML = `<i class="fal fa-spin fa-unlock"></i>`;
 
-        login(u,p)
-        .then((datos)=>{
+            login(u,p)
+            .then((datos)=>{
 
-                datos.recordset.map((r)=>{
+                    datos.recordset.map((r)=>{
 
-                    GlobalEmpnit = r.EMPNIT;
-                    GlobalCodUsuario = Number(r.CODIGO);
-                    GlobalUsuario = r.USUARIO;
-                    GlobalPass = r.CLAVE;
-                    GlobalNivelUsuario =Number(r.NIVEL)
+                        GlobalEmpnit = r.EMPNIT;
+                        GlobalCodUsuario = Number(r.CODIGO);
+                        GlobalUsuario = r.USUARIO;
+                        GlobalPass = r.CLAVE;
+                        GlobalNivelUsuario =Number(r.NIVEL)
 
-                })
+                    })
 
-                F.showToast('Obteniendo configuraciones generales');
+                    F.showToast('Obteniendo configuraciones generales');
 
-                GF.data_configuraciones()
-                .then((data)=>{
-                    
-                    data_config_general = data.recordset;
-                    document.getElementById('root_navbar').style = "visibility:visible";
+                    GF.data_configuraciones()
+                    .then((data)=>{
+                        
+                        data_config_general = data.recordset;
+                        document.getElementById('root_navbar').style = "visibility:visible";
 
-                    Menu.inicio();
-                    
-                })
-                .catch(()=>{
-                    
-                    F.AvisoError('No se pudo iniciar, no se lograron obtener las configuraciones de sistema. Intente de nuevo.');
+                        Menu.inicio();
+                        
+                    })
+                    .catch(()=>{
+                        
+                        F.AvisoError('No se pudo iniciar, no se lograron obtener las configuraciones de sistema. Intente de nuevo.');
 
-                    btnLogin.disabled = false;
-                    btnLogin.innerHTML = `<i class="fal fa-lock"></i>`;
-                })
+                        btnLogin.disabled = false;
+                        btnLogin.innerHTML = `<i class="fal fa-lock"></i>`;
+                    })
 
-        })
-        .catch(()=>{
+            })
+            .catch(()=>{
 
-            F.AvisoError('No se pudo iniciar, verifique si sus datos de ingreso son correctos');
+                F.AvisoError('No se pudo iniciar, verifique si sus datos de ingreso son correctos');
 
-            btnLogin.disabled = false;
-            btnLogin.innerHTML = `<i class="fal fa-lock"></i>`;
-        })
+                btnLogin.disabled = false;
+                btnLogin.innerHTML = `<i class="fal fa-lock"></i>`;
+            })
 
 
-
-       
-        
     });
 
 
-    document.getElementById('btnPdf').addEventListener('click',()=>{
-
-        getPDF('PRESENT',1)
-        .then(()=>{
-
-        })
-        .catch(()=>{
-
-        })
-
-    })
+  
 
 
 };

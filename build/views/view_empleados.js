@@ -114,6 +114,7 @@ function getView(){
                             <option value='2'>BODEGUERO (Nivel 2)</option>
                             <option value='3'>OPERADOR BODEGA (Nivel 3)</option>
                             <option value='4'>CONTABILIDAD (Nivel 4)</option>
+                            <option value='5'>ENCARGADO DE AREA (Nivel 5)</option>
                         </select>
                     </div>
 

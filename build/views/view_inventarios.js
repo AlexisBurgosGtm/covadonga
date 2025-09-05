@@ -104,6 +104,7 @@ function getView(){
                                     <td>TIPO</td>
                                     <td>CODIGOS</td>
                                     <td>DESCRIPCIONES</td>
+                                    <td>MARCA</td>
                                     <td>EMPAQUE</td>
                                     <td>EXISTENCIA</td>
                                     <td>COSTO</td>
@@ -305,12 +306,9 @@ function get_tbl_productos(){
             str += `
             <tr>
                 <td>${r.TIPO}</td>
-                <td><b class="text-danger">${r.CODPROD}</b>
-                </td>
-                <td>${r.DESPROD.replace('&','').replace('%','')}
-                    <br>
-                    <small class="negrita">${r.DESMARCA}</small>
-                </td>
+                <td><b class="text-danger">${F.limpiarTextoExport(r.CODPROD)}</b></td>
+                <td>${F.limpiarTextoExport(r.DESPROD)}</td>
+                <td>${r.DESMARCA}</td>
                 <td>${r.CODMEDIDA}</td>
                 <td>${r.EXISTENCIA}</td>
                 <td class="${strPermisoCostos}">${F.setMoneda(r.COSTO,'Q')}</td>
