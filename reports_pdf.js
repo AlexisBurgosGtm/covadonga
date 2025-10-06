@@ -691,7 +691,7 @@ let PDF = {
                             factura_fel = r.FACTURA_FEL;
                             persona_cargo = r.PROVEEDOR;
                             proyecto = r.PROYECTO;
-                            empleado_recibe = r.EMPLEADO_RECIBE;
+                            empleado_recibe = r.ENTREGADO;
                             bodega = r.EMPRESA;
                             varTotal+=Number(r.TOTALCOSTO)
                     });
