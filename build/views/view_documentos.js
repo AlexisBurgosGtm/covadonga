@@ -97,7 +97,9 @@ function getView(){
                                     <td>BODEGA</td>
                                     <td>DOCUMENTO</td>
                                     <td>FECHA</td>
-                                    <td>RECIBE/SOLICITA</td>
+                                    <td>ENCARGADO</td>
+                                    <td>ENTREGADO A</td>
+                                    <td>PROYECTO / AREA</td>
                                     <td>FECHA RECIBIDO / ORIGEN</td>
                                     <td></td>
                                     <td></td>
@@ -750,8 +752,10 @@ function tbl_movimientos(){
                 </td>
                 <td>${F.convertDateNormal(r.FECHA)}</td>
                 <td>${r.RECIBE}
-                    <br>
-                    <small class="negrita">${r.SOLICITA}</small>
+                
+                <td>${r.ENTREGADO}
+                <td>${r.NOMPROYECTO}
+                    
                 </td>
                 <td>${F.convertDateNormal(r.FECHA_RECIBE)}
                     <br>
