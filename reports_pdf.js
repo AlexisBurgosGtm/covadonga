@@ -657,7 +657,9 @@ let PDF = {
                     EMPLEADOS.NOMEMP AS EMPLEADO_RECIBE, 
                     PROVEEDORES.PROVEEDOR, 
                     ISNULL(ORDERS.ENTREGADO, '') AS ENTREGADO, 
-                    EMPRESAS.EMPRESA
+                    EMPRESAS.EMPRESA,
+                    ORDERS.ENTREGADO,
+                    ISNULL(ORDERS.OBS,'') AS OBS
                 FROM ORDERS LEFT OUTER JOIN
                         EMPRESAS ON ORDERS.EMPNIT = EMPRESAS.EMPNIT LEFT OUTER JOIN
                         PROVEEDORES ON ORDERS.CODPROV = PROVEEDORES.CODPROV LEFT OUTER JOIN
@@ -680,6 +682,7 @@ let PDF = {
                     let proyecto = '';
                     let bodega = '';
                     let varTotal = 0;
+                    let observaciones = '';
 
                     tbl_data.push(['PRODUCTO','CANTIDAD','COSTO','IMPORTE']);
 
@@ -693,7 +696,8 @@ let PDF = {
                             proyecto = r.PROYECTO;
                             empleado_recibe = r.ENTREGADO;
                             bodega = r.EMPRESA;
-                            varTotal+=Number(r.TOTALCOSTO)
+                            varTotal+=Number(r.TOTALCOSTO);
+                            observaciones = r.OBS;
                     });
                 
                   
@@ -732,8 +736,13 @@ let PDF = {
                     doc
                         .fontSize(11)
                         .text(`Total: ${setMoneda(varTotal,'Q')}`,{align:'right'});
-                       
-                    
+                    doc
+                        .moveDown()
+                        .moveDown()
+                        .fontSize(9)
+                        .text(`Observaciones:`)
+                        .text(observaciones)
+                                                               
                     doc
                         .fontSize(10)
                         .text('__________________________________',70,685)
