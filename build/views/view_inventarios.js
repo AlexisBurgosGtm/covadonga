@@ -89,8 +89,7 @@ function getView(){
                             </div>
                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                 <br>
-                                <button class="btn btn-md btn-success hand shadow"
-                                onclick="F.exportTableToExcel('tblProductos','Inventario_actual')">
+                                <button class="btn btn-md btn-success hand shadow" id="btnExportarInventario">
                                     <i class="fal fa-share"></i> Exportar Excel
                                 </button>
                             </div>
@@ -234,6 +233,33 @@ function addListeners(){
     })
 
 
+    let btnExportarInventario = document.getElementById('btnExportarInventario');
+    btnExportarInventario.addEventListener('click',()=>{
+
+        btnExportarInventario.disabled = true;
+
+        F.showToast('Exportando...')
+
+        let st = document.getElementById('cmbStatus').value;
+
+        get_inventario_export(st)
+        .then((data)=>{
+
+            let datos = data.recordset;
+            F.export_json_to_xlsx(datos,'InventarioProductos')
+
+            btnExportarInventario.disabled = false;
+        
+        })
+        .catch(()=>{
+            F.AvisoError('No se pudo exportar');
+            btnExportarInventario.disabled = false;
+        })
+
+    });
+
+
+
 
 };
 
@@ -245,6 +271,40 @@ function initView(){
 };
 
 
+function get_inventario_export(st){
+
+    let sucursal = document.getElementById('cmbEmpresas').value;
+    let existencia = document.getElementById('cmbStatusExistencia').value;
+
+    return new Promise((resolve,reject)=>{
+    
+        axios.post(GlobalUrlCalls + '/productos/inventario_productos_export',
+            {
+                sucursal:sucursal,
+                habilitado:st,
+                existencia:existencia
+            })
+        .then((response) => {
+            if(response.status.toString()=='200'){
+                let data = response.data;
+                if(data.toString()=="error"){
+                    reject();
+                }else{
+                    if(Number(data.rowsAffected[0])>0){
+                        resolve(data);             
+                    }else{
+                        reject();
+                    } 
+                }       
+            }else{
+                reject();
+            }                   
+        }, (error) => {
+            reject();
+        });
+    })   
+
+};
 
 function get_data_productos(st){
 
