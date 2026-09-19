@@ -1,0 +1,58 @@
+﻿
+//inicia las view transition
+document.startViewTransition(() => updateDOM());
+
+
+
+
+function InicializarServiceWorkerNotif(){
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () =>
+   navigator.serviceWorker.register('./sw.js')
+    .then(registration => console.log('Service Worker registered'))
+    .catch(err => 'SW registration failed'));
+  };
+
+ 
+  requestPermission();
+}
+
+if ('Notification' in window) {};
+
+function requestPermission() {
+  if (!('Notification' in window)) {
+    //alert('Notification API not supported!');
+    return;
+  }
+  
+  Notification.requestPermission(function (result) {
+    //$status.innerText = result;
+  });
+}
+
+
+InicializarServiceWorkerNotif();
+
+
+
+
+document.getElementById('lbVersion').innerText = versionapp;
+
+
+Menu.login();
+
+
+
+
+
+function load_configuraciones(){
+
+    GF.data_configuraciones()
+    .then((data)=>{                
+      data_config_general = data.recordset;   
+    })
+    .catch(()=>{
+        data_config_general = [];
+    })
+
+};

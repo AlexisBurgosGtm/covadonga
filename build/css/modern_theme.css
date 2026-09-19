@@ -1,0 +1,765 @@
+/* ============================================================
+   COVADONGA — capa de estilo moderno
+   Se carga de ultimo. Solo ajusta tipografia, superficies y
+   espaciados sobre SmartAdmin; la paleta es la original.
+   ============================================================ */
+
+/* Los tokens de marca (--c-base, --c-verde, ...) viven en custom_theme.css */
+
+:root {
+    /* Tintes translucidos derivados del verde institucional */
+    --c-verde-soft: rgba(2, 119, 64, .08);
+    --c-verde-ring: rgba(2, 119, 64, .20);
+
+    /* Neutros con un leve tinte verde para que acompanen la marca */
+    --c-canvas: #f2f5f3;
+    --c-surface: #ffffff;
+    --c-border: #e1e7e3;
+    --c-border-strong: #cfd8d3;
+    --c-text: #1b2420;
+    --c-text-muted: #6b7a72;
+
+    /* Formas */
+    --r-sm: 6px;
+    --r-md: 9px;
+    --r-lg: 14px;
+    --r-pill: 999px;
+
+    /* Elevacion */
+    --sh-1: 0 1px 2px rgba(11, 49, 30, .06);
+    --sh-2: 0 2px 8px rgba(11, 49, 30, .07), 0 1px 2px rgba(11, 49, 30, .05);
+    --sh-3: 0 12px 32px rgba(11, 49, 30, .12), 0 2px 6px rgba(11, 49, 30, .06);
+
+    --ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+
+/* ------------------------------------------------------------
+   1. Tipografia
+   El framework trabaja en rem, asi que bajar el root reduce
+   proporcionalmente toda la interfaz.
+   ------------------------------------------------------------ */
+
+html {
+    font-size: 15px;
+}
+
+body {
+    font-family: "Inter", "Segoe UI Variable Text", "Segoe UI", Roboto, system-ui,
+        -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: .8rem;
+    line-height: 1.5;
+    letter-spacing: 0;
+    color: var(--c-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -.01em;
+    margin-bottom: .5rem;
+}
+
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.28rem; }
+h3 { font-size: 1.1rem; }
+h4 { font-size: .98rem; }
+h5 { font-size: .87rem; }
+h6 { font-size: .8rem; }
+
+small, .small { font-size: .74rem; }
+
+strong, b, .negrita {
+    font-weight: 600;
+}
+
+.text-muted {
+    color: var(--c-text-muted) !important;
+}
+
+/* Cifras alineadas en columnas numericas */
+.table td, .table th, .currSign, input[type="number"] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+}
+
+
+/* ------------------------------------------------------------
+   2. Alineacion de "primary" con la marca
+   SmartAdmin trae un morado (#886ab5) que no pertenece a la
+   paleta; se reasigna al verde institucional.
+   ------------------------------------------------------------ */
+
+.bg-primary { background-color: var(--c-verde) !important; }
+.text-primary { color: var(--c-verde) !important; }
+.border-primary { border-color: var(--c-verde) !important; }
+
+.btn-primary {
+    background-color: var(--c-verde);
+    border-color: var(--c-verde);
+    box-shadow: none;
+}
+
+.btn-primary:hover,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show > .btn-primary.dropdown-toggle {
+    background-color: var(--c-verde-hover);
+    border-color: var(--c-verde-hover);
+}
+
+.bg-trans-gradient {
+    background-image: linear-gradient(135deg, var(--c-base) 0%, var(--c-verde) 100%) !important;
+}
+
+/* En este proyecto .btn-info es el boton de accion principal (btnGuardar,
+   btnLogin, ...), nunca un aviso informativo. Se lleva al verde de marca
+   en lugar del azul material que trae la plantilla. */
+.btn-info {
+    color: #fff;
+    background-color: var(--c-verde);
+    border-color: var(--c-verde);
+    box-shadow: none;
+}
+
+.btn-info:hover,
+.btn-info:focus,
+.btn-info.focus,
+.btn-info:not(:disabled):not(.disabled):active,
+.btn-info:not(:disabled):not(.disabled).active,
+.show > .btn-info.dropdown-toggle {
+    color: #fff;
+    background-color: var(--c-verde-hover);
+    border-color: var(--c-verde-hover);
+}
+
+.btn-info.disabled,
+.btn-info:disabled {
+    color: #fff;
+    background-color: var(--c-verde);
+    border-color: var(--c-verde);
+}
+
+.btn-outline-info {
+    color: var(--c-verde);
+    border-color: var(--c-verde);
+}
+
+.btn-outline-info:hover {
+    color: #fff;
+    background-color: var(--c-verde);
+    border-color: var(--c-verde);
+}
+
+/* Toggle de navegacion movil: la plantilla lo pinta con un degradado fucsia
+   por background-image, asi que no basta con cambiar el background-color */
+.header-btn[data-class='mobile-nav-on'] {
+    background-color: var(--c-base);
+    background-image: none;
+    border-color: var(--c-base);
+}
+
+.header-btn[data-class='mobile-nav-on']:hover {
+    background-color: var(--c-verde);
+    background-image: none;
+    border-color: var(--c-verde);
+}
+
+/* Barra de progreso de carga (Pace) */
+.pace .pace-progress {
+    background-color: var(--c-mostaza);
+}
+
+
+/* ------------------------------------------------------------
+   3. Estructura de pagina
+   ------------------------------------------------------------ */
+
+.page-content {
+    color: var(--c-text);
+    background-color: var(--c-canvas);
+}
+
+.page-header {
+    background-color: var(--c-surface);
+    box-shadow: none;
+    border-bottom: 1px solid var(--c-border);
+}
+
+.page-header .header-icon,
+.page-header .header-btn {
+    border-radius: var(--r-md);
+    transition: background-color .16s var(--ease), color .16s var(--ease);
+}
+
+.page-header .header-icon:hover,
+.page-header .header-btn:hover {
+    background-color: var(--c-verde-soft);
+}
+
+.page-footer {
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    font-size: .72rem;
+}
+
+.page-footer #lbVersion {
+    font-size: .72rem;
+    font-weight: 500;
+    letter-spacing: .3px;
+    opacity: .7;
+    margin: 0;
+}
+
+
+/* ------------------------------------------------------------
+   4. Navegacion lateral
+   ------------------------------------------------------------ */
+
+.page-sidebar,
+.page-sidebar .primary-nav,
+.nav-footer {
+    background-color: var(--c-base);
+}
+
+.nav-menu li a {
+    margin: 1px 10px;
+    padding: .5rem .7rem;
+    border-radius: var(--r-md);
+    font-size: .74rem;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: .2px;
+    color: rgba(255, 255, 255, .78) !important;
+    transition: background-color .16s var(--ease), color .16s var(--ease);
+}
+
+.nav-menu li a:hover {
+    background-color: rgba(255, 255, 255, .08);
+    color: #fff !important;
+}
+
+.nav-menu li a > i {
+    width: 1.5rem;
+    font-size: .95rem;
+    opacity: .85;
+}
+
+.nav-menu li.active > a,
+.nav-menu li a.active {
+    background-color: var(--c-verde);
+    color: #fff !important;
+    box-shadow: inset 3px 0 0 var(--c-verde-claro);
+}
+
+.nav-menu li.active > a > i,
+.nav-menu li a.active > i {
+    opacity: 1;
+}
+
+.nav-footer {
+    border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+
+/* ------------------------------------------------------------
+   5. Tarjetas y superficies
+   ------------------------------------------------------------ */
+
+.card {
+    background-color: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-1);
+}
+
+.card-rounded {
+    border-radius: var(--r-lg);
+}
+
+.card-header,
+.card-footer {
+    background-color: transparent;
+    border-color: var(--c-border);
+}
+
+.shadow { box-shadow: var(--sh-2) !important; }
+.shadow-sm { box-shadow: var(--sh-1) !important; }
+.shadow-lg { box-shadow: var(--sh-3) !important; }
+
+hr {
+    border-top-color: var(--c-border);
+}
+
+
+/* ------------------------------------------------------------
+   6. Botones
+   ------------------------------------------------------------ */
+
+.btn {
+    border-radius: var(--r-md);
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .15px;
+    padding: .42rem .85rem;
+    box-shadow: none;
+    transition: background-color .16s var(--ease), border-color .16s var(--ease),
+        color .16s var(--ease), box-shadow .16s var(--ease), transform .12s var(--ease);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn:focus,
+.btn.focus {
+    box-shadow: 0 0 0 3px var(--c-verde-ring) !important;
+}
+
+.btn-sm {
+    font-size: .72rem;
+    padding: .3rem .6rem;
+    border-radius: var(--r-sm);
+}
+
+.btn-lg {
+    font-size: .88rem;
+    padding: .6rem 1.15rem;
+    border-radius: var(--r-md);
+}
+
+.btn i {
+    margin-right: .3em;
+}
+
+.btn-circle i {
+    margin-right: 0;
+}
+
+/* Botones circulares: mismos puntos de anclaje, proporciones mas contenidas */
+.btn-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: var(--r-pill);
+    font-size: .78rem;
+    line-height: 1;
+}
+
+.btn-circle.btn-xl {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border-radius: var(--r-pill);
+    font-size: 1.1rem;
+}
+
+.btn-group-sm > .btn,
+.btn-group .btn {
+    border-radius: var(--r-sm);
+}
+
+
+/* ------------------------------------------------------------
+   7. Formularios
+   ------------------------------------------------------------ */
+
+label {
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .1px;
+    color: var(--c-text-muted);
+    margin-bottom: .3rem;
+}
+
+.form-group {
+    margin-bottom: .85rem;
+}
+
+.form-control,
+.custom-select {
+    min-height: 2.15rem;
+    height: auto;
+    padding: .42rem .7rem;
+    font-size: .8rem;
+    color: var(--c-text);
+    background-color: var(--c-surface);
+    border: 1px solid var(--c-border-strong);
+    border-radius: var(--r-md);
+    box-shadow: none;
+    transition: border-color .16s var(--ease), box-shadow .16s var(--ease);
+}
+
+.form-control:focus,
+.custom-select:focus {
+    border-color: var(--c-verde);
+    box-shadow: 0 0 0 3px var(--c-verde-ring);
+}
+
+.form-control::placeholder {
+    color: var(--c-text-muted);
+    opacity: .75;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    background-color: #f5f8f6;
+    color: var(--c-text-muted);
+}
+
+textarea.form-control {
+    min-height: 5rem;
+}
+
+/* Caret propio para los select, en el verde de la marca */
+select.form-control:not([multiple]):not([size]) {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 1.9rem;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23027740' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right .6rem center;
+    background-size: 14px 14px;
+}
+
+.input-group-text {
+    font-size: .78rem;
+    background-color: #f5f8f6;
+    border-color: var(--c-border-strong);
+    color: var(--c-text-muted);
+}
+
+
+/* ------------------------------------------------------------
+   8. Tablas
+   ------------------------------------------------------------ */
+
+.table {
+    margin-bottom: 0;
+    font-size: .78rem;
+    color: var(--c-text);
+}
+
+.table thead td,
+.table thead th {
+    padding: .55rem .6rem;
+    border: 0;
+    font-size: .67rem;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.table tbody td,
+.table tbody th {
+    padding: .5rem .6rem;
+    border-top: 1px solid var(--c-border);
+    vertical-align: middle;
+}
+
+.table tfoot td,
+.table tfoot th {
+    padding: .55rem .6rem;
+    border: 0;
+    font-size: .74rem;
+}
+
+.table-bordered,
+.table-bordered td,
+.table-bordered th {
+    border-color: var(--c-border);
+}
+
+.table-hover tbody tr {
+    transition: background-color .12s var(--ease);
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--c-verde-soft);
+}
+
+/* Esquinas suaves en el encabezado de color */
+.table thead tr:first-child > *:first-child { border-top-left-radius: var(--r-md); }
+.table thead tr:first-child > *:last-child  { border-top-right-radius: var(--r-md); }
+
+.table-responsive {
+    border-radius: var(--r-md);
+}
+
+
+/* ------------------------------------------------------------
+   9. Pestanas
+   ------------------------------------------------------------ */
+
+.nav-tabs {
+    border-bottom: 1px solid var(--c-border);
+}
+
+.nav-tabs .nav-link {
+    padding: .5rem .85rem;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--c-text-muted);
+    transition: color .16s var(--ease), border-color .16s var(--ease);
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--c-verde);
+}
+
+.nav-tabs .nav-link.active {
+    background-color: transparent;
+    color: var(--c-verde);
+    border-bottom-color: var(--c-verde);
+}
+
+
+/* ------------------------------------------------------------
+   10. Modales y paneles laterales
+   ------------------------------------------------------------ */
+
+/* Todas las modales del proyecto abren centradas, redondeadas y con sombra.
+   La plantilla traia .modal-dialog-right (panel pegado al costado derecho,
+   a todo lo alto y con esquinas rectas); aqui se neutraliza esa posicion
+   para no tener que tocar el marcado de las ~32 modales existentes. */
+.modal-dialog,
+.modal-dialog-right,
+.modal-dialog-left {
+    position: relative;
+    top: auto;
+    right: auto;
+    left: auto;
+    width: auto;
+    height: auto;
+    border-width: 0;
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 3.5rem);
+    margin: 1.75rem auto !important;
+}
+
+/* La animacion por defecto entraba desplazada un 25% desde la derecha */
+.modal.fade .modal-dialog,
+.modal.fade .modal-dialog-right {
+    transform: translate(0, -24px) scale(.98);
+    transition: transform .22s var(--ease), opacity .22s var(--ease);
+}
+
+.modal.show .modal-dialog,
+.modal.show .modal-dialog-right {
+    transform: translate(0, 0) scale(1);
+}
+
+.modal-content,
+.modal-dialog-right .modal-content {
+    min-height: 0;
+    border: 0;
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-3);
+}
+
+/* Recorta el encabezado de color a la curva de la tarjeta */
+.modal-content {
+    overflow: hidden;
+}
+
+.modal-content > .dropdown-header:first-child {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
+
+.modal-backdrop.show {
+    opacity: .4;
+}
+
+@media (max-width: 575.98px) {
+    .modal-dialog,
+    .modal-dialog-right,
+    .modal-dialog-left {
+        min-height: calc(100% - 1rem);
+        margin: .5rem !important;
+    }
+}
+
+/* Al centrarse ya no ocupan todo el ancho: las modales con tablas
+   necesitan algo mas de aire que los 800px que trae Bootstrap */
+@media (min-width: 992px) {
+    .modal-xl { max-width: 1100px; }
+}
+
+@media (min-width: 1400px) {
+    .modal-xl { max-width: 1280px; }
+}
+
+.dropdown-header {
+    padding: .9rem 1rem;
+    font-size: .8rem;
+}
+
+.dropdown-header h3,
+.dropdown-header h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: .1px;
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--c-border);
+    padding: .8rem 1rem;
+}
+
+.dropdown-menu {
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    box-shadow: var(--sh-3);
+    font-size: .8rem;
+}
+
+.dropdown-item {
+    font-size: .8rem;
+    padding: .45rem .9rem;
+}
+
+
+/* ------------------------------------------------------------
+   11. Avisos, insignias y utilidades
+   ------------------------------------------------------------ */
+
+.badge {
+    padding: .32em .58em;
+    border-radius: var(--r-sm);
+    font-size: .67rem;
+    font-weight: 600;
+    letter-spacing: .3px;
+}
+
+.badge-pill {
+    border-radius: var(--r-pill);
+}
+
+.alert {
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    font-size: .8rem;
+    box-shadow: var(--sh-1);
+}
+
+.internet-connection-status {
+    border-radius: var(--r-pill);
+    font-size: .7rem;
+    letter-spacing: .3px;
+}
+
+.progress {
+    height: .5rem;
+    border-radius: var(--r-pill);
+    background-color: var(--c-border);
+}
+
+.progress-bar {
+    background-color: var(--c-verde);
+}
+
+
+/* ------------------------------------------------------------
+   12. Librerias externas alineadas a la paleta
+   ------------------------------------------------------------ */
+
+/* SweetAlert */
+.swal-modal {
+    border-radius: var(--r-lg);
+    font-family: inherit;
+}
+
+.swal-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.swal-text {
+    font-size: .84rem;
+}
+
+.swal-button {
+    padding: .5rem 1.05rem;
+    border-radius: var(--r-md);
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+.swal-button--confirm {
+    background-color: var(--c-verde);
+}
+
+.swal-button--confirm:not([disabled]):hover {
+    background-color: var(--c-verde-hover);
+}
+
+/* Noty */
+.noty_bar {
+    border-radius: var(--r-md) !important;
+    box-shadow: var(--sh-3);
+    font-size: .8rem;
+}
+
+
+/* ------------------------------------------------------------
+   13. Barras de desplazamiento
+   ------------------------------------------------------------ */
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(11, 49, 30, .25) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(11, 49, 30, .22);
+    border: 2px solid transparent;
+    border-radius: var(--r-pill);
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(11, 49, 30, .38);
+    background-clip: content-box;
+}
+
+.page-sidebar ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, .22);
+    background-clip: content-box;
+}
+
+
+/* ------------------------------------------------------------
+   14. Accesibilidad
+   ------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

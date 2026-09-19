@@ -1,0 +1,5 @@
+node_modules
+dist
+
+# PDFs generados en tiempo de ejecucion por reports_pdf.js
+PDF/*.pdf

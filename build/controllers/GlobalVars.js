@@ -1,0 +1,163 @@
+let versionapp = "M.19.09.2026:0"
+// &nbsp
+
+let map; //mapa de leaflet
+
+
+
+let GlobalUrlCalls = '';
+let GlobalUrlServicioLocal = 'http://192.168.1.16:8080'
+let GlobalUrlPrinter = 'http://192.168.0.250:9000'
+let TOKEN = '';
+let GlobalEmpnitBodega = '';
+let GlobalEmpnit ='';
+
+let GlobalUsuario = '';
+let GlobalPass = '';
+let GlobalNivelUsuario = 1;
+let GlobalCodUsuario = 0;
+
+let selected_clasificacion = '';
+
+
+
+let _selected_coddoc='';
+let _selected_correlativo='';
+let _selected_empnit='';
+let _selected_fecha='';
+let _selected_codprov='';
+
+
+
+let data_config_general = [];
+
+function get_config(id){
+
+    let valor = '';
+
+    data_config_general.map((r)=>{
+        if(Number(r.ID)==Number(id)){
+            valor = r.VALOR;
+        }
+    })
+    
+    return valor;
+    
+};
+
+let data_empresa_config = [];
+let data_usuario_config = [];
+
+let tbl_etiquetas = [
+    {valor:"BAJA",color:"bg-info"},
+    {valor:"MEDIA",color:"bg-warning"},
+    {valor:"ALTA",color:"bg-danger"},
+]
+
+
+
+let root = document.getElementById('root');
+let rootErrores = document.getElementById('rootErrores');
+
+
+let navmenu = document.getElementById('js-nav-menu');
+
+
+
+let GlobalLoader = `
+                <div>
+                    <div class="spinner-border text-base" role="status"><span class="sr-only">Loading...</span></div>
+                    <div class="spinner-border text-base" role="status"><span class="sr-only">Loading...</span></div>
+                    <div class="spinner-border text-base" role="status"><span class="sr-only">Loading...</span></div>
+                    <div class="spinner-border text-secondary" role="status"><span class="sr-only">Loading...</span></div>
+                    <div class="spinner-border text-secondary" role="status"><span class="sr-only">Loading...</span></div>
+                    <div class="spinner-border text-secondary" role="status"><span class="sr-only">Loading...</span></div>
+                    <div class="spinner-border text-danger" role="status"><span class="sr-only">Loading...</span></div>
+                </div>
+                `
+               
+function get_button_loader(texto){
+    let str = '';
+
+    str = `${texto}<div>
+                <div class="spinner-grow text-base" role="status"><span class="sr-only">Loading...</span></div>
+                <div class="spinner-grow text-base" role="status"><span class="sr-only">Loading...</span></div>
+                <div class="spinner-grow text-base" role="status"><span class="sr-only">Loading...</span></div>
+            </div>`
+
+
+    return str;
+
+}
+
+
+// VARIABLES
+let GlobalSelected_empnit = '';
+
+let GlobalSelected_codmedida = '';
+let GlobalSelected_Codprod = '';
+let GlobalSelected_Desprod = '';
+let GlobalSelected_Costo = 0;
+let GlobalSelected_Status = '';
+
+let Selected_exento =0; 
+let Selected_tipoprod = '';
+let Selected_existencia = 0;
+let Selected_bono = 0;
+
+let GlobalSelectedCodclie = 0;
+let GlobalSelectedNoOrden = 0;
+let GlobalSelectedCodEquipo = 0;
+let GlobalConfigIVA = 1.12;
+
+let GlobalCodBodega  = 0;
+
+
+let GlobalTotalDocumento = 0;
+let GlobalTotalCostoDocumento = 0;
+let GlobalTotalDescuento = 0;
+let GlobalTotalItems = 0;
+
+let Selected_coddoc_env = '';
+let Selected_coddoc_cot = '';
+
+
+let selected_ped_coddoc = '';
+let selected_ped_correlativo = '';
+let selected_ped_codembarque = '';
+
+let selected_id_element = '';
+
+
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+};
+
+
+function descargar_documento(coddoc,correlativo,tipo, idbtn){
+
+        let btn = document.getElementById(idbtn);
+        btn.disabled =true;
+        btn.innerHTML = `<i class="fal fa-spin fa-download"></i>`;
+
+        //F.showToast('Generando PDF');
+
+        GF.generar_pdf_documento(coddoc,correlativo,tipo)
+        .then((filename)=>{
+            GF.descargar_pdf_documento(filename);
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fal fa-download"></i>`;
+        })
+        .catch(()=>{
+            F.AvisoError('No se pudo generar el documento pdf');
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fal fa-download"></i>`;
+        })
+
+};

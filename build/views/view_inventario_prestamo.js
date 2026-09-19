@@ -1,0 +1,1275 @@
+
+function getView(){
+    let view = {
+        body:()=>{
+            return `
+                <div class="col-12 p-0 bg-white">
+                    <div class="tab-content" id="myTabHomeContent">
+                        <div class="tab-pane fade show active" id="cero" role="tabpanel" aria-labelledby="receta-tab">
+                             ${view.inicio()}
+                        </div>
+                        <div class="tab-pane fade" id="uno" role="tabpanel" aria-labelledby="receta-tab">
+                             ${view.movimiento_salida_productos()}
+                        </div>
+                        <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="home-tab">
+                           ${view.movimiento_salida_encabezado()}
+                        </div>
+                        <div class="tab-pane fade" id="tres" role="tabpanel" aria-labelledby="home-tab">
+                           
+                        </div>    
+                    </div>
+
+                    <ul class="nav nav-tabs hidden" id="myTabHome" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active negrita text-success" id="tab-cero" data-toggle="tab" href="#cero" role="tab" aria-controls="profile" aria-selected="false">
+                                <i class="fal fa-list"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link negrita text-success" id="tab-uno" data-toggle="tab" href="#uno" role="tab" aria-controls="profile" aria-selected="false">
+                                <i class="fal fa-list"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link negrita text-danger" id="tab-dos" data-toggle="tab" href="#dos" role="tab" aria-controls="home" aria-selected="true">
+                                <i class="fal fa-comments"></i></a>
+                        </li>  
+                        <li class="nav-item">
+                            <a class="nav-link negrita text-danger" id="tab-tres" data-toggle="tab" href="#tres" role="tab" aria-controls="home" aria-selected="true">
+                                <i class="fal fa-comments"></i></a>
+                        </li>         
+                    </ul>
+                    
+                </div>
+                ${view.modal_lista_productos() + view.modal_cantidad()}
+               
+            `
+        },
+        inicio:()=>{
+            return `
+            <div class="card card-rounded col-12 card-bordered shadow">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-4">
+                            <img src="./favicon.png" width="100px" height="100px">
+                        </div>
+                        <div class="col-8">
+                            <h4 class="negrita text-base">GESTION DE HERRAMIENTAS</h4>
+
+                          
+
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    ${view.frag_tabla_herramientas()}
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    ${view.frag_tabla_movimientos_herramienta()}
+                </div>
+            </div>
+
+
+            <button class="btn btn-circle btn-success btn-bottom-r btn-xl hand shadow"
+            onclick="document.getElementById('tab-uno').click()">
+                <i class="fal fa-plus"></i>
+            </button>
+            `
+        },
+        frag_tabla_herramientas:()=>{
+            return `
+            <div class="card card-rounded col-12 card-bordered shadow">
+                <div class="card-body p-4">
+                    <label class="h5 negrita text-danger">Herramientas en Inventario</label>
+                    <div class="table-responsive">
+                        
+                        <div class="form-group">
+                            <label>Escriba para buscar</label>
+                            <input type="text" class="form-control" 
+                            placeholder="Escriba para buscar..."
+                            id="txtBuscarHerr" oninput="F.FiltrarTabla('tbl_herramientas','txtBuscarHerr')">
+                        </div>
+
+                        <table class="table h-full col-12 table-bordered" id="tbl_herramientas">
+                            <thead class="bg-base text-white">
+                                <tr>
+                                    <td>CODIGO</td>
+                                    <td>HERRAMIENTA</td>
+                                    <td>MARCA</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_data_herramientas"></tbody>
+                        </table>
+                    </div>
+                
+                </div>
+            </div>
+            `
+        },
+        frag_tabla_movimientos_herramienta:()=>{
+            return `
+                            <div class="card card-rounded col-12 shadow ">
+                                <div class="card-body p-4">
+
+                                    <h4 class="negrita text-danger" id="lbKardexDesprod"></h4>
+
+                                    <div class="form-group">
+                                        <label>Escriba para buscar...</label>
+                                        <input type="text"
+                                        placeholder='Escriba para filtrar...'
+                                        class="form-control negrita text-danger"
+                                        id="txtBuscarHistorial"
+                                        oninput="F.FiltrarTabla('tblHistorial','txtBuscarHistorial')">
+                                    </div>
+
+                                    <table class="table h-full col-12 table-bordered border-info" id="tblHistorial">
+                                        <thead class="bg-secondary text-white">
+                                            <tr>
+                                                <td>FECHA</td>
+                                                <td>DOCUMENTO</td>
+                                                <td>ENTRADA</td>
+                                                <td>SALIDA</td>
+                                                <td>ENTREGADO A</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tblDataHistorial">
+                                        </tbody>
+                                        <tfoot class="bg-secondary text-white negrita">
+                                            <tr>
+                                                <td></td>
+                                                <td><b id="lbKardexConteo"></b></td>
+                                                <td><b id="lbKardexEntradas"></b></td>
+                                                <td><b id="lbKardexSalidas"></b></td>
+                                                <td id=""></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+
+                                    
+                                </div>
+                            </div>
+            `
+        },
+        movimiento_salida_productos: ()=>{
+            return `
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4">
+
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <h2 class="text-left negrita text-base">Prestamo de Herramienta</h2>
+                            <h5 class="negrita text-danger" id="lbItems"></h5>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Bodega (Salida)</label>
+                                <select class="form-control negrita" id="cmbEmpresa">
+                                </select>                              
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <br>
+
+                    <div class="row">
+
+                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group">
+                                <label>Codigo Seleccionado</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control negrita text-base" disabled="true" id="txtCodprod">
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                            <div class="form-group">
+                                <label>Producto</label>
+                                <div class="input-group">
+                                    <input type="text" 
+                                    class="form-control negrita text-base" 
+                                    id="txtDesprod"
+                                    placeholder="Escriba para buscar...">
+                                    <button class="btn btn-success hand shadow" id="btnNuevoProducto">
+                                        <i class="fal fa-search"></i>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+
+                    </div>
+
+
+                </div>
+            </div>
+            
+            <br>
+
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered h-full col-12">
+                            <thead class="bg-base text-white">
+                                <tr>
+                                    <td>PRODUCTO</td>
+                                    <td>CANTIDAD</td>
+                                    <td>COSTO</td>
+                                    <td>SUBTOTAL</td>
+                                    <td>ESTADO</td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDataMovimiento"></tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <input type="text" id="txtCodprod" disabled="true" class="hidden">
+            
+
+            <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow"
+            onclick="document.getElementById('tab-cero').click()">
+                <i class="fal fa-arrow-left"></i>
+            </button>
+
+        
+            <button class="btn btn-success btn-xl btn-circle btn-bottom-r hand shadow"
+            onclick="document.getElementById('tab-dos').click()">
+                <i class="fal fa-arrow-right"></i>
+            </button>
+
+            
+            `
+        },
+        movimiento_salida_encabezado: ()=>{
+            return `
+         
+            <div class="card card-rounded col-12">
+                <div class="card-body p-4" style="font-size:90%">
+
+                   
+                    <h4 class="negrita text-info text-center">Datos finales</h4>
+                    <br>
+                    
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Bodega (Entrada)</label>
+                                <select class="form-control negrita" id="cmbEmpresaEntrada">
+                                </select>                              
+                            </div>
+
+                            <div class="form-group">
+                              
+                                <label class="negrita text-secondary">Proyecto / Area</label>
+                                <select class="form-control negrita" id="cmbProyectos">
+                                </select>
+                            </div>
+
+                            
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Documento de Salida</label>
+                                <div class="input-group">
+                                    <select class="form-control negrita" id="cmbCoddoc">
+                                    <input type="text" class="form-control negrita" id="txtCorrelativo" disabled="true">
+                                </div>                               
+                            </div>
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Observaciones</label>
+                                <textarea rows="4" class="form-control negrita" id="txtObs"></textarea>                               
+                            </div>
+
+                          
+
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        
+                            <div class="form-group">
+
+                                <label class="negrita text-secondary">Persona Encargada</label>
+                                <select class="form-control negrita"  id="cmbRecibe">
+                                </select>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Entregado a</label>
+                                <input type="text" class="form-control negrita"  id="txtEntregado">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Documento de Entrada</label>
+                                <div class="input-group">
+                                    <select class="form-control negrita" id="cmbCoddocEnt">
+                                    <input type="text" class="form-control negrita" id="txtCorrelativoEnt" disabled="true">
+                                </div>                               
+                            </div>
+
+                         
+
+
+                            <div class="form-group">
+                                <label class="negrita text-secondary">Fecha y Hora del Despacho</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control negrita" id="txtFecha">
+                                    <input type="text" class="form-control negrita" id="txtHora" disabled="true">
+                                </div>
+                                
+                            </div>
+
+                            <div class="form-group">
+
+                                <label class="negrita text-secondary">Total Costo</label>
+                                <h1 class="negrita text-danger" id="lbTotalCosto"></h1>
+                                
+                                
+                            </div>
+
+                        
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+          
+            
+            <button class="btn btn-secondary btn-xl btn-circle btn-bottom-l hand shadow" 
+            onclick="document.getElementById('tab-uno').click()">
+                <i class="fal fa-arrow-left"></i>
+            </button>
+
+            <button class="btn btn-info btn-xl btn-circle btn-bottom-r hand shadow" id="btnGuardar">
+                <i class="fal fa-save"></i>
+            </button>
+          
+            `
+        },
+        modal_lista_productos:()=>{
+            return `
+              <div id="modal_productos" 
+              class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-right modal-xl">
+                    <div class="modal-content">
+                        <div class="dropdown-header bg-base d-flex justify-content-center align-items-center w-100">
+                            <h4 class="m-0 text-center color-white" id="">
+                                Seleccione un Producto
+                            </h4>
+                        </div>
+                        <div class="modal-body p-4">
+                            
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+                                    
+                                    <div class="table-responsive">
+                                        
+                                        <div class="form-group">
+                                            <input type="text" class="negrita text-base border-warning form-control" 
+                                                id="txtBuscarProducto" 
+                                                oninput="F.FiltrarTabla('tblProductos','txtBuscarProducto')"
+                                                placeholder="Escriba para filtrar...."
+                                            >
+                                        </div>
+
+                                        <table class="table table-bordered h-full col-12" id="tblProductos">
+                                            <thead class="bg-secondary text-white">
+                                                <tr>
+                                                    <td>CODIGO</td>
+                                                    <td>PRODUCTO</td>
+                                                    <td>EXISTENCIA</td>
+                                                    <td>MARCA</td>
+                                                    <td></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tblDataProductos"></tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                                
+                            <div class="row">
+                                <button class="btn btn-secondary btn-circle btn-xl hand shadow" data-dismiss="modal">
+                                    <i class="fal fa-arrow-left"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            `
+        },
+        modal_cantidad:()=>{
+            return `
+              <div id="modal_cantidad" class="modal fade js-modal-settings modal-backdrop-transparent modal-with-scroll" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-right modal-lg">
+                    <div class="modal-content">
+                        <div class="dropdown-header bg-secondary d-flex justify-content-center align-items-center w-100">
+                            <h4 class="m-0 text-center color-white" id="">
+                                Indique la cantidad
+                            </h4>
+                        </div>
+                        <div class="modal-body p-4">
+                            
+                            <div class="card card-rounded">
+                                <div class="card-body p-4">
+                                    
+                                    <h4 class="negrita text-base" id="lbDesprod"></h4>
+                                    <h5 class="negrita text-danger" id="lbCodprod"></h5>
+                                    
+                                    <div class="form-group">
+                                        <label class="negrita text-secondary">Cantidad</label>
+                                        <input type="number" class="negrita text-danger form-control h5" id="txtCantidad">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="negrita text-secondary">Costo Unitario</label>
+                                        <input type="number" class="negrita text-danger form-control h5" id="txtCosto" disabled="true">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="negrita text-secondary">Costo Total</label>
+                                        <input type="number" class="negrita text-danger form-control h5" id="txtCostoTotal" disabled="true">
+                                    </div>
+
+                                     <div class="form-group">
+                                        <label class="negrita text-secondary">Estado de la Herramienta</label>
+                                        <select class="negrita text-danger form-control h5" id="cmbEstado">
+                                            <option value='NUEVO'>NUEVO</option>
+                                            <option value='BUEN ESTADO'>BUEN ESTADO</option>
+                                            <option value='ESTADO REGULAR'>ESTADO REGULAR</option>
+                                            <option value='MAL ESTADO'>MAL ESTADO</option>
+                                            <option value='PERDIDA TOTAL'>PERDIDA TOTAL</option>
+                                        </select>
+                                    </div>
+
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button class="btn btn-secondary btn-circle btn-xl hand shadow" data-dismiss="modal">
+                                                <i class="fal fa-arrow-left"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn btn-success btn-circle btn-xl hand shadow" id="btnAceptarCantidad">
+                                                <i class="fal fa-check"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <input type="text" id="txtTipoEntSal" disabled="true" class="hidden">
+                                
+                           
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+            `
+        }
+    }
+
+    root.innerHTML = view.body();
+
+};
+
+function addListeners(){
+
+
+    document.title = 'PRESTAMOS DE HERRAMIENTA';
+
+
+    F.slideAnimationTabs();
+
+
+    document.getElementById('txtFecha').value = F.getFecha();
+
+   setInterval(() => {
+        try {
+            document.getElementById('txtHora').value = F.getHora();    
+        } catch (error) {
+            
+        }
+        
+   }, 1000);
+
+
+    //cargando empresas
+    GF.data_listado_empresas_todas()
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.EMPNIT}'>(${r.TIPO}) ${r.EMPRESA}</option>
+            `
+        })
+      
+        document.getElementById('cmbEmpresa').innerHTML = str;
+        document.getElementById('cmbEmpresaEntrada').innerHTML = str;
+
+        tbl_lista_herramientas();
+
+        cargar_proyectos();
+    })
+    .catch(()=>{
+       document.getElementById('cmbEmpresa').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+       document.getElementById('cmbEmpresaEntrada').innerHTML = "<option value=''>No se cargaron las empresas</option>";
+    });
+
+    
+    //cargando empresas
+
+
+
+
+    document.getElementById('cmbEmpresaEntrada').addEventListener('change',()=>{
+        cargar_proyectos();
+    });
+
+    //carga de empleados
+    GF.data_listado_empleados('%')
+    .then((data)=>{
+
+         let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODEMP}'>${r.NOMEMP} (<small class="negrita">${r.EMPRESA}</small>)</option>`
+        })
+        document.getElementById('cmbRecibe').innerHTML = str;
+  
+    })
+    .catch(()=>{
+         document.getElementById('cmbRecibe').innerHTML = "<option value=''>SN</option>";
+      })
+    //carga de empleados
+
+
+   
+
+
+
+   
+
+     //cargando coddoc salidas
+    GF.data_coddoc('%','PRS')
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODDOC}'>${r.CODDOC}</option>
+            `
+        })
+        document.getElementById('cmbCoddoc').innerHTML = str;
+        GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
+        .then((data)=>{document.getElementById('txtCorrelativo').value=data})
+        .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
+  
+      
+    })
+    .catch(()=>{
+        document.getElementById('cmbCoddoc').innerHTML = "<option value=''></option>";
+        document.getElementById('txtCorrelativo').value = '0';
+    });
+    //cargando coddoc salidas
+
+
+     //cargando coddoc entradas
+    GF.data_coddoc('%','PRE')
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODDOC}'>${r.CODDOC}</option>
+            `
+        })
+        document.getElementById('cmbCoddocEnt').innerHTML = str;
+        GF.data_correlativo('%',document.getElementById('cmbCoddocEnt').value)
+        .then((data)=>{document.getElementById('txtCorrelativoEnt').value=data})
+        .catch((data)=>{document.getElementById('txtCorrelativoEnt').value=data})
+      
+    })
+    .catch(()=>{
+        document.getElementById('cmbCoddocEnt').innerHTML = "<option value=''></option>";
+        document.getElementById('txtCorrelativoEnt').value = '0';
+    });
+    //cargando coddoc entradas
+
+
+
+    document.getElementById('cmbCoddoc').addEventListener('change',()=>{
+          GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
+        .then((data)=>{document.getElementById('txtCorrelativo').value=data})
+        .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
+    });
+    document.getElementById('cmbCoddocEnt').addEventListener('change',()=>{
+          GF.data_correlativo('%',document.getElementById('cmbCoddocEnt').value)
+        .then((data)=>{document.getElementById('txtCorrelativoEnt').value=data})
+        .catch((data)=>{document.getElementById('txtCorrelativoEnt').value=data})
+    });
+
+
+
+
+    document.getElementById('txtDesprod').addEventListener('keyup',(e)=>{
+        if (e.code === 'Enter') { 
+             document.getElementById('btnNuevoProducto').click();
+        };
+        if (e.keyCode === 13 && !e.shiftKey) {
+            document.getElementById('btnNuevoProducto').click();
+        };
+    })
+    
+
+    document.getElementById('btnNuevoProducto').addEventListener('click',()=>{
+        
+        $('#modal_productos').modal('show');
+
+        let sucursal = document.getElementById('cmbEmpresa').value;
+        let filtro = document.getElementById('txtDesprod').value || '';
+
+        document.getElementById('txtTipoEntSal').value = 'E';
+
+        tbl_lista_productos(sucursal,filtro,'S');
+
+        //document.getElementById('txtDesprod').value = '';
+
+    });
+
+
+    document.getElementById('txtCantidad').addEventListener('input',()=>{
+
+            get_total_costo();
+
+    });
+
+    document.getElementById('txtCosto').addEventListener('input',()=>{
+
+           get_total_costo();
+
+    });
+
+
+
+    // modal cantidad
+
+    let btnAceptarCantidad = document.getElementById('btnAceptarCantidad');
+    btnAceptarCantidad.addEventListener('click',()=>{
+
+        
+        let tipoentsal = document.getElementById('txtTipoEntSal').value;
+           
+
+        let cantidad = document.getElementById('txtCantidad').value || '1';
+        let costo = document.getElementById('txtCosto').value || '0.01';
+
+
+        F.showToast('Producto agregado a la lista');
+    
+        let coddoc = document.getElementById('cmbCoddoc').value;
+        let codprod = document.getElementById('txtCodprod').value;
+        let desprod = document.getElementById('txtDesprod').value;
+        let totalcosto = (Number(costo)*Number(cantidad));
+        let estado = document.getElementById('cmbEstado').value;
+
+            $("#modal_cantidad").modal('hide');
+       
+                db_prestamo.insert_temp_movinv_salida(coddoc,codprod,desprod,'UNIDAD',cantidad,costo,totalcosto,estado)
+                .then(()=>{
+                    tbl_temp_salida();
+                })
+
+
+    });
+
+
+
+    
+    // modal cantidad
+    tbl_temp_salida();
+
+
+    let btnGuardar = document.getElementById('btnGuardar');
+    btnGuardar.addEventListener('click',()=>{
+
+        F.Confirmacion('¿Está seguro que desea Guardar este movimiento?')
+        .then((value)=>{
+            if(value==true){
+
+              
+                btnGuardar.disabled = true;
+                btnGuardar.innerHTML = `<i class="fal fa-spin fa-save"></i>`;
+                
+                F.showToast('Cargando correlativo de documento salida...');
+                
+                get_correlativo_salida()
+                .then(()=>{
+
+
+                    get_correlativo_entrada()
+                    .then(()=>{
+
+                            insert_movimiento('')
+                            .then(()=>{
+                                
+                                F.Aviso('Documento guardado exitosamente!!');
+                                
+                                btnGuardar.disabled = false;
+                                btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+
+
+                                let coddocEnt = document.getElementById('cmbCoddocEnt').value;
+                                let correlativoEnt = document.getElementById('txtCorrelativoEnt').value;
+      
+                                GF.generar_pdf_documento(coddocEnt,correlativoEnt,'PRE')
+                                .then((documento)=>{
+                                    GF.descargar_pdf_documento(documento);
+                                })
+                                
+
+                                clean_data();
+                                
+                            })
+                            .catch((err)=>{
+                                
+
+                                    if(err.toString()=='duplicado'){
+
+                                            F.AvisoError('Este correlativo interno ya existe, intente de nuevo, se aplicara una correccion automatica');
+
+                                            let coddoc = document.getElementById('cmbCoddoc').value;
+
+                                            GF.corregir_correlativo(coddoc)
+                                            .then(()=>{
+                                                //F.Aviso('Se corrigio el correlativo, guarde de nuevo');
+                                                btnGuardar.disabled = false;
+                                                btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                                            })
+                                            .catch(()=>{
+                                                //F.AvisoError('No se pudo corregir el correlativo');
+                                                btnGuardar.disabled = false;
+                                                btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                                            })
+
+                                    }else{
+                                            F.AvisoError('No se pudo guardar');
+                                            btnGuardar.disabled = false;
+                                            btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                                    }
+
+                            })
+                    })
+                    .catch(()=>{
+                            F.AvisoError('No se pudo obtener el correlativo de la Entrada');
+
+                             btnGuardar.disabled = false;
+                            btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                    })
+
+                           
+
+                })
+                .catch(()=>{
+                    
+                    F.AvisoError('No se pudo obtener el correlativo de la Salida');
+
+                    btnGuardar.disabled = false;
+                    btnGuardar.innerHTML = `<i class="fal fa-save"></i>`;
+                })
+
+             
+
+            }
+        })
+
+
+
+    });
+
+
+  
+
+
+};
+
+function get_correlativo_salida(){
+
+        return new Promise((resolve,reject)=>{
+
+            GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
+            .then((data)=>{document.getElementById('txtCorrelativo').value=data;resolve();})
+            .catch((data)=>{document.getElementById('txtCorrelativo').value=data;reject();})
+
+        })
+    
+};
+function get_correlativo_entrada(){
+
+        return new Promise((resolve,reject)=>{
+
+            GF.data_correlativo('%',document.getElementById('cmbCoddocEnt').value)
+            .then((data)=>{document.getElementById('txtCorrelativoEnt').value=data;resolve();})
+            .catch((data)=>{document.getElementById('txtCorrelativoEnt').value=data;reject();})
+
+        })
+    
+};
+
+function get_total_costo(){
+     try {
+                let cantidad = Number(document.getElementById('txtCantidad').value) || 1;
+                let costo = Number(document.getElementById('txtCosto').value) || 0.01;
+                let totalcosto = Number(cantidad) * Number(costo);
+                console.log(totalcosto)
+                document.getElementById('txtCostoTotal').value = totalcosto;
+
+            } catch (error) {
+                console.log(error)
+                document.getElementById('txtCostoTotal').value = '0.01';
+            }
+};
+
+function cargar_proyectos(){
+
+    let sucursal = document.getElementById('cmbEmpresaEntrada').value;
+      //cargando proyectos
+    GF.data_listado_proyectos(sucursal)
+    .then((data)=>{
+        
+        let str = '';
+
+        data.recordset.map((r)=>{
+            str += `
+            <option value='${r.CODPROYECTO}'>${r.NOMPROYECTO}</option>
+            `
+        })
+         document.getElementById('cmbProyectos').innerHTML = str;
+
+    })
+    .catch(()=>{
+        document.getElementById('cmbProyectos').innerHTML = "<option value=''>No se cargaron los proyectos/areas</option>";
+
+    });
+};
+
+function initView(){
+
+    getView();
+    addListeners();
+
+};
+
+function insert_movimiento(entsal){
+
+    return new Promise((resolve,reject)=>{
+
+         let json_details;
+
+        let sucursal = document.getElementById('cmbEmpresa').value;
+    
+        let sucursal_recibe = document.getElementById('cmbEmpresaEntrada').value;
+        let coddoc = document.getElementById('cmbCoddoc').value;
+        let correlativo = document.getElementById('txtCorrelativo').value;
+        let mes = 0;
+        let anio = 0;
+        let fecha = F.devuelveFecha('txtFecha');
+        let hora = document.getElementById('txtHora').value;
+      
+        let codproyecto = document.getElementById('cmbProyectos').value || 0;
+        //let codsolicita = document.getElementById('cmbSolicita').value;
+        let codsolicita = 0;
+        let codrecibe = document.getElementById('cmbRecibe').value;
+        let noorden = '';
+        let obs = F.limpiarTexto(document.getElementById('txtObs').value);
+
+        let txtEntregado = document.getElementById('txtEntregado').value || '';
+        let coddocEnt = document.getElementById('cmbCoddocEnt').value;
+        let correlativoEnt = document.getElementById('txtCorrelativoEnt').value;
+        
+
+        let items = 0; let varTotalCosto = 0;
+
+ 
+        db_prestamo.select_temp_movinv_salida()
+        .then((data)=>{
+
+            data.map((r)=>{
+                varTotalCosto += Number(r.TOTALCOSTO);
+                items +=1;
+            })
+
+            if(Number(items)==0){
+                F.AvisoError('Agregue un producto al menos');
+                reject();
+                
+            }else{
+
+                json_details = data;
+
+                let datos = {sucursal:sucursal,
+                    sucursal_recibe: sucursal_recibe,
+                    coddoc:coddoc,
+                    correlativo:correlativo,
+                    coddoc_ent:coddocEnt,
+                    correlativo_ent:correlativoEnt,
+                    entregado:txtEntregado,
+                    mes:mes,
+                    anio:anio,
+                    fecha:fecha,
+                    hora:hora,
+                    codproyecto:codproyecto,
+                    codsolicita:codsolicita,
+                    codrecibe:codrecibe,
+                    noorden:noorden,
+                    obs:obs,
+                    items:items,
+                    totalcosto:varTotalCosto,
+                    json_details: JSON.stringify(json_details)
+                }
+
+                axios.post(GlobalUrlCalls + '/general/insert_documento_prestamo',datos)
+                .then((response) => {
+                    if(response.status.toString()=='200'){
+                        let data = response.data;
+
+                         switch (data.toString()) {
+                            case "error":
+                                reject('error');
+                                break;
+                            case "duplicado":
+                                reject('duplicado')
+                                break;
+                        
+                            default:
+                                if(Number(data.rowsAffected[0])>0){
+                                    resolve(data);             
+                                }else{
+                                    reject('error');
+                                } 
+                                break;
+                        }
+
+                        
+                        
+
+                    }else{
+                        reject('error');
+                    }                   
+                }, (_error) => {
+                    reject('error');
+                });
+
+
+            }
+
+        });
+       
+
+        //if(entsal=='S'){db_prestamo.select_temp_movinv_salida().then((data)=>{json_details = data}); codrecibe = document.getElementById('cmbRecibe'+ entsal).value;};
+    })
+
+};
+
+function clean_data(){
+
+
+
+    db_prestamo.delete_temp_movinv_salida_all()
+    .then(()=>{
+        tbl_temp_salida();
+    })
+
+
+    GF.data_correlativo('%',document.getElementById('cmbCoddoc').value)
+    .then((data)=>{document.getElementById('txtCorrelativo').value=data})
+    .catch((data)=>{document.getElementById('txtCorrelativo').value=data})
+
+    document.getElementById('tab-uno').click();
+
+
+};
+
+
+
+function tbl_lista_herramientas(){
+
+    let sucursal = document.getElementById('cmbEmpresa').value;
+    
+    let container = document.getElementById('tbl_data_herramientas');
+    container.innerHTML = GlobalLoader;
+ 
+    GF.data_lista_productos(sucursal,'','HERRAMIENTA')
+    .then((data)=>{
+        let str = '';
+        data.recordset.map((r)=>{
+            str += `
+            <tr class="hand"
+                onclick="">
+                <td>${F.limpiarTexto(r.CODPROD)}</td>
+                <td>${F.limpiarTexto(r.DESPROD)}</td>
+                <td>${F.limpiarTexto(r.DESMARCA)}</td>
+            
+                <td>
+                       <button class="btn btn-md btn-circle btn-warning hand shadow"
+                        onclick="tbl_kardex_producto('${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.DESPROD)}')"
+                        >
+                            <i class="fal fa-list"></i>
+                        </button>
+                </td>
+            </tr>
+            `
+        })
+        container.innerHTML = str;
+
+
+    })
+    .catch(()=>{
+
+        container.innerHTML = 'No se cargaron datos...';
+
+    })
+
+
+};
+
+function tbl_kardex_producto(codprod,desprod){
+
+   
+
+
+    document.getElementById('lbKardexDesprod').innerText = desprod;
+
+    let contenedor = document.getElementById('tblDataHistorial');
+    contenedor.innerHTML = GlobalLoader;
+
+
+
+    let varConteo = 0; let varEntradas = 0; let varSalidas = 0;
+
+    GF.data_producto_kardex_herramienta(codprod,'%')
+    .then((data)=>{
+
+        let str = '';
+        data.recordset.map((r)=>{
+
+            let entrada = 0; let salida = 0; let prestamo=0;
+            switch (r.INV.toString()) {
+                case '0':
+                    prestamo = Number(r.CANTIDAD);
+                    entrada = 0;
+                    salida = 0;
+                    break;
+            case '1':
+                    prestamo = 0;
+                    entrada = Number(r.CANTIDAD);
+                    salida = 0;
+                    break;
+            case '-1':
+                    prestamo = 0;
+                    entrada = 0;
+                    salida = Number(r.CANTIDAD);
+                    break;
+            }
+            varConteo += 1; varEntradas += Number(entrada); varSalidas += Number(salida);
+            str +=  `
+                <tr>
+                    <td>${F.convertDateNormal(r.FECHA)}
+                        <br>
+                        <small class="negrita text-danger">Hora: ${r.HORA}</small>
+                    </td>
+                    <td>${r.EMPRESA}
+                        <br>
+                        <small class="negrita text-danger">${r.CODDOC}-${r.CORRELATIVO}</small>
+                        <br>
+                        <small>${F.limpiarTexto(r.OBS)}</small>
+                    </td>
+                    <td>${entrada}</td>
+                    <td>${salida}</td>
+                    <td>${r.ENTREGADO}</td>
+                </tr>
+                `
+        })
+        contenedor.innerHTML = str;  
+
+        
+        document.getElementById('lbKardexConteo').innerText = `Movimientos: ${varConteo}`;
+        document.getElementById('lbKardexEntradas').innerText = `${varEntradas}`;
+        document.getElementById('lbKardexSalidas').innerText = `${varSalidas}`;
+
+
+    })
+    .catch((error)=>{
+
+
+        contenedor.innerHTML = 'No se cargaron datos...';
+
+         document.getElementById('lbKardexConteo').innerText = '';
+        document.getElementById('lbKardexEntradas').innerText = '';
+        document.getElementById('lbKardexSalidas').innerText = '';
+    })
+
+
+
+};
+
+function tbl_lista_productos(sucursal,filtro,entsal){
+
+
+    let container = document.getElementById('tblDataProductos');
+    container.innerHTML = GlobalLoader;
+ 
+    GF.data_lista_productos(sucursal,filtro,'HERRAMIENTA')
+    .then((data)=>{
+        let str = '';
+        data.recordset.map((r)=>{
+            str += `
+            <tr class="hand"
+                onclick="get_producto('${F.limpiarTexto(r.CODPROD)}','${F.limpiarTexto(r.DESPROD)}','${r.COSTO}','${entsal}')">
+                <td>${F.limpiarTexto(r.CODPROD)}</td>
+                <td>${F.limpiarTexto(r.DESPROD)}</td>
+                <td>${r.EXISTENCIA}</td>
+                <td>${F.limpiarTexto(r.DESMARCA)}</td>
+                <td></td>
+            </tr>
+            `
+        })
+        container.innerHTML = str;
+
+
+    })
+    .catch(()=>{
+
+        container.innerHTML = 'No se cargaron datos...';
+
+    })
+
+
+};
+
+function get_producto(codprod,desprod,costo,entsal){
+
+
+        document.getElementById('txtCodprod').value = codprod;
+        document.getElementById('txtDesprod').value = desprod;
+        
+
+
+        document.getElementById('lbDesprod').innerText = desprod;
+        document.getElementById('lbCodprod').innerText = codprod;
+        
+        document.getElementById('txtCosto').value = costo;
+        document.getElementById('txtCantidad').value = 1;
+
+        get_total_costo();
+
+        $("#modal_cantidad").modal('show');
+
+
+};
+
+
+
+
+
+function tbl_temp_salida(){
+
+    
+    let container = document.getElementById('tblDataMovimiento');
+    container.innerHTML = GlobalLoader;
+
+    let str = '';
+    
+    let varTotal = 0;
+    let varItem = 0;
+
+    db_prestamo.select_temp_movinv_salida()
+    .then((data)=>{
+
+        if(Number(data.length)==0){
+            document.getElementById('cmbEmpresa').disabled=false;
+        }else{
+            document.getElementById('cmbEmpresa').disabled=true;
+        };
+
+        
+        data.map((r)=>{
+            
+            varTotal += Number(r.TOTALCOSTO);
+            varItem += 1;
+
+            let idbtn = `btnEE${r.ID}`
+            str += `
+            <tr>
+                <td>${r.DESPROD}
+                    <br>
+                    <small class="negrita text-danger">Cod: ${r.CODPROD}</small>
+                </td>
+                <td>${r.CANTIDAD}</td>
+                <td>${F.setMoneda(r.COSTO,'Q')}</td>
+                <td>${F.setMoneda(r.TOTALCOSTO,'Q')}</td>
+                <td>${r.ESTADO}</td>
+                <td>
+                    <button class="btn btn-danger btn-circle btn-md hand shadow" id="${idbtn}"
+                     onclick="delete_temp_salida('${r.ID}','${idbtn}')">
+                        <i class="fal fa-trash"></i>
+                     </button>
+                </td>
+            </tr>
+            `
+        })
+        container.innerHTML = str;
+        document.getElementById('lbTotalCosto').innerText = F.setMoneda(varTotal,'Q');
+        document.getElementById('lbItems').innerText = `items: ${varItem}`
+
+    })
+
+
+};
+
+function delete_temp_salida(idrow,idbtn){
+
+      F.Confirmacion('¿Está seguro que desea ELIMINAR esta linea?')
+        .then((value)=>{
+            if(value==true){
+                    db_prestamo.delete_temp_movinv_salida_id(idrow)
+                    .then(()=>{
+                        tbl_temp_salida();
+                    })
+            }
+        })
+
+};
+
+
+

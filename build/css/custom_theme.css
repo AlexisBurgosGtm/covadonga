@@ -1,0 +1,276 @@
+/* ============================================================
+   COVADONGA — paleta institucional
+   Define los tokens de color y las utilidades .bg-/.text-/
+   .border-/.btn-/.btn-outline- de cada color de la marca.
+   ============================================================ */
+
+:root {
+    /* Colores base de la marca */
+    --c-base: rgb(11, 49, 30);
+    --c-verde: rgb(2, 119, 64);
+    --c-verde-claro: rgb(118, 188, 64);
+    --c-mostaza: rgb(230, 145, 18);
+    --c-gris: #505050;
+    --c-gris-2: #333333;
+
+    /* Estados (un paso mas claro/oscuro para dar realimentacion) */
+    --c-base-hover: rgb(17, 66, 42);
+    --c-verde-hover: rgb(2, 100, 54);
+    --c-verde-claro-hover: rgb(104, 170, 54);
+    --c-mostaza-hover: rgb(204, 127, 13);
+
+    /* Anillos de foco translucidos */
+    --ring-base: rgba(11, 49, 30, .25);
+    --ring-verde: rgba(2, 119, 64, .25);
+    --ring-verde-claro: rgba(118, 188, 64, .35);
+    --ring-mostaza: rgba(230, 145, 18, .30);
+}
+
+
+/* ------------------------------------------------------------
+   COLOR BASE — verde bosque
+   ------------------------------------------------------------ */
+
+.bg-base { background: var(--c-base); }
+.border-base { border-color: var(--c-base); }
+.text-base { color: var(--c-base); }
+
+.btn-base {
+    color: #fff;
+    background-color: var(--c-base);
+    border-color: var(--c-base);
+}
+
+.btn-base:hover {
+    color: #fff;
+    background-color: var(--c-base-hover);
+    border-color: var(--c-base-hover);
+}
+
+.btn-base:focus,
+.btn-base.focus {
+    box-shadow: 0 0 0 3px var(--ring-base);
+}
+
+.btn-base.disabled,
+.btn-base:disabled {
+    color: #fff;
+    background-color: var(--c-base);
+    border-color: var(--c-base);
+}
+
+.btn-base:not(:disabled):not(.disabled):active,
+.btn-base:not(:disabled):not(.disabled).active,
+.show > .btn-base.dropdown-toggle {
+    color: #fff;
+    background-color: var(--c-base-hover);
+    border-color: var(--c-base-hover);
+}
+
+.btn-base:not(:disabled):not(.disabled):active:focus,
+.btn-base:not(:disabled):not(.disabled).active:focus,
+.show > .btn-base.dropdown-toggle:focus {
+    box-shadow: 0 0 0 3px var(--ring-base);
+}
+
+.btn-outline-base {
+    color: var(--c-base);
+    border-color: var(--c-base);
+}
+
+.btn-outline-base:hover {
+    color: #fff;
+    background-color: var(--c-base);
+    border-color: var(--c-base);
+}
+
+.btn-outline-base:focus,
+.btn-outline-base.focus {
+    box-shadow: 0 0 0 3px var(--ring-base);
+}
+
+.btn-outline-base.disabled,
+.btn-outline-base:disabled {
+    color: var(--c-base);
+    background-color: transparent;
+}
+
+.btn-outline-base:not(:disabled):not(.disabled):active,
+.btn-outline-base:not(:disabled):not(.disabled).active,
+.show > .btn-outline-base.dropdown-toggle {
+    color: #fff;
+    background-color: var(--c-base);
+    border-color: var(--c-base);
+}
+
+.btn-outline-base:not(:disabled):not(.disabled):active:focus,
+.btn-outline-base:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-base.dropdown-toggle:focus {
+    box-shadow: 0 0 0 3px var(--ring-base);
+}
+
+
+/* ------------------------------------------------------------
+   COLOR VERDE — verde institucional
+   ------------------------------------------------------------ */
+
+.bg-verde { background: var(--c-verde); }
+.border-verde { border-color: var(--c-verde); }
+.text-verde { color: var(--c-verde); }
+
+.btn-verde {
+    color: #fff;
+    background-color: var(--c-verde);
+    border-color: var(--c-verde);
+}
+
+.btn-verde:hover {
+    color: #fff;
+    background-color: var(--c-verde-hover);
+    border-color: var(--c-verde-hover);
+}
+
+.btn-verde:focus,
+.btn-verde.focus {
+    box-shadow: 0 0 0 3px var(--ring-verde);
+}
+
+.btn-verde.disabled,
+.btn-verde:disabled {
+    color: #fff;
+    background-color: var(--c-verde);
+    border-color: var(--c-verde);
+}
+
+.btn-verde:not(:disabled):not(.disabled):active,
+.btn-verde:not(:disabled):not(.disabled).active,
+.show > .btn-verde.dropdown-toggle {
+    color: #fff;
+    background-color: var(--c-verde-hover);
+    border-color: var(--c-verde-hover);
+}
+
+.btn-verde:not(:disabled):not(.disabled):active:focus,
+.btn-verde:not(:disabled):not(.disabled).active:focus,
+.show > .btn-verde.dropdown-toggle:focus {
+    box-shadow: 0 0 0 3px var(--ring-verde);
+}
+
+.btn-outline-verde {
+    color: var(--c-verde);
+    border-color: var(--c-verde);
+}
+
+.btn-outline-verde:hover {
+    color: #fff;
+    background-color: var(--c-verde);
+    border-color: var(--c-verde);
+}
+
+.btn-outline-verde:focus,
+.btn-outline-verde.focus {
+    box-shadow: 0 0 0 3px var(--ring-verde);
+}
+
+.btn-outline-verde.disabled,
+.btn-outline-verde:disabled {
+    color: var(--c-verde);
+    background-color: transparent;
+}
+
+.btn-outline-verde:not(:disabled):not(.disabled):active,
+.btn-outline-verde:not(:disabled):not(.disabled).active,
+.show > .btn-outline-verde.dropdown-toggle {
+    color: #fff;
+    background-color: var(--c-verde);
+    border-color: var(--c-verde);
+}
+
+.btn-outline-verde:not(:disabled):not(.disabled):active:focus,
+.btn-outline-verde:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-verde.dropdown-toggle:focus {
+    box-shadow: 0 0 0 3px var(--ring-verde);
+}
+
+
+/* ------------------------------------------------------------
+   COLOR VERDE CLARO
+   ------------------------------------------------------------ */
+
+.bg-verde-claro { background: var(--c-verde-claro); }
+.border-verde-claro { border-color: var(--c-verde-claro); }
+.text-verde-claro { color: var(--c-verde-claro); }
+
+.btn-verde-claro {
+    color: #fff;
+    background-color: var(--c-verde-claro);
+    border-color: var(--c-verde-claro);
+}
+
+.btn-verde-claro:hover {
+    color: #fff;
+    background-color: var(--c-verde-claro-hover);
+    border-color: var(--c-verde-claro-hover);
+}
+
+.btn-verde-claro:focus,
+.btn-verde-claro.focus {
+    box-shadow: 0 0 0 3px var(--ring-verde-claro);
+}
+
+.btn-verde-claro.disabled,
+.btn-verde-claro:disabled {
+    color: #fff;
+    background-color: var(--c-verde-claro);
+    border-color: var(--c-verde-claro);
+}
+
+.btn-verde-claro:not(:disabled):not(.disabled):active,
+.btn-verde-claro:not(:disabled):not(.disabled).active,
+.show > .btn-verde-claro.dropdown-toggle {
+    color: #fff;
+    background-color: var(--c-verde-claro-hover);
+    border-color: var(--c-verde-claro-hover);
+}
+
+.btn-verde-claro:not(:disabled):not(.disabled):active:focus,
+.btn-verde-claro:not(:disabled):not(.disabled).active:focus,
+.show > .btn-verde-claro.dropdown-toggle:focus {
+    box-shadow: 0 0 0 3px var(--ring-verde-claro);
+}
+
+.btn-outline-verde-claro {
+    color: var(--c-verde-claro);
+    border-color: var(--c-verde-claro);
+}
+
+.btn-outline-verde-claro:hover {
+    color: #fff;
+    background-color: var(--c-verde-claro);
+    border-color: var(--c-verde-claro);
+}
+
+.btn-outline-verde-claro:focus,
+.btn-outline-verde-claro.focus {
+    box-shadow: 0 0 0 3px var(--ring-verde-claro);
+}
+
+.btn-outline-verde-claro.disabled,
+.btn-outline-verde-claro:disabled {
+    color: var(--c-verde-claro);
+    background-color: transparent;
+}
+
+.btn-outline-verde-claro:not(:disabled):not(.disabled):active,
+.btn-outline-verde-claro:not(:disabled):not(.disabled).active,
+.show > .btn-outline-verde-claro.dropdown-toggle {
+    color: #fff;
+    background-color: var(--c-verde-claro);
+    border-color: var(--c-verde-claro);
+}
+
+.btn-outline-verde-claro:not(:disabled):not(.disabled):active:focus,
+.btn-outline-verde-claro:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-verde-claro.dropdown-toggle:focus {
+    box-shadow: 0 0 0 3px var(--ring-verde-claro);
+}
