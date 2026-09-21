@@ -154,8 +154,8 @@ function descargar_documento(coddoc,correlativo,tipo, idbtn){
             btn.disabled = false;
             btn.innerHTML = `<i class="fal fa-download"></i>`;
         })
-        .catch(()=>{
-            F.AvisoError('No se pudo generar el documento pdf');
+        .catch((motivo)=>{
+            F.AvisoError(motivo || 'No se pudo generar el documento pdf');
             btn.disabled = false;
             btn.innerHTML = `<i class="fal fa-download"></i>`;
         })

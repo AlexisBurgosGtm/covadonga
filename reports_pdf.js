@@ -1,27 +1,76 @@
 const execute = require('./connection');
+const fs = require('fs');
+const path = require('path');
+
+
+//Carpeta donde se escriben los PDF. Se resuelve contra __dirname para no
+//depender del directorio desde el que se arranque node.
+//git no versiona carpetas vacias y todo su contenido esta en .gitignore,
+//asi que al hosting llegaba sin ella: por eso hay que crearla al vuelo.
+const PDF_DIR = path.join(__dirname, 'PDF');
+
+
+//Prepara el archivo de salida y deja listo el manejo de errores.
+//Devuelve null si ni siquiera se pudo abrir el archivo.
+function crear_archivo_pdf(nombreArchivo, reject){
+
+    try {
+
+        fs.mkdirSync(PDF_DIR, {recursive:true});
+
+        const filePath = path.join(PDF_DIR, nombreArchivo);
+        const writeStream = fs.createWriteStream(filePath);
+
+        //El listener se registra aqui y no despues de la consulta: el error de
+        //apertura se emite de inmediato y un 'error' sin listener tumba todo
+        //el proceso de node, no solo esta peticion.
+        writeStream.on('error', (err)=>{
+            console.error('Error al guardar el PDF:', err);
+            reject();
+        });
+
+        return {filePath, writeStream};
+
+    } catch (error) {
+
+        console.error('No se pudo preparar la carpeta de PDF:', error);
+        reject();
+        return null;
+
+    }
+
+};
 
 
 let PDF = {
     config_eliminar_archivos:()=>{
         return new Promise((resolve, reject) => {
-            
-                const directory = `./PDF`
 
-                const fs = require("fs");
-                const path = require("path");
-    
+                //si la carpeta aun no existe no hay nada que limpiar
+                if(fs.existsSync(PDF_DIR)==false){resolve();return;}
 
-                fs.readdir(directory, (err, files) => {
-                    if (err) throw err;
+                fs.readdir(PDF_DIR, (err, files) => {
+
+                    //un throw aqui adentro es una excepcion no capturada
+                    //que mata el proceso, por eso se reporta y ya
+                    if (err) {
+                        console.error('No se pudo leer la carpeta de PDF:', err);
+                        reject();
+                        return;
+                    }
 
                     for (const file of files) {
-                    fs.unlink(path.join(directory, file), (err) => {
-                        if (err) throw err;
-                    });
+                        fs.unlink(path.join(PDF_DIR, file), (err) => {
+                            if (err) {
+                                console.error(`No se pudo borrar ${file}:`, err);
+                            }
+                        });
                     }
+
+                    resolve();
+
                 });
 
-                resolve();
         })
 
     },
@@ -31,16 +80,15 @@ let PDF = {
 
         
                 const PDFDocument = require('pdfkit');
-                const fs = require('fs');
 
                 // Crea una nueva instancia de PDFDocument
                 const doc = new PDFDocument({size: 'LETTER'});
 
-                // Define la ruta del archivo PDF que quieres reemplazar
-                const filePath = `./PDF/prestamo_herramienta_salida_${coddoc}_${correlativo}.pdf`;
+                // Crea el archivo de salida (y la carpeta PDF si hiciera falta)
+                const salida = crear_archivo_pdf(`prestamo_herramienta_salida_${coddoc}_${correlativo}.pdf`, reject);
+                if(salida===null){return;}
 
-                // Crea un flujo de escritura para el archivo
-                const writeStream = fs.createWriteStream(filePath);
+                const {filePath, writeStream} = salida;
 
                 // Canaliza la salida del documento PDF al flujo de escritura
                 doc.pipe(writeStream);
@@ -152,12 +200,6 @@ let PDF = {
                         resolve();
                     });
 
-                    // Maneja errores en la escritura del archivo
-                    writeStream.on('error', (err) => {
-                        console.error('Error al guardar el archivo:', err);
-                        reject();
-                    });
-
                     
                 })
                 .catch(()=>{
@@ -174,16 +216,15 @@ let PDF = {
 
         
                 const PDFDocument = require('pdfkit');
-                const fs = require('fs');
 
                 // Crea una nueva instancia de PDFDocument
                 const doc = new PDFDocument({size: 'LETTER'});
 
-                // Define la ruta del archivo PDF que quieres reemplazar
-                const filePath = `./PDF/prestamo_herramienta_${coddoc}_${correlativo}.pdf`;
+                // Crea el archivo de salida (y la carpeta PDF si hiciera falta)
+                const salida = crear_archivo_pdf(`prestamo_herramienta_${coddoc}_${correlativo}.pdf`, reject);
+                if(salida===null){return;}
 
-                // Crea un flujo de escritura para el archivo
-                const writeStream = fs.createWriteStream(filePath);
+                const {filePath, writeStream} = salida;
 
                 // Canaliza la salida del documento PDF al flujo de escritura
                 doc.pipe(writeStream);
@@ -300,12 +341,6 @@ let PDF = {
                         resolve();
                     });
 
-                    // Maneja errores en la escritura del archivo
-                    writeStream.on('error', (err) => {
-                        console.error('Error al guardar el archivo:', err);
-                        reject();
-                    });
-
                     
                 })
                 .catch(()=>{
@@ -322,16 +357,15 @@ let PDF = {
 
         
                 const PDFDocument = require('pdfkit');
-                const fs = require('fs');
 
                 // Crea una nueva instancia de PDFDocument
                 const doc = new PDFDocument({size: 'LETTER'});
 
-                // Define la ruta del archivo PDF que quieres reemplazar
-                const filePath = `./PDF/compra_${coddoc}_${correlativo}.pdf`;
+                // Crea el archivo de salida (y la carpeta PDF si hiciera falta)
+                const salida = crear_archivo_pdf(`compra_${coddoc}_${correlativo}.pdf`, reject);
+                if(salida===null){return;}
 
-                // Crea un flujo de escritura para el archivo
-                const writeStream = fs.createWriteStream(filePath);
+                const {filePath, writeStream} = salida;
 
                 // Canaliza la salida del documento PDF al flujo de escritura
                 doc.pipe(writeStream);
@@ -452,12 +486,6 @@ let PDF = {
                         resolve();
                     });
 
-                    // Maneja errores en la escritura del archivo
-                    writeStream.on('error', (err) => {
-                        console.error('Error al guardar el archivo:', err);
-                        reject();
-                    });
-
                     
                 })
                 .catch(()=>{
@@ -474,16 +502,15 @@ let PDF = {
 
         
                 const PDFDocument = require('pdfkit');
-                const fs = require('fs');
 
                 // Crea una nueva instancia de PDFDocument
                 const doc = new PDFDocument({size: 'LETTER'});
 
-                // Define la ruta del archivo PDF que quieres reemplazar
-                const filePath = `./PDF/entrada_bodega_${coddoc}_${correlativo}.pdf`;
+                // Crea el archivo de salida (y la carpeta PDF si hiciera falta)
+                const salida = crear_archivo_pdf(`entrada_bodega_${coddoc}_${correlativo}.pdf`, reject);
+                if(salida===null){return;}
 
-                // Crea un flujo de escritura para el archivo
-                const writeStream = fs.createWriteStream(filePath);
+                const {filePath, writeStream} = salida;
 
                 // Canaliza la salida del documento PDF al flujo de escritura
                 doc.pipe(writeStream);
@@ -604,12 +631,6 @@ let PDF = {
                         resolve();
                     });
 
-                    // Maneja errores en la escritura del archivo
-                    writeStream.on('error', (err) => {
-                        console.error('Error al guardar el archivo:', err);
-                        reject();
-                    });
-
                     
                 })
                 .catch(()=>{
@@ -626,16 +647,15 @@ let PDF = {
 
         
                 const PDFDocument = require('pdfkit');
-                const fs = require('fs');
 
                 // Crea una nueva instancia de PDFDocument
                 const doc = new PDFDocument({size: 'LETTER'});
 
-                // Define la ruta del archivo PDF que quieres reemplazar
-                const filePath = `./PDF/salida_consumo_${coddoc}_${correlativo}.pdf`;
+                // Crea el archivo de salida (y la carpeta PDF si hiciera falta)
+                const salida = crear_archivo_pdf(`salida_consumo_${coddoc}_${correlativo}.pdf`, reject);
+                if(salida===null){return;}
 
-                // Crea un flujo de escritura para el archivo
-                const writeStream = fs.createWriteStream(filePath);
+                const {filePath, writeStream} = salida;
 
                 // Canaliza la salida del documento PDF al flujo de escritura
                 doc.pipe(writeStream);
@@ -765,12 +785,6 @@ let PDF = {
                         resolve();
                     });
 
-                    // Maneja errores en la escritura del archivo
-                    writeStream.on('error', (err) => {
-                        console.error('Error al guardar el archivo:', err);
-                        reject();
-                    });
-
                     
                 })
                 .catch(()=>{
@@ -787,16 +801,15 @@ let PDF = {
 
         
                 const PDFDocument = require('pdfkit');
-                const fs = require('fs');
 
                 // Crea una nueva instancia de PDFDocument
                 const doc = new PDFDocument({size: 'LETTER'});
 
-                // Define la ruta del archivo PDF que quieres reemplazar
-                const filePath = `./PDF/salida_traslado_${coddoc}_${correlativo}.pdf`;
+                // Crea el archivo de salida (y la carpeta PDF si hiciera falta)
+                const salida = crear_archivo_pdf(`salida_traslado_${coddoc}_${correlativo}.pdf`, reject);
+                if(salida===null){return;}
 
-                // Crea un flujo de escritura para el archivo
-                const writeStream = fs.createWriteStream(filePath);
+                const {filePath, writeStream} = salida;
 
                 // Canaliza la salida del documento PDF al flujo de escritura
                 doc.pipe(writeStream);
@@ -919,12 +932,6 @@ let PDF = {
                     writeStream.on('finish', () => {
                         console.log(`Archivo PDF reemplazado en: ${filePath}`);
                         resolve();
-                    });
-
-                    // Maneja errores en la escritura del archivo
-                    writeStream.on('error', (err) => {
-                        console.error('Error al guardar el archivo:', err);
-                        reject();
                     });
 
                     

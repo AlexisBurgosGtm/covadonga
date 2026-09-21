@@ -1,0 +1,4 @@
+Carpeta de salida de los PDF generados por reports_pdf.js.
+Los .pdf estan en .gitignore, pero la carpeta si debe viajar en el deploy:
+git no versiona carpetas vacias y sin este archivo el hosting la recibia
+sin crear, lo que tumbaba el proceso al generar el primer documento.

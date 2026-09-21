@@ -1,5 +1,6 @@
 node_modules
 dist
 
-# PDFs generados en tiempo de ejecucion por reports_pdf.js
+# PDFs generados en tiempo de ejecucion por reports_pdf.js.
+# La carpeta si se versiona (via PDF/.gitkeep): el servidor la necesita.
 PDF/*.pdf

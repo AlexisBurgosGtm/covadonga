@@ -94,21 +94,37 @@ let GF = {
                                 coddoc:coddoc,
                                 correlativo:correlativo,
                                 tipo:tipo
-                            })
+                            },
+                            //sin timeout el boton se queda girando para siempre
+                            //si el servidor no contesta
+                            {timeout: 60000})
                         .then((response) => {
                             if(response.status.toString()=='200'){
                                 let data = response.data;
                                 if(data.toString()=="error"){
-                                    reject();
+                                    reject('No se pudo generar el documento pdf');
                                 }else{
-                                    console.log(data);
                                     resolve(data);
                                 }       
                             }else{
-                                reject();
+                                reject('No se pudo generar el documento pdf');
                             }                   
-                        }, (_error) => {
-                            reject();
+                        }, (error) => {
+
+                            //distingue "el servidor no respondio" de "fallo el pdf",
+                            //asi se sabe si hay que reintentar o avisar a sistemas
+                            if(error && error.code==='ECONNABORTED'){
+                                reject('El servidor tardó demasiado en responder. Intente de nuevo.');
+                                return;
+                            }
+
+                            if(error && error.response===undefined){
+                                reject('Sin conexión con el servidor. Espere unos segundos e intente de nuevo.');
+                                return;
+                            }
+
+                            reject('No se pudo generar el documento pdf');
+
                         });
 
             })

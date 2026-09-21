@@ -8,6 +8,7 @@ try {
 
 var express = require("express");
 var axios = require('axios');
+var pathLib = require('path');
 var app = express();
 var router = express.Router();
 var bodyParser = require('body-parser');
@@ -171,7 +172,24 @@ app.get("/download_pdf",function(req,res){
       
       const {filename} = req.query;
 
-      res.download(path + `PDF/${filename}`);
+      if(!filename){res.status(400).send('error');return;}
+
+      //basename descarta cualquier ruta: sin esto un filename como
+      //"../../.env" dejaba descargar archivos fuera de la carpeta PDF
+      const archivo = pathLib.basename(filename.toString());
+
+      res.download(pathLib.join(__dirname, 'PDF', archivo), archivo, function(err){
+
+            if(!err){return;}
+
+            console.error('No se pudo descargar el PDF:', archivo, err.message);
+
+            //si ya se empezo a mandar el archivo no se puede responder otra cosa
+            if(res.headersSent){res.end();return;}
+
+            res.status(404).send('error');
+
+      });
       
 });
 
@@ -184,6 +202,11 @@ app.get("/config_eliminar_cache_pdf",function(req,res){
         
           res.send('ok');
       
+      })
+      .catch(()=>{
+
+          res.send('error');
+
       })
 
       
@@ -225,6 +248,20 @@ io.on('connection', function(socket){
    
       
   
+});
+
+
+// Red de seguridad. Un error no capturado en cualquier peticion (por ejemplo
+// un stream de PDF que no puede abrir su archivo) mataba el proceso completo
+// y dejaba el sistema caido hasta reiniciarlo a mano. Se deja registrado y el
+// servidor sigue atendiendo al resto de usuarios.
+// No sustituye el manejo de errores de cada modulo, es el ultimo recurso.
+process.on('uncaughtException', function(err){
+  console.error('[uncaughtException]', err);
+});
+
+process.on('unhandledRejection', function(reason){
+  console.error('[unhandledRejection]', reason);
 });
 
 

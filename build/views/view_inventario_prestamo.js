@@ -756,6 +756,10 @@ function addListeners(){
                                 .then((documento)=>{
                                     GF.descargar_pdf_documento(documento);
                                 })
+                                .catch((motivo)=>{
+                                    //el prestamo ya quedo guardado, aqui solo fallo el pdf
+                                    F.AvisoError(motivo || 'No se pudo generar el documento pdf');
+                                })
                                 
 
                                 clean_data();
